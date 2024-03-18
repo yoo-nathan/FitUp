@@ -1,0 +1,121 @@
+*{  /* check if css is working by resetting */
+    margin: 0;
+    padding: 0;
+} 
+html, body {
+    height: 100%;
+}
+.wrapper{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;  /* put objects vertically */
+    overflow: hidden;
+}
+.user-container{
+    background: #a9bdce ; /* background color */
+    flex: 1;
+    display: flex; /* clean up label and input tag */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.5rem;
+}
+.user-container label{
+    font-size: 14px;
+    margin-right: 1rem;
+}
+.user-container input{
+    border-radius: 3px;
+    border: none;
+    height: 100%;
+}
+.display-container{
+    flex: 12;
+    background: #b2c7d9 ; /* chat color use: #ffffff for alternative */
+    overflow-y: scroll; /* scroll for chat that goes over */
+}
+.input-container{
+    flex: 1;
+    display: flex;
+    justify-content: stretch; /* cover full area */
+    align-items: stretch;
+}
+.input-container span{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.3rem;
+    width: 100%; /* cover full area */
+}
+.chatting-input{
+    font-size: 12px;
+    height: 100%;
+    flex: 8;
+    border: none;
+}
+
+.send-button{
+    flex: 1;
+    background: #1F8AFF; /* iMessage blue */
+    border: none;
+    height: 100%;
+    border-radius: 3px;
+}
+
+.chatting-list li{
+    width: 90%;
+    padding: 0.3rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin-top: 0.5rem;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+
+}
+
+.profile .user{
+    font-size: 10px;
+    margin-bottom: 0.3rem;
+}
+
+.profile .image{
+    border-radius: 50%; /* change to squarcle later */
+    object-fit: cover; /* make image fit the shape */
+    width: 50px;
+    height: 50px;
+}
+
+.message {
+    border-radius: 5px;
+    padding: 0.5rem;
+    font-size: 12px;
+    margin: 0 5px;
+}
+
+.time{
+    font-size: 10px;
+    margin: 0 5px;
+
+}
+
+.sent{
+    flex-direction: row-reverse;  /* reverse sent message */
+    float: right;
+}
+
+
+.sent .message{
+    background: #1F8AFF; /* iMessage blue */
+}
+
+.received .message{
+    background: #ffffff; /* iMessage blue */
+}
+

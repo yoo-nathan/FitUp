@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel = "stylesheet" href="css/style.css">
+</head>
+
+
+<body>
+    <div class="wrapper">
+        <div class="user-container">
+            <label for ="nickname"> chatname</label>
+            <input type = "text" id="nickname">
+        </div>
+        <div class="display-container">
+            <ul class="chatting-list">
+                <li class = "sent">
+                    <span class ="profile">
+                        <span class="user">G Fenves</span>
+                        <img class="image" src="https://pbs.twimg.com/profile_images/1522295556147748866/gl9rIIpC_400x400.jpg" alt="any">
+                    </span>
+                    <span class = "message"> sup</span>
+                    <span class = "time"> 9:41</span>
+                </li>
+                <li class="received">
+                    <span class ="profile">
+                        <span class="user">J Epstein</span>
+                        <img class="image" src="https://engineering.nyu.edu/sites/default/files/styles/square_large_default_1x/public/2018-09/headshot3.jpg?h=bf336fe8&itok=AGCvzp1x" alt="any">
+                    </span>
+                    <span class = "message"> sup</span>
+                    <span class = "time"> 9:41</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="input-container" >
+            <span>
+                <input type ="text" class="chatting-input">
+                <button class= "send-button">send</button>
+            </span>
+            
+    </div>
+</div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js" integrity="sha512-luMnTJZ7oEchNDZAtQhgjomP1eZefnl82ruTH/3Oj/Yu5qYtwL7+dVRccACS/Snp1lFXq188XFipHKYE75IaQQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="js/chat.js"> </script>
+
+</body>
+</html>
