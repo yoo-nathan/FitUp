@@ -13,7 +13,7 @@ html, body {
     overflow: hidden;
 }
 .user-container{
-    background: #a9bdce ; /* background color */
+    background:#EBE3D5 ; /* top bar; use #a9bdce as backup */
     flex: 1;
     display: flex; /* clean up label and input tag */
     justify-content: flex-start;
@@ -31,7 +31,7 @@ html, body {
 }
 .display-container{
     flex: 12;
-    background: #b2c7d9 ; /* chat color use: #ffffff for alternative */
+    background: #F3EEEA ; /* chat color use: # dadada or #b2c7d9 for alternative */
     overflow-y: scroll; /* scroll for chat that goes over */
 }
 .input-container{
@@ -54,30 +54,49 @@ html, body {
     border: none;
 }
 
+.send-button {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%; 
+    background: #1F8AFF; 
+    border: none; 
+    color: white; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    cursor: pointer;
+    outline: none; 
+    font-size: 20px; 
+    padding: 0; 
+}
+
+
+/*
 .send-button{
     flex: 1;
-    background: #1F8AFF; /* iMessage blue */
+    background: #1F8AFF; /* iMessage blue 
     border: none;
     height: 100%;
     border-radius: 3px;
 }
 
-.chatting-list li{
-    width: 90%;
-    padding: 0.3rem;
+*/
+
+.chatting-list{
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
+    flex-direction: column;
+}
+
+.chatting-list li {
+    width: 100%; /* Might take it out */
+    display: flex;
+    align-items: center;
     margin-top: 0.5rem;
 }
 
 .profile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-
+    flex-shrink: 0; /* Prevents the profile from shrinking */
+    margin-right: 20px; /* Adjust space between profile and message */
 }
 
 .profile .user{
@@ -93,16 +112,14 @@ html, body {
 }
 
 .message {
-    border-radius: 5px;
-    padding: 0.5rem;
-    font-size: 12px;
-    margin: 0 5px;
+    background: #1F8AFF; /* iMessage color */
+    padding: 10px;
+    border-radius: 20px; /* Adjust for rounded corners */
+    max-width: 60%; /* Prevent message from taking full width */
 }
 
-.time{
-    font-size: 10px;
-    margin: 0 5px;
-
+.time {
+    padding-left: 10px; /* Space between message and time */
 }
 
 .sent{
