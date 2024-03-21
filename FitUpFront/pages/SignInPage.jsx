@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import React from 'react';
 
-export const LoginPage = () => {
+const LoginPage = () => {
     return (
         <View style={{backgroundColor: 'black'}}>
           <View style = {styles.content}>
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     },
     content: {
       paddingVertical: 10, // Adjust this value to position lower on the screen
-      alignItems: 'center', // Centers content horizontally
+      textAlign: 'center', // Centers content horizontally
       width: '100%',
       height: '100%',
     },
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
       fontSize:30,
       color:"white",
-      alignItems: 'center',
+      textAlign: 'center',
       justifyContent: 'center',
       //paddingVertical: 10,
       },
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
       fontWeight: "normal",
       fontSize:15,
       color:"white",
-      alignItems: 'center',
+      textAlign: 'center',
       justifyContent: 'center',
       paddingVertical: 10,
       },
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         fontWeight: "normal",
         fontSize:15,
         color:"white",
-        alignItems: 'left',
+        textAlign: 'left',
         paddingVertical: 5,
         paddingRight: 250
         },
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
           fontWeight: "normal",
           fontSize:15,
           color:"white",
-          alignItems: 'left',
+          textAlign: 'left',
           paddingVertical: 5,
           paddingRight: 220
           },
@@ -88,10 +88,10 @@ const styles = StyleSheet.create({
           },
     forgotPwText:{
       fontWeight: "normal",
-      textDecorationLine: 'line',
+      textDecorationLine: 'underline',
       fontSize:14,
       color:"grey",
-      alignItems: 'left',
+      textAlign: 'left',
       paddingVertical: 0,
       //paddingRight: 220
       },
@@ -135,3 +135,4 @@ const styles = StyleSheet.create({
   
   });
   
+export default LoginPage; // Changed to default export for consistency
