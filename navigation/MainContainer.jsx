@@ -12,7 +12,7 @@ import ProfileScreen from './screens/ProfileScreen';
 
 // Screen names
 const homeName = 'Home';
-const chatName = 'Chat';
+const chatName = 'Messages';
 const networkName = 'Network';
 const menuName = 'Menu';
 const profileName = 'Profile'
@@ -23,7 +23,7 @@ export default function MainContainer() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName={homeName}
+        // initialRouteName={homeName}
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) => {
             let iconName;
@@ -43,6 +43,9 @@ export default function MainContainer() {
 
             return <Ionicons name={iconName} size={size} color={color}/>;
           },
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: '#8075FF',
+          tabBarInactiveTintColor: 'black',
         })}
         >
         <Tab.Screen name={homeName} component={HomeScreen}/>
