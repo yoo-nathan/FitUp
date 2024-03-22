@@ -5,7 +5,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Import screens
 import HomeScreen from './screens/HomeScreen';
-import ChatScreen from './screens/ChatScreen';
+// import ChatScreen from './screens/ChatScreen';
+import ChatRoom from '../components/chatRoom';
 import NetworkScreen from './screens/NetworkScreen';
 import MenuScreen from './screens/MenuScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -46,7 +47,7 @@ export default function MainContainer() {
         })}
         >
         <Tab.Screen name={homeName} component={HomeScreen}/>
-        <Tab.Screen name={chatName} component={ChatScreen}/>
+        <Tab.Screen name={chatName} component={ChatRoom}/>
         <Tab.Screen name={networkName} component={NetworkScreen}/>
         <Tab.Screen name={menuName} component={MenuScreen}/>
         <Tab.Screen name={profileName} component={ProfileScreen}/>
