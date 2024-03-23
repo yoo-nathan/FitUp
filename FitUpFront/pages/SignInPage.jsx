@@ -3,7 +3,7 @@ import React from 'react';
 
 export const LoginPage = () => {
     return (
-        <View style={{backgroundColor: 'black'}}>
+        <View style={{backgroundColor: '#373F51'}}>
           <View style = {styles.content}>
             <Text style={styles.title}> Welcome to FitUP!</Text>
             <Text style={styles.subtitle}> Log in with your Emory Email </Text>
@@ -27,7 +27,7 @@ export const LoginPage = () => {
             <TouchableOpacity style={styles.forgotPwPress} > 
               <Text style={styles.forgotPwText}>Forgot Password? </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} >
+            <TouchableOpacity style={styles.button} onPress={signInPress} >
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
             
@@ -36,6 +36,7 @@ export const LoginPage = () => {
         
       )
 }
+const signInPress = () => console.log('Implement Sign In')
 
 const styles = StyleSheet.create({
     container: {
