@@ -12,9 +12,9 @@ const ThankYou = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#373F51', // Background color
-    justifyContent: 'center', // Center content vertically
-    textAlign: 'center', // Center content horizontally
+    backgroundColor: '#373F51', 
+    justifyContent: 'center',
+    textAlign: 'center', 
   },
   message: {
     fontWeight: '700',

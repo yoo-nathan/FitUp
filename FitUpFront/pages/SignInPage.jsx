@@ -3,7 +3,7 @@ import React from 'react';
 
 const LoginPage = () => {
     return (
-        <View style={{backgroundColor: 'black'}}>
+        <View style={{backgroundColor: '#373F51'}}>
           <View style = {styles.content}>
             <Text style={styles.title}> Welcome to FitUP!</Text>
             <Text style={styles.subtitle}> Log in with your Emory Email </Text>
@@ -27,7 +27,7 @@ const LoginPage = () => {
             <TouchableOpacity style={styles.forgotPwPress} > 
               <Text style={styles.forgotPwText}>Forgot Password? </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} >
+            <TouchableOpacity style={styles.button} onPress={signInPress} >
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
             
@@ -36,17 +36,16 @@ const LoginPage = () => {
         
       )
 }
+const signInPress = () => console.log('Implement Sign In')
 
 const styles = StyleSheet.create({
     container: {
       flex: 4,
       backgroundColor: '#000000',
-      //alignItems: 'center',
-      //justifyContent: 'flex-end',
     },
     content: {
-      paddingVertical: 10, // Adjust this value to position lower on the screen
-      textAlign: 'center', // Centers content horizontally
+      paddingVertical: 10, 
+      textAlign: 'center', 
       width: '100%',
       height: '100%',
     },
@@ -57,7 +56,6 @@ const styles = StyleSheet.create({
       color:"white",
       textAlign: 'center',
       justifyContent: 'center',
-      //paddingVertical: 10,
       },
     subtitle:{
       fontWeight: "normal",
@@ -93,7 +91,6 @@ const styles = StyleSheet.create({
       color:"grey",
       textAlign: 'left',
       paddingVertical: 0,
-      //paddingRight: 220
       },
     inputView:{
         width:"80%",
@@ -119,7 +116,7 @@ const styles = StyleSheet.create({
       padding:20
       },
       button: {
-        backgroundColor: '#4b0082', // Initial background color of the button
+        backgroundColor: '#4b0082', 
         paddingVertical: 15,
         paddingHorizontal: 30,
         borderRadius: 15,
@@ -135,4 +132,4 @@ const styles = StyleSheet.create({
   
   });
   
-export default LoginPage; // Changed to default export for consistency
+export default LoginPage; 

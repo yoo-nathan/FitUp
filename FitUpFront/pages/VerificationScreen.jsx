@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: 'black', // Change as per your theme
+    backgroundColor: '#373F51', 
   },
   title: {
     fontSize: 22,
@@ -94,10 +94,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   submitButton: {
-    backgroundColor: '#6a0dad', // Adjust your button colors accordingly
+    backgroundColor: '#6a0dad', 
   },
   cancelButton: {
-    backgroundColor: 'grey', // Adjust your button colors accordingly
+    backgroundColor: 'grey', 
   },
 });
 

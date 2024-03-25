@@ -10,11 +10,8 @@ const io = socketIO(server);
 
 
 //Server Side
-
-
 app.use(express.static(path.join(__dirname, "src")))
 const PORT = process.env.Port || 5001;
-
 
 io.on("connection",(socket) => {
     socket.on("chatting", (data) =>{
@@ -23,7 +20,6 @@ io.on("connection",(socket) => {
             name,
             msg,
             time: moment (new Date()).format("hh:mm a")
-
         })
     })
 })
