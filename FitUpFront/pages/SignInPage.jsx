@@ -69,7 +69,11 @@ const styles = StyleSheet.create({
         fontWeight: "normal",
         fontSize:15,
         color:"white",
+<<<<<<< HEAD
         textAlign: 'left',
+=======
+        // alignItems: 'left',
+>>>>>>> 8ff41320aa787308519c2b6e1839efb39a1b34dd
         paddingVertical: 5,
         paddingRight: 250
         },
@@ -77,7 +81,11 @@ const styles = StyleSheet.create({
           fontWeight: "normal",
           fontSize:15,
           color:"white",
+<<<<<<< HEAD
           textAlign: 'left',
+=======
+          // alignItems: 'left',
+>>>>>>> 8ff41320aa787308519c2b6e1839efb39a1b34dd
           paddingVertical: 5,
           paddingRight: 220
           },
@@ -86,10 +94,17 @@ const styles = StyleSheet.create({
           },
     forgotPwText:{
       fontWeight: "normal",
+<<<<<<< HEAD
       textDecorationLine: 'underline',
       fontSize:14,
       color:"grey",
       textAlign: 'left',
+=======
+      // textDecorationLine: 'line',
+      fontSize:14,
+      color:"grey",
+      // alignItems: 'left',
+>>>>>>> 8ff41320aa787308519c2b6e1839efb39a1b34dd
       paddingVertical: 0,
       },
     inputView:{
