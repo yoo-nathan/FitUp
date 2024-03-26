@@ -1,22 +1,25 @@
-GET http://localhost:3000/users
+@host = http://localhost:3000
 
 ###
-//Register New User
-POST http://localhost:3000/users
+# List all users
+GET {{host}}/users
+
+###
+# Register a new user
+POST {{host}}/users
 Content-Type: application/json
 
 {
-    "email": "dkoo6@emory.edu",
-    "password": "1q2w3e4r!Q@W#E$R"
+    "email": "dkoo4@emory.edu",
+    "password": "password99999999"
 }
 
-
 ###
-//Login
-POST http://localhost:3000/users/login
+# Login
+POST {{host}}/users/login
 Content-Type: application/json
 
 {
-    "email": "dkoo6@emory.edu",
-    "password": "1q2w3e4r!Q@W#E$R"
+    "email": "dkoo4@emory.edu",
+    "password": "password99999999"
 }

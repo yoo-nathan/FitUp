@@ -1,46 +1,48 @@
 const express = require('express');
-const app = express();
 const bcrypt = require('bcrypt');
+const pool = require('./db'); // Import the database connection
 
+const app = express();
 app.use(express.json());
 
-//Save this to sql later
-const users = [];
-
-app.get('/users', (req, res) => {
-    res.json(users);
+// Get all users
+app.get('/users', async (req, res) => {
+    try {
+        const { rows } = await pool.query('SELECT email FROM users'); // Don't select passwords
+        res.json(rows);
+    } catch (error) {
+        res.status(500).send('Server error');
+    }
 });
 
-
-//Registering User
+// Register new user
 app.post('/users', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const user = { email: req.body.email, password: hashedPassword };
-        users.push(user);
-        res.status(201).send();
-    } catch {
-        res.status(500).send();
+        await pool.query('INSERT INTO users (email, password) VALUES ($1, $2)', [req.body.email, hashedPassword]);
+        res.status(201).send('User registered successfully');
+    } catch (error) {
+        res.status(500).send('Error registering new user');
     }
 });
 
-
-//Login
+// Login
 app.post('/users/login', async (req, res) => {
-    const user = users.find(user => user.email === req.body.email);
-    if (user == null) {
-        //Use the same message for user not found for bette security
-        return res.status(400).send('Login Failed'); 
-    }
     try {
-        if (await bcrypt.compare(req.body.password, user.password)) {
-            res.send('Success');
+        const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+        if (rows.length > 0) {
+            const user = rows[0];
+            if (await bcrypt.compare(req.body.password, user.password)) {
+                res.send('Success');
+            } else {
+                res.send('Login Failed');
+            }
         } else {
-            res.send('Login Failed');
+            res.status(400).send('User not found');
         }
-    } catch {
-        res.status(500).send();
+    } catch (error) {
+        res.status(500).send('Login error');
     }
 });
 
-app.listen(3000);
+app.listen(3000, () => console.log('Server running on port 3000'));
