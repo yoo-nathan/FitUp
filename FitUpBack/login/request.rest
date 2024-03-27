@@ -6,20 +6,20 @@ GET {{host}}/users
 
 ###
 # Register a new user
-POST {{host}}/users
+POST {{host}}/authenticate/register
 Content-Type: application/json
 
 {
-    "email": "dkoo4@emory.edu",
-    "password": "password99999999"
+    "email": "admin@emory.edu",
+    "password": "test1234"
 }
 
 ###
 # Login
-POST {{host}}/users/login
+POST {{host}}/authenticate/login
 Content-Type: application/json
 
 {
-    "email": "dkoo4@emory.edu",
-    "password": "password99999999"
+    "email": "admin@emory.edu",
+    "password": "test1234"
 }

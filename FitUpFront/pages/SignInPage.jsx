@@ -1,7 +1,41 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginPage = () => {
+
+const SignInPage = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const signInPress = async () => {
+      try {
+        const token = await fetch('http://localhost:3000/authenticate/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+        });
+
+        const data = await tokenData.json();
+
+        if (token.ok) {
+          await AsyncStorage.setItem('userToken', data.token);
+          Alert.alert("Success", "Successfully logged in!");
+        } else {
+          Alert.alert("Login Failed", "Invalid email or password");
+        }
+
+      } catch (error) {
+          console.error(error);
+          Alert.alert("Error", "An error occurred");
+      }
+    }
+
+
     return (
         <View style={{backgroundColor: '#373F51'}}>
           <View style = {styles.content}>
@@ -28,7 +62,9 @@ const LoginPage = () => {
               <Text style={styles.forgotPwText}>Forgot Password? </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={signInPress} >
-              <Text style={styles.buttonText}>Sign In</Text>
+              <Text 
+              style={styles.buttonText}
+              >Sign In</Text>
             </TouchableOpacity>
             
           </View>
@@ -36,18 +72,14 @@ const LoginPage = () => {
         
       )
 }
-const signInPress = () => console.log('Implement Sign In')
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 4,
-      backgroundColor: '#000000',
-    },
     content: {
       paddingVertical: 10, 
       textAlign: 'center', 
       width: '100%',
       height: '100%',
+      alignItems: 'center'
     },
     title:{
       marginTop: 130,
@@ -69,11 +101,7 @@ const styles = StyleSheet.create({
         fontWeight: "normal",
         fontSize:15,
         color:"white",
-<<<<<<< HEAD
         textAlign: 'left',
-=======
-        // alignItems: 'left',
->>>>>>> 8ff41320aa787308519c2b6e1839efb39a1b34dd
         paddingVertical: 5,
         paddingRight: 250
         },
@@ -81,30 +109,19 @@ const styles = StyleSheet.create({
           fontWeight: "normal",
           fontSize:15,
           color:"white",
-<<<<<<< HEAD
           textAlign: 'left',
-=======
-          // alignItems: 'left',
->>>>>>> 8ff41320aa787308519c2b6e1839efb39a1b34dd
           paddingVertical: 5,
           paddingRight: 220
           },
     forgotPwPress: {
-            paddingRight: 200
+            paddingRight: 170
           },
     forgotPwText:{
       fontWeight: "normal",
-<<<<<<< HEAD
       textDecorationLine: 'underline',
       fontSize:14,
       color:"grey",
       textAlign: 'left',
-=======
-      // textDecorationLine: 'line',
-      fontSize:14,
-      color:"grey",
-      // alignItems: 'left',
->>>>>>> 8ff41320aa787308519c2b6e1839efb39a1b34dd
       paddingVertical: 0,
       },
     inputView:{
@@ -147,4 +164,4 @@ const styles = StyleSheet.create({
   
   });
   
-export default LoginPage; 
+export default SignInPage; 

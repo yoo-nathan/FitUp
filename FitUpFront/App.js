@@ -1,39 +1,64 @@
-<<<<<<< HEAD
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View } from 'react-native';
-import ProfileInfoScreen from './pages/ProfileInfoScreen'; 
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const App = () => {
-  return (
-    <View style={styles.container}>
-      <ProfileInfoScreen />
-    </View>
-  );
-};
-=======
-//import { StatusBar } from 'expo-status-bar';
-import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { LoginPage } from './pages/SignInPage';
+// page or screen
+import ProfileInfoScreen from './pages/ProfileInfoScreen'; 
+import SignInPage from './pages/SignInPage';
 import MainContainer from './navigation/MainContainer';
 
-const App = () => {
-  return (
-    // <View>
-      <MainContainer/>
-    // </View>
-  )
-}
-export default App;
->>>>>>> 8ff41320aa787308519c2b6e1839efb39a1b34dd
+const Stack = createNativeStackNavigator();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff', 
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const App = () => {
+  const [userToken, setUserToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        setUserToken(token);
+      } catch (e) {
+        console.error(e);
+      }
+      setIsLoading(false);
+    };
+
+    checkToken();
+  }, []);
+
+  if (isLoading) {
+    // TODO: create a splash screen
+    return ; 
+  }
+
+  return (
+    // change userToken to !userToken to see MainContainer
+    <>
+    { !userToken ? <MainContainer/> : <SignInPage/> }
+    </>
+    // <NavigationContainer>
+    //   { userToken ? (
+    //       <MainContainer/>
+    //     ) : (
+    //       <Stack.Navigator>
+    //         <Stack.Screen name="SignIn" component={SignInPage} />
+    //       </Stack.Navigator>
+    //     )
+    //   }
+    // </NavigationContainer>
+  );
+};
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff', 
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+// });
 
 export default App;
