@@ -24,7 +24,7 @@ const register = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-         // handle an error when there's the same email in DB
+        // handle an error when there's the same email in DB
         const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
         if (rows.length > 0) {
@@ -38,7 +38,7 @@ const register = async (req, res) => {
         const payload = { id: UID };
         const token = jwt.sign(payload, JWT_SECRET);
 
-        await pool.query('INSERT INTO users (UID, email, password) VALUES ($1, $2, $3)', [UID, email, hashedPassword]);
+        const save = await pool.query('INSERT INTO users (UID, email, password) VALUES ($1, $2, $3)', [UID, email, hashedPassword]);
 
         res.status(201).json({
             message: 'User registered successfully',

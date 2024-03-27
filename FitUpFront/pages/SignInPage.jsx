@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { login } from './../service/authService';
 
 const SignInPage = () => {
     const [email, setEmail] = useState('');
@@ -9,21 +9,13 @@ const SignInPage = () => {
 
     const signInPress = async () => {
       try {
-        const token = await fetch('http://localhost:3000/authenticate/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
-        });
-
-        const data = await tokenData.json();
-
-        if (token.ok) {
-          await AsyncStorage.setItem('userToken', data.token);
+        console.log(1)
+        const tokenData = await login(email, password);
+        console.log(email)
+        console.log(2)
+        console.log(tokenData)
+        if (tokenData) {
+          await AsyncStorage.setItem('userToken', tokenData);
           Alert.alert("Success", "Successfully logged in!");
         } else {
           Alert.alert("Login Failed", "Invalid email or password");
@@ -31,7 +23,8 @@ const SignInPage = () => {
 
       } catch (error) {
           console.error(error);
-          Alert.alert("Error", "An error occurred");
+          const errorMessage = error.token ? error.token.data.message : "An error occurred!";
+          Alert.alert("Error", errorMessage);
       }
     }
 
@@ -47,6 +40,8 @@ const SignInPage = () => {
               style={styles.inputText}
               placeholder="example@emory.edu"
               placeholderTextColor="#003f5c"
+              onChange={setEmail} // Use the text argument to update email
+              value={email}
               />
             </View>
             <Text style={styles.sidetitle1}> Password </Text>
@@ -56,12 +51,15 @@ const SignInPage = () => {
               secureTextEntry
               placeholder="Enter Password"
               placeholderTextColor="#003f5c"
+              onChangeText={setPassword}
               />
             </View>
             <TouchableOpacity style={styles.forgotPwPress} > 
               <Text style={styles.forgotPwText}>Forgot Password? </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={signInPress} >
+            <TouchableOpacity 
+            style={styles.button} 
+            onPress={signInPress} >
               <Text 
               style={styles.buttonText}
               >Sign In</Text>

@@ -37,7 +37,7 @@ const App = () => {
   return (
     // change userToken to !userToken to see MainContainer
     <>
-    { !userToken ? <MainContainer/> : <SignInPage/> }
+    { userToken ? <MainContainer/> : <SignInPage/> }
     </>
     // <NavigationContainer>
     //   { userToken ? (
