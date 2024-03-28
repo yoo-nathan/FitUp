@@ -140,7 +140,7 @@ const HeaderCard = ({MACROS}) => (
         </Text>
         <Image resizeMode='contain'
           style={styles.iconImg}
-          source={require('../../assets/pictures/dairy.png')}/>
+          source={require('../../assets/pictures/fat.png')}/>
         <Text style={styles.cardSubText}>
           : {MACROS.dairy}g
         </Text>
