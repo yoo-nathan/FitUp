@@ -6,11 +6,11 @@ export const login = async(email, password) => {
             email: email,
             password: password,
         });
-        console.log(response)
+        // console.log(response)
         if (response) {
             return response.data;
         }
     } catch(error) {
-
+        console.error(error);
     }
 }

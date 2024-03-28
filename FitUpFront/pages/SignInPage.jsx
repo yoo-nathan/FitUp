@@ -10,8 +10,10 @@ const SignInPage = () => {
     const signInPress = async () => {
       try {
         console.log(1)
-        const tokenData = await login(email, password);
         console.log(email)
+        console.log(password)
+        const tokenData = await login(email, password);
+        
         console.log(2)
         console.log(tokenData)
         if (tokenData) {
@@ -40,7 +42,7 @@ const SignInPage = () => {
               style={styles.inputText}
               placeholder="example@emory.edu"
               placeholderTextColor="#003f5c"
-              onChange={setEmail} // Use the text argument to update email
+              onChangeText={text => setEmail(text)}
               value={email}
               />
             </View>
@@ -51,7 +53,8 @@ const SignInPage = () => {
               secureTextEntry
               placeholder="Enter Password"
               placeholderTextColor="#003f5c"
-              onChangeText={setPassword}
+              onChangeText={text => setPassword(text)}
+              value={password}
               />
             </View>
             <TouchableOpacity style={styles.forgotPwPress} > 
