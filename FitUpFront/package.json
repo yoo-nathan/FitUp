@@ -9,15 +9,17 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.24.3",
     "@babel/preset-react": "^7.23.3",
+    "@expo/config-types": "^50.0.0",
     "@react-native-async-storage/async-storage": "^1.21.0",
-    "@react-navigation/bottom-tabs": "^6.5.16",
+    "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "@react-navigation/stack": "^6.3.25",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
-    "expo": "^50.0.14",
+    "expo": "^49.0.23",
     "expo-status-bar": "~1.11.1",
     "jsonwebtoken": "^9.0.2",
     "react": "18.2.0",
@@ -33,7 +35,8 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@babel/types": "^7.24.0"
   },
   "env": {
     "test": {
