@@ -1,4 +1,4 @@
-@host = http://localhost:3000
+@host = 35.196.1.236
 
 ###
 # List all users

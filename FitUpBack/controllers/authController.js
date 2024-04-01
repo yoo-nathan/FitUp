@@ -40,36 +40,46 @@ const register = async (req, res) => {
 
         const save = await pool.query('INSERT INTO users (UID, email, password) VALUES ($1, $2, $3)', [UID, email, hashedPassword]);
 
-        res.status(201).json({
+        return res.status(201).json({
             message: 'User registered successfully',
             token: token,
             UID: UID
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
 // Log In API ================================================================================================================================================================
 const login = async (req, res) => {
     try {
+        console.log(1)
         const { email, password } = req.body
-
+        console.log(2)
+        pool.connect(err => {
+          if (err) {
+              console.log('Failed to connect db ' + err)
+          } else {
+              console.log('Connect to db done!')
+          }
+        })
         const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-
+        pool.end()
+        console.log(3)
         if (rows.length == 0) {
           return res.status(401).send('Invalid email or password');
         }
-
+        console.log(4)
         const user = rows[0];
-
+        console.log(5)
         const isPasswordValid = await bcrypt.compare(password, user.password)
-
+        console.log(6)
         if (!isPasswordValid) {
           return res.status(401).send('Invalid email or password');
         }
-
+        console.log(7)
         const payload = { id: user.UID };
+        console.log(8)
         const token = jwt.sign(payload, JWT_SECRET, {
           expiresIn: '1h'
         });

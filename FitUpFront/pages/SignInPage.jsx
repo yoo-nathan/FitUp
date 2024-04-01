@@ -9,13 +9,13 @@ const SignInPage = () => {
 
     const signInPress = async () => {
       try {
-        console.log(1)
-        console.log(email)
-        console.log(password)
+        // console.log(1)
+        // console.log(email)
+        // console.log(password)
         const tokenData = await login(email, password);
         
-        console.log(2)
-        console.log(tokenData)
+        // console.log(2)
+        // console.log(tokenData)
         if (tokenData) {
           await AsyncStorage.setItem('userToken', tokenData);
           Alert.alert("Success", "Successfully logged in!");
