@@ -38,10 +38,10 @@ const App = () => {
 
   return (
     // change userToken to !userToken to see MainContainer
-    //<>
-    //{ userToken ? <MainContainer/> : <SignInPage/> }
-    //</>
-    <MainContainer/>
+    <>
+    { userToken ? <MainContainer/> : <SignInPage/> }
+    </>
+    // <MainContainer/>
     // <NavigationContainer>
     //   { userToken ? (
     //       <MainContainer/>

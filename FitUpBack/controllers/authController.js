@@ -50,21 +50,6 @@ const register = async (req, res) => {
 
       await pool.query('INSERT INTO users (UID, email, password) VALUES (?, ?, ?)', [UID, email, hashedPassword]);
 
-<<<<<<< HEAD
-        const payload = { id: UID };
-        const token = jwt.sign(payload, JWT_SECRET);
-
-        const save = await pool.query('INSERT INTO users (UID, email, password) VALUES ($1, $2, $3)', [UID, email, hashedPassword]);
-
-        return res.status(201).json({
-            message: 'User registered successfully',
-            token: token,
-            UID: UID
-        });
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
-=======
       // Send back a response
       res.status(201).json({
           message: 'User registered successfully',
@@ -74,57 +59,27 @@ const register = async (req, res) => {
   } catch (error) {
       res.status(500).json({ error: error.message });
   }
->>>>>>> 86705a58a91e4e643adb5905cf76f8c952dcd828
 };
 
 // Log In API
 const login = async (req, res) => {
     try {
-<<<<<<< HEAD
-        console.log(1)
-        const { email, password } = req.body
-        console.log(2)
-        pool.connect(err => {
-          if (err) {
-              console.log('Failed to connect db ' + err)
-          } else {
-              console.log('Connect to db done!')
-          }
-        })
-        const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        pool.end()
-        console.log(3)
-=======
         const { email, password } = req.body;
         const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
 
->>>>>>> 86705a58a91e4e643adb5905cf76f8c952dcd828
         if (rows.length == 0) {
             return res.status(401).send('Invalid email or password');
         }
         console.log(4)
         const user = rows[0];
-<<<<<<< HEAD
-        console.log(5)
-        const isPasswordValid = await bcrypt.compare(password, user.password)
-        console.log(6)
-=======
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
->>>>>>> 86705a58a91e4e643adb5905cf76f8c952dcd828
         if (!isPasswordValid) {
             return res.status(401).send('Invalid email or password');
         }
         console.log(7)
         const payload = { id: user.UID };
-<<<<<<< HEAD
-        console.log(8)
-        const token = jwt.sign(payload, JWT_SECRET, {
-          expiresIn: '1h'
-        });
-=======
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
->>>>>>> 86705a58a91e4e643adb5905cf76f8c952dcd828
 
         return res.status(200).json({ 
             message: 'Login successful', 
