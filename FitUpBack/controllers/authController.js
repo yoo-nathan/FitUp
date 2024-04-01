@@ -1,10 +1,18 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const pool = require('../db'); // Import the database connection
+const mysql = require('mysql2/promise');
 const { v4: uuidv4 } = require('uuid'); 
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = 'your-secret-key-here';
+
+// MySQL database connection setup
+const pool = mysql.createPool({
+    host: '35.196.58.227',
+    user: 'root',
+    database: 'User',
+    password: '1q2w3e4r!Q@W#E$R!',
+});
 
 const app = express();
 app.use(express.json());
@@ -12,29 +20,37 @@ app.use(express.json());
 // Get all users
 const getUsers = async (req, res) => {
     try {
-        const { rows } = await pool.query('SELECT email FROM users'); // Don't select passwords
+        const [rows] = await pool.query('SELECT email FROM users'); 
         res.json(rows);
     } catch (error) {
         res.status(500).send('Server error');
     }
 };
 
-// Registering the User==================================================================================================================================================================
 const register = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+  try {
+      const { email, password } = req.body;
 
-        // handle an error when there's the same email in DB
-        const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+      // Check if the email ends with @emory.edu
+      if (!email.endsWith('@emory.edu')) {
+          return res.status(400).json({ message: 'This email address is not supported.' });
+      }
 
-        if (rows.length > 0) {
+      // Handle an error when there's the same email in the DB
+      const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+
+      if (rows.length > 0) {
           return res.status(409).json({ message: 'Email already registered' });
-        }
-        
-        const UID = uuidv4();
+      }
+      
+      const UID = uuidv4();
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const payload = { id: UID };
+      const token = jwt.sign(payload, JWT_SECRET);
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+      await pool.query('INSERT INTO users (UID, email, password) VALUES (?, ?, ?)', [UID, email, hashedPassword]);
 
+<<<<<<< HEAD
         const payload = { id: UID };
         const token = jwt.sign(payload, JWT_SECRET);
 
@@ -48,11 +64,23 @@ const register = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
+=======
+      // Send back a response
+      res.status(201).json({
+          message: 'User registered successfully',
+          token: token,
+          UID: UID
+      });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+>>>>>>> 86705a58a91e4e643adb5905cf76f8c952dcd828
 };
 
-// Log In API ================================================================================================================================================================
+// Log In API
 const login = async (req, res) => {
     try {
+<<<<<<< HEAD
         console.log(1)
         const { email, password } = req.body
         console.log(2)
@@ -66,30 +94,44 @@ const login = async (req, res) => {
         const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         pool.end()
         console.log(3)
+=======
+        const { email, password } = req.body;
+        const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+
+>>>>>>> 86705a58a91e4e643adb5905cf76f8c952dcd828
         if (rows.length == 0) {
-          return res.status(401).send('Invalid email or password');
+            return res.status(401).send('Invalid email or password');
         }
         console.log(4)
         const user = rows[0];
+<<<<<<< HEAD
         console.log(5)
         const isPasswordValid = await bcrypt.compare(password, user.password)
         console.log(6)
+=======
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+>>>>>>> 86705a58a91e4e643adb5905cf76f8c952dcd828
         if (!isPasswordValid) {
-          return res.status(401).send('Invalid email or password');
+            return res.status(401).send('Invalid email or password');
         }
         console.log(7)
         const payload = { id: user.UID };
+<<<<<<< HEAD
         console.log(8)
         const token = jwt.sign(payload, JWT_SECRET, {
           expiresIn: '1h'
         });
+=======
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+>>>>>>> 86705a58a91e4e643adb5905cf76f8c952dcd828
 
         return res.status(200).json({ 
-          message: 'Login successful', 
-          token 
+            message: 'Login successful', 
+            token 
         }); 
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 

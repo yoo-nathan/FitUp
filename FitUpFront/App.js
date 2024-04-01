@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // page or screen
@@ -18,6 +19,7 @@ const App = () => {
   useEffect(() => {
     const checkToken = async () => {
       try {
+        //AsyncStorage.removeItem('userToken'); // line added for live demo in class. don't forget to remove later.
         const token = await AsyncStorage.getItem('userToken');
         setUserToken(token);
       } catch (e) {
@@ -36,9 +38,10 @@ const App = () => {
 
   return (
     // change userToken to !userToken to see MainContainer
-    <>
-    { userToken ? <MainContainer/> : <SignInPage/> }
-    </>
+    //<>
+    //{ userToken ? <MainContainer/> : <SignInPage/> }
+    //</>
+    <MainContainer/>
     // <NavigationContainer>
     //   { userToken ? (
     //       <MainContainer/>

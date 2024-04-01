@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const { Pool } = require('pg');
 const fs = require('fs'); 
 
@@ -28,3 +29,16 @@ const pool = new Pool({
 //     })
 
 module.exports = pool;
+=======
+// db.js
+const mysql = require('mysql2/promise');
+
+const pool = mysql.createPool({
+    host: '35.196.58.227',
+    user: 'root',
+    database: 'user', 
+    password: '1q2w3e4r!Q@W#E$R!',
+});
+
+module.exports = pool;
+>>>>>>> 86705a58a91e4e643adb5905cf76f8c952dcd828
