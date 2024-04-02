@@ -10,11 +10,11 @@ const JWT_SECRET = 'your-secret-key-here';
 const pool = mysql.createPool({
     host: '35.196.58.227',
     user: 'root',
-    database: 'User', 
+    database: 'User', // Ensure this matches the actual database name
     password: '1q2w3e4r!Q@W#E$R!',
 });
 
-// Get all users
+// Get all users (You might not have exposed this, but it's here for completeness)
 const getUsers = async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT email FROM users');
@@ -81,7 +81,7 @@ const login = async (req, res) => {
 };
 
 module.exports = {
-    getUsers, 
+    getUsers, // If you plan to use it
     register,
     login,
 };
