@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const mysql = require('mysql2/promise');
-const { v4: uuidv4 } = require('uuid'); 
+const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 // const pool = require('../db');
 
@@ -11,55 +11,45 @@ const JWT_SECRET = 'your-secret-key-here';
 const pool = mysql.createPool({
     host: '35.196.58.227',
     user: 'root',
-    database: 'User',
+    database: 'User', // Ensure this matches the actual database name
     password: '1q2w3e4r!Q@W#E$R!',
 });
 
-const app = express();
-app.use(express.json());
-
-// Get all users
+// Get all users (You might not have exposed this, but it's here for completeness)
 const getUsers = async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT email FROM users'); 
+        const [rows] = await pool.query('SELECT email FROM users');
         res.json(rows);
     } catch (error) {
         res.status(500).send('Server error');
     }
 };
 
+// Registering the User
 const register = async (req, res) => {
-  try {
-      const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
+        const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
 
-      // Check if the email ends with @emory.edu
-      if (!email.endsWith('@emory.edu')) {
-          return res.status(400).json({ message: 'This email address is not supported.' });
-      }
+        if (rows.length > 0) {
+            return res.status(409).json({ message: 'Email already registered' });
+        }
+        
+        const UID = uuidv4();
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const payload = { id: UID };
+        const token = jwt.sign(payload, JWT_SECRET);
 
-      // Handle an error when there's the same email in the DB
-      const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+        await pool.query('INSERT INTO users (UID, email, password) VALUES (?, ?, ?)', [UID, email, hashedPassword]);
 
-      if (rows.length > 0) {
-          return res.status(409).json({ message: 'Email already registered' });
-      }
-      
-      const UID = uuidv4();
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const payload = { id: UID };
-      const token = jwt.sign(payload, JWT_SECRET);
-
-      await pool.query('INSERT INTO users (UID, email, password) VALUES (?, ?, ?)', [UID, email, hashedPassword]);
-
-      // Send back a response
-      res.status(201).json({
-          message: 'User registered successfully',
-          token: token,
-          UID: UID
-      });
-  } catch (error) {
-      res.status(500).json({ error: error.message });
-  }
+        res.status(201).json({
+            message: 'User registered successfully',
+            token: token,
+            UID: UID
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
 // Log In API
@@ -73,28 +63,37 @@ const login = async (req, res) => {
         if (rows.length == 0) {
             return res.status(401).send('Invalid email or password');
         }
+<<<<<<< HEAD
         console.log(4)
         
+=======
+
+>>>>>>> 59e92bf2659e9db6ae5da8341bea91d06ce991d0
         const user = rows[0];
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(401).send('Invalid email or password');
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 59e92bf2659e9db6ae5da8341bea91d06ce991d0
         const payload = { id: user.UID };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 
-        return res.status(200).json({ 
-            message: 'Login successful', 
-            token 
-        }); 
+        return res.status(200).json({
+            message: 'Login successful',
+            token
+        });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
 };
 
 module.exports = {
-  register,
-  login,
+    getUsers, // If you plan to use it
+    register,
+    login,
 };
