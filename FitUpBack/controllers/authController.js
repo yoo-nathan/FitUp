@@ -6,7 +6,16 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = 'your-secret-key-here';
 
+<<<<<<< HEAD
 const pool = require('../db');
+=======
+const pool = mysql.createPool({
+    host: '35.196.58.227',
+    user: 'root',
+    database: 'User',
+    password: '1q2w3e4r!Q@W#E$R!',
+});
+>>>>>>> e21d0e8618205c769132c7458eae1434caa4eb0a
 
 const getUsers = async (req, res) => {
     try {
