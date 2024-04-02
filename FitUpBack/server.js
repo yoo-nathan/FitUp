@@ -4,7 +4,6 @@ require('dotenv').config();
 
 const app = express();
 
-// const PORT = process.env.LOCAL_PORT;
 
 app.use(express.json());
 app.use('/authenticate', authRouter);
