@@ -1,14 +1,12 @@
 @host = http://localhost:3000/users
 
 
-
-
 # Register a new user
 POST {{host}}/authenticate/register
 Content-Type: application/json
 
 {
-    "email": "test1234@emory.edu",
+    "email": "isitconnected@emory.edu",
     "password": "test1234"
 }
 
