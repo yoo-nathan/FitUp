@@ -10,7 +10,7 @@ POST {{host}}/authenticate/register
 Content-Type: application/json
 
 {
-    "email": "aaadmin@emory.edu",
+    "email": "test1234@emory.edu",
     "password": "test1234"
 }
 

@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const mysql = require('mysql2/promise');
 const { v4: uuidv4 } = require('uuid'); 
 const jwt = require('jsonwebtoken');
+// const pool = require('../db');
 
 const JWT_SECRET = 'your-secret-key-here';
 
@@ -64,20 +65,23 @@ const register = async (req, res) => {
 // Log In API
 const login = async (req, res) => {
     try {
+        console.log(1)
         const { email, password } = req.body;
+        console.log(2)
         const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
-
+        console.log(3)
         if (rows.length == 0) {
             return res.status(401).send('Invalid email or password');
         }
         console.log(4)
+        
         const user = rows[0];
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(401).send('Invalid email or password');
         }
-        console.log(7)
+        
         const payload = { id: user.UID };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 
