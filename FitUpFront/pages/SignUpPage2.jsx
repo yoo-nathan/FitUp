@@ -7,12 +7,10 @@ import { useRoute } from '@react-navigation/native';
 const SignUpPage2 = ({ navigation }) => {
     const [height, setHeight] = useState('');
     const [weight, setWeight] = useState('');
-    const [purpose, setPurpose] = useState('Lose weight'); // default 
+    const [purpose, setPurpose] = useState('Lose weight');
     const [workoutSchedule, setWorkoutSchedule] = useState([]);
     const route = useRoute();
     const { email, password, firstName, lastName, gender, schoolYear } = route.params;
-
-    const purposes = ['Lose weight', 'Gain weight', 'Maintain weight', 'Performance'];
 
     const canSignUp = () => {
         return height && weight && purpose && workoutSchedule;
@@ -43,7 +41,7 @@ const SignUpPage2 = ({ navigation }) => {
             <TextInput
                 style={styles.input}
                 placeholder="Height (enter 5.8 for 5'8)"
-                keyboardType="default"
+                keyboardType="numeric"
                 value={height}
                 onChangeText={setHeight}
             />
@@ -55,16 +53,18 @@ const SignUpPage2 = ({ navigation }) => {
                 value={weight}
                 onChangeText={setWeight}
             />
+            <Text style={styles.subtitle}>Purpose of Training:</Text>
 
-            <View style={styles.pickerContainer}>
+            <View style={styles.otherContainer}>
                 <Picker
                     selectedValue={purpose}
                     style={styles.picker}
-                    onValueChange={(itemValue) => setPurpose(itemValue)}
+                    onValueChange={(itemValue, itemIndex) => setPurpose(itemValue)}
                 >
-                    {purposes.map((purpose, index) => (
-                        <Picker.Item key={index} label={purpose} value={purpose} />
-                    ))}
+                    <Picker.Item label="Lose Weight" value="Lose Weight" />
+                    <Picker.Item label="Gain Weight" value="Gain Weight" />
+                    <Picker.Item label="Maintain Weight" value="Maintain" />
+                    <Picker.Item label="Better Performance" value="Better Performance" />
                 </Picker>
             </View>
 
@@ -123,26 +123,17 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         fontSize: 18,
     },
-    pickerContainer: {
-        backgroundColor: "#d3d3d3",
-        borderRadius: 15,
-        marginBottom: 20,
-    },
-    picker: {
-        height: 50,
-        width: '100%',
-    },
     day: {
         backgroundColor: '#2a2a2a',
-        borderRadius: 15,
-        padding: 15,
-        marginBottom: 10,
+        borderRadius: 40,
+        padding: 13,
+        marginBottom: 5,
     },
     selectedDay: {
-        backgroundColor: '#4b0082',
-        borderRadius: 15,
-        padding: 15,
-        marginBottom: 10,
+        backgroundColor: '#b4a7d6',
+        borderRadius: 40,
+        padding: 13,
+        marginBottom: 5,
     },
     dayText: {
         color: 'white',
@@ -150,7 +141,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     button: {
-        backgroundColor: '#4b0082',
+        backgroundColor: '#8075FF',
         borderRadius: 15,
         height: 50,
         justifyContent: 'center',
@@ -161,6 +152,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    otherContainer: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 0,
+        height: 'auto'
+      },
+    picker: {
+        fontSize: 10
     },
 });
 
