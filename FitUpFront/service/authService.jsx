@@ -24,6 +24,7 @@ export const register = async(totalInfo) => {
             password: password,
             userInfo: restInfo
         })
+        console.log(response)
         if (response) {
             return response.data;
         }

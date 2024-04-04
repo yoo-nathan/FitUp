@@ -41,7 +41,7 @@ const register = async (req, res) => {
         const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password) VALUES (?, ?, ?)';
 
         const saveCredential = await pool.query(saveCredentialQuery, [UID, email, hashedPassword]);
-
+        console.log(userInfo)
         const {
             first_name,
             last_name,
@@ -59,7 +59,7 @@ const register = async (req, res) => {
         const saveInfoQuery = 'INSERT INTO userInfo (UID, height, weight, purpose, workout_schedule, gender, workout_style, personal_records, partner_preferences, first_name, last_name, school_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         
         const saveInfo = await pool.query(saveInfoQuery, 
-            [UID, height, weight, purpose, workout_schedule, gender, workout_style, 
+            [UID, height, weight, purpose, JSON.stringify(workout_schedule), gender, workout_style, 
             JSON.stringify(personal_records), JSON.stringify(partner_preferences), first_name, last_name, school_year]);
         console.log(4)
         res.status(201).json({

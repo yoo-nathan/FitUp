@@ -34,10 +34,10 @@ const WorkoutPreferences = ({ navigation }) => {
   const totalInfo = {
     email: email,
     password: password,
-    firstName: firstName,
-    lastName: lastName,
+    first_name: firstName,
+    last_name: lastName,
     gender: gender,
-    schoolYear: schoolYear,
+    school_year: schoolYear,
     height: height,
     weight: weight,
     purpose: purpose,
@@ -61,10 +61,6 @@ const WorkoutPreferences = ({ navigation }) => {
     } catch (error) {
       console.error(error);
     }
-  }
-
-  const handleSignUp = () => {
-        navigation.navigate('ThankYou', totalInfo)
   }
 
   const WorkoutTypeOption = ({ option }) => (
