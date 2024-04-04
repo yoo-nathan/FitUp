@@ -5,7 +5,7 @@ const ThankYou = ({ navigation }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('HomeScreen'); 
+      navigation.navigate('MainContainer'); 
     }, 3000); // 3 seconds
 
     return () => clearTimeout(timer);

@@ -58,7 +58,11 @@ const App = () => {
           <Stack.Screen name="SignIn" component={SignInPage} />
         </Stack.Navigator>
       )} */}
-      <Stack.Navigator initialRouteName="SignUpPage">
+      <Stack.Navigator 
+      initialRouteName="SignUpPage"
+      screenOptions={{
+        headerShown: false,
+      }}>
         <Stack.Screen name="SignInPage" component={SignInPage} />
         <Stack.Screen name="SignUpPage" component={SignUpPage} />
         <Stack.Screen name="SignUpPage1" component={SignUpPage1} />
@@ -66,7 +70,7 @@ const App = () => {
         <Stack.Screen name="WorkoutPreferences" component={WorkoutPreferences} />
         <Stack.Screen name="ThankYou" component={ThankYouScreen} />
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="MainContainer" component={MainContainer}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
