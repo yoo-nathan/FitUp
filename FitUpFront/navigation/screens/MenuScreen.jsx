@@ -13,29 +13,41 @@ import {
   } from 'react-native';
 
 export default function MenuScreen({ navigation }) {
+  const [menu, setMenu] = useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const showModal = () => setIsModalVisible(true);
+  const showModal = (id) => {
+    setIsModalVisible(true);
+    const MENU = ALL.find(item => item.mid === id)
+    setMenu(MENU)
+    //console.log(menu)
+    //console.log(id)
+  }
   const hideModal = () => setIsModalVisible(false);
+  
   const Item = ({item}) => (
     <SafeAreaView>
       <TouchableOpacity 
         style={styles.item}
-        onPress={showModal}>
+        onPress={() => showModal(item.mid)}>
           <Text style={styles.itemTitle}>
               {item.menu}
           </Text>
       </TouchableOpacity>
-      <Modal visible={isModalVisible}
-      animationType='fade'
-      transparent>
-        <View style={styles.modalViewContainer}>
-          <View style={styles.modalCardView}>
-            <ModalPopUp item = {item}/>
-            <Button title='hide' onPress={hideModal}/>
-            
+      {menu &&(
+        <Modal visible={isModalVisible}
+        animationType='fade'
+        transparent>
+          <View style={styles.modalViewContainer}>
+            <View style={styles.modalCardView}>
+              <ModalPopUp item = {menu}/>
+              <Button title='hide' onPress={hideModal}/>
+              
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
+        
+      
     </SafeAreaView>
   );
 
@@ -62,7 +74,7 @@ export default function MenuScreen({ navigation }) {
   );
 }
 
-const ModalPopUp = ({item, MACROS}) => (
+const ModalPopUp = ({item}) => (
   <View style={{alignContent:"center",justifyContent:'center'}}>
     <Text style={{
       fontSize:30, 
@@ -157,55 +169,119 @@ const MACROS = {
 
 const DCT = [
   {  
-      menu: "1 serving of Noodle 1 serving of Noodle 1 serving of Noodle",
-      carbs: 20,
-      protein: 23,
-      fat: 10,
-      location: "Fire and Spice",
-      price: "Meal Swipe"
+    mid: '11',  
+    menu: "1 serving of Noodle 1 serving of Noodle 1 serving of Noodle",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Fire and Spice",
+    price: "Meal Swipe"
 
   },
-  {   
-      menu: "2 pieces of Rotisserie Chicken",
-      carbs: 20,
-      protein: 23,
-      fat: 10,
-      location: "605 Kitchen",
-      price: "Meal Swipe"
+  { 
+    mid: '12',  
+    menu: "2 pieces of Rotisserie Chicken",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "605 Kitchen",
+    price: "Meal Swipe"
   },
-  {   
-      menu: "Turkey Dog",
-      carbs: 20,
-      protein: 23,
-      fat: 10,
-      location: "Flatiron",
-      price: "Meal Swipe"
+  { 
+    mid: '13',  
+    menu: "Turkey Dog",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Flatiron",
+    price: "Meal Swipe"
   }
 ];
 const COX = [
   {
-      menu: "Maru Bowl w/ Ginger Chicken Gochujang sauce",
-      carbs: 20,
-      protein: 23,
-      fat: 10,
-      location: "Maru",
-      price: "11.89"
+    mid: '24',
+    menu: "Maru Bowl w/ Ginger Chicken Gochujang sauce",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Maru",
+    price: "11.89"
   },
-  {   
-      menu: "Steak Nachos",
-      carbs: 20,
-      protein: 23,
-      fat: 10,
-      location: "Twisted Taco",
-      price: "10.09"
+  { 
+    mid: '25',  
+    menu: "Steak Nachos",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Twisted Taco",
+    price: "10.09"
   },
-  {   
-      menu: "Cheese Pizza",
-      carbs: 20,
-      protein: 23,
-      fat: 10,
-      location: "Ray's Pizza",
-      price: "3.75"
+  { 
+    mid: '26',  
+    menu: "Cheese Pizza",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Ray's Pizza",
+    price: "3.75"
+  }
+];
+
+const ALL = [
+  {  
+    mid: '11',  
+    menu: "1 serving of Noodle 1 serving of Noodle 1 serving of Noodle",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Fire and Spice",
+    price: "Meal Swipe"
+
+  },
+  { 
+    mid: '12',  
+    menu: "2 pieces of Rotisserie Chicken",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "605 Kitchen",
+    price: "Meal Swipe"
+  },
+  { 
+    mid: '13',  
+    menu: "Turkey Dog",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Flatiron",
+    price: "Meal Swipe"
+  },
+  {
+    mid: '24',
+    menu: "Maru Bowl w/ Ginger Chicken Gochujang sauce",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Maru",
+    price: "11.89"
+  },
+  { 
+    mid: '25',  
+    menu: "Steak Nachos",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Twisted Taco",
+    price: "10.09"
+  },
+  { 
+    mid: '26',  
+    menu: "Cheese Pizza",
+    carbs: 20,
+    protein: 23,
+    fat: 10,
+    location: "Ray's Pizza",
+    price: "3.75"
   }
 ];
 
