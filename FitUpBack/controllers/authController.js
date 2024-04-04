@@ -3,19 +3,9 @@ const bcrypt = require('bcrypt');
 const mysql = require('mysql2/promise');
 const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-const JWT_SECRET = 'your-secret-key-here';
-
-<<<<<<< HEAD
 const pool = require('../db');
-=======
-const pool = mysql.createPool({
-    host: '35.196.58.227',
-    user: 'root',
-    database: 'User',
-    password: '1q2w3e4r!Q@W#E$R!',
-});
->>>>>>> e21d0e8618205c769132c7458eae1434caa4eb0a
 
 const getUsers = async (req, res) => {
     try {
@@ -26,11 +16,18 @@ const getUsers = async (req, res) => {
     }
 };
 
+// Register with email and password =================================================================================================
 const register = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const [rows] = await pool.query('SELECT * FROM login WHERE email = ?', [email]);
+        console.log(1)
+        const { 
+            email, 
+            password,
+            userInfo
+        } = req.body;
 
+        const [rows] = await pool.query('SELECT * FROM userCredentials WHERE email = ?', [email]);
+        console.log(2)
         if (rows.length > 0) {
             return res.status(409).json({ message: 'Email already registered' });
         }
@@ -38,10 +35,33 @@ const register = async (req, res) => {
         const UID = uuidv4();
         const hashedPassword = await bcrypt.hash(password, 10);
         const payload = { id: UID };
-        const token = jwt.sign(payload, JWT_SECRET);
+        const token = jwt.sign(payload, process.env.JWT_SECRET);
 
-        await pool.query('INSERT INTO login (UID, email, password) VALUES (?, ?, ?)', [UID, email, hashedPassword]);
+        // save the credential information first
+        const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password) VALUES (?, ?, ?)';
 
+        const saveCredential = await pool.query(saveCredentialQuery, [UID, email, hashedPassword]);
+
+        const {
+            first_name,
+            last_name,
+            gender, 
+            school_year,
+            height, 
+            weight, 
+            purpose, 
+            workout_schedule, 
+            workout_style, 
+            personal_records, 
+            partner_preferences,
+        } = userInfo;
+        console.log(3);
+        const saveInfoQuery = 'INSERT INTO userInfo (UID, height, weight, purpose, workout_schedule, gender, workout_style, personal_records, partner_preferences, first_name, last_name, school_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        
+        const saveInfo = await pool.query(saveInfoQuery, 
+            [UID, height, weight, purpose, workout_schedule, gender, workout_style, 
+            JSON.stringify(personal_records), JSON.stringify(partner_preferences), first_name, last_name, school_year]);
+        console.log(4)
         res.status(201).json({
             message: 'User registered successfully',
             token: token,
@@ -52,24 +72,25 @@ const register = async (req, res) => {
     }
 };
 
+// Login API =================================================================================================
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const [rows] = await pool.query('SELECT * FROM login WHERE email = ?', [email]);
+        const [rows] = await pool.query('SELECT * FROM userCredentials WHERE email = ?', [email]);
 
         if (rows.length == 0) {
             return res.status(401).send('Invalid email or password');
         }
 
         const user = rows[0];
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await bcrypt.compare(password, user.hashed_password);
 
         if (!isPasswordValid) {
             return res.status(401).send('Invalid email or password');
         }
 
         const payload = { id: user.UID };
-        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         return res.status(200).json({
             message: 'Login successful',

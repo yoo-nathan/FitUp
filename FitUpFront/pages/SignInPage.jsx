@@ -2,23 +2,25 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'reac
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from './../service/authService';
+import { useNavigation } from '@react-navigation/native';
 
 const SignInPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const navigation = useNavigation();
 
     const signInPress = async () => {
       try {
-        // console.log(1)
-        // console.log(email)
-        // console.log(password)
         const tokenData = await login(email, password);
         
-        // console.log(2)
-        // console.log(tokenData)
         if (tokenData) {
           await AsyncStorage.setItem('userToken', tokenData.token);
-          Alert.alert("Success", "Successfully logged in!");
+          // Alert.alert("Success", "Successfully logged in!");
+          console.log('Successfully logged in!')
+          // navigation.navigate('Home');
+          // setIsLoggedIn(true);
         } else {
           Alert.alert("Login Failed", "Invalid email or password");
         }

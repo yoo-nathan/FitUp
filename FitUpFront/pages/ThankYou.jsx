@@ -1,7 +1,16 @@
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
 
-const ThankYou = () => {
+const ThankYou = ({ navigation }) => {  
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigation.navigate('HomeScreen'); 
+    }, 3000); // 3 seconds
+
+    return () => clearTimeout(timer);
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.message}>Thank you for joining FitUp</Text>

@@ -10,8 +10,11 @@ import {
   Pressable,
   FlatList,
 } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import { register } from '../service/authService';
 
-const WorkoutPreferencesScreen = () => {
+
+const WorkoutPreferences = ({ navigation }) => {
   const [workoutType, setWorkoutType] = useState('Click to select');
   const [modalVisible, setModalVisible] = useState(false);
   const [squatPR, setSquatPR] = useState('');
@@ -25,6 +28,44 @@ const WorkoutPreferencesScreen = () => {
     similarWorkoutStyle: false,
     noPreference: false,
   });
+  const route = useRoute();
+  const { email, password, firstName, lastName, gender, schoolYear, height, weight, purpose, workoutSchedule } = route.params;
+
+  const totalInfo = {
+    email: email,
+    password: password,
+    firstName: firstName,
+    lastName: lastName,
+    gender: gender,
+    schoolYear: schoolYear,
+    height: height,
+    weight: weight,
+    purpose: purpose,
+    workout_schedule: workoutSchedule,
+    workout_style: workoutType,
+    personal_records: {
+      squat: squatPR, 
+      deadlift: deadliftPR,
+      benchpress: benchPressPR
+    },
+    partner_preferences: preferences
+  }
+
+  const signUpPress = async () => {
+    try {
+      console.log(workoutType);
+      const token = await register(totalInfo);
+      if (token) {
+        navigation.navigate('ThankYou');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleSignUp = () => {
+        navigation.navigate('ThankYou', totalInfo)
+  }
 
   const WorkoutTypeOption = ({ option }) => (
     <Pressable
@@ -142,8 +183,13 @@ const WorkoutPreferencesScreen = () => {
       </View>
 
       {/* Submit Button */}
-      <TouchableOpacity style={styles.submitButton}>
-        <Text style={styles.buttonText}>Submit</Text>
+      <TouchableOpacity
+        style={styles.submitButton}
+        onPress={signUpPress}
+      >
+        <View style={styles.buttonInnerContainer}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </View>
       </TouchableOpacity>
 
       <Modal
@@ -198,15 +244,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   submitButton: {
-    backgroundColor: '#6a0dad',
-    paddingVertical: 15,
+    backgroundColor: '#4b0082', 
+    paddingVertical: 15, 
+    paddingHorizontal: 30, 
     borderRadius: 10,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 30,
+    marginBottom: 20,
   },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'white', 
+    fontWeight: 'bold', 
+    fontSize: 18, 
   },
   row: {
     flexDirection: 'row',
@@ -296,4 +345,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default WorkoutPreferencesScreen;
+export default WorkoutPreferences;
