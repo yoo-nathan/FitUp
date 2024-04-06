@@ -1,16 +1,12 @@
-@host = http://localhost:3000
+@host = http://localhost:3000/users
 
-###
-# List all users
-GET {{host}}/users
 
-###
 # Register a new user
 POST {{host}}/authenticate/register
 Content-Type: application/json
 
 {
-    "email": "admin@emory.edu",
+    "email": "isitconnected@emory.edu",
     "password": "test1234"
 }
 
