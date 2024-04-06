@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#373F51'
     },
     flatList:{
-      height:130,
+      height:150,
       flexGrow: 0
     },
     item: {
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 6,
       borderRadius: 25, 
       width: 375, // Fixed width for each item
-      height: 100, // Fixed height for each item
+      height: 120, // Fixed height for each item
       justifyContent: 'center',
       alignContent:'center'
       
