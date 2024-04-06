@@ -8,12 +8,12 @@ const SignUpPage1 = ({ navigation }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('Male');
-  const [schoolYear, setSchoolYear] = useState('');
+  const [age, setAge] = useState('');
   const route = useRoute();
   const { email, password } = route.params;
 
   const canSignUp = () => {
-    return firstName && lastName && gender && schoolYear;
+    return firstName && lastName && gender && age;
   };
 
   const handleSignUp = () => {
@@ -24,7 +24,7 @@ const SignUpPage1 = ({ navigation }) => {
         firstName: firstName,
         lastName: lastName,
         gender: gender,
-        schoolYear: schoolYear
+        age: age
       })
     }
 
@@ -41,7 +41,7 @@ const SignUpPage1 = ({ navigation }) => {
         <Text style={styles.inputLabel}>First Name</Text>
         <TextInput style={styles.input} placeholder="John" value={firstName} onChangeText={setFirstName} />
         <Text style={styles.inputLabel}>Last Name</Text>
-        <TextInput style={styles.input} placeholder="Doe" value={lastName} onChangeText={setLastName} />
+        <TextInput style={styles.input} placeholder="Parker" value={lastName} onChangeText={setLastName} />
         <Text style={styles.label}>Gender</Text>
         <View style={styles.pickerContainer}>
           <Picker selectedValue={gender} onValueChange={setGender}>
@@ -50,8 +50,13 @@ const SignUpPage1 = ({ navigation }) => {
             <Picker.Item label="Other" value="Other" />
           </Picker>
         </View>
-        <Text style={styles.label}>School Year</Text>
-        <TextInput style={styles.input} placeholder="2024" value={schoolYear} onChangeText={setSchoolYear} />
+        <Text style={styles.label}>Age (years) </Text>
+        <TextInput 
+          style={styles.input} 
+          placeholder="21" value={age} 
+          onChangeText={setAge} 
+          
+        />
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>

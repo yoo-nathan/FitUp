@@ -21,8 +21,8 @@ const WorkoutPreferences = ({ navigation }) => {
   const [benchPressPR, setBenchPressPR] = useState('');
   const [deadliftPR, setDeadliftPR] = useState('');
   const [preferences, setPreferences] = useState({
-    similarBodyProfile: false,
-    similarPR: false,
+    SimilarWorkoutSchedule: false,
+    SimilarPr: false,
     samePurpose: false,
     sameGender: false,
     similarWorkoutStyle: false,
@@ -165,7 +165,7 @@ const WorkoutPreferences = ({ navigation }) => {
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Preferences in Workout Partner</Text>
         <View style={styles.row}>
-          {renderPreferenceButton('SimilarBodyProfile')}
+          {renderPreferenceButton('SimilarWorkoutSchedule')}
           {renderPreferenceButton('SimilarPr')}
         </View>
         <View style={styles.row}>

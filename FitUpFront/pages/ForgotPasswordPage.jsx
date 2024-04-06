@@ -13,9 +13,10 @@ const ForgotPasswordPage = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Reset Password</Text>
+            <Text style={styles.subheader}>Enter your Emory email below, and we will send you the reset password link to your email.</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Enter your email"
+                placeholder="example@emory.edu"
                 value={email}
                 onChangeText={setEmail}
                 autoCapitalize="none"
@@ -24,8 +25,7 @@ const ForgotPasswordPage = ({ navigation }) => {
             <TouchableOpacity style={styles.button} onPress={handlePasswordReset}>
                 <Text style={styles.buttonText}>Send Reset Link</Text>
             </TouchableOpacity>
-            {/* Back Button */}
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('LogInPage')}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('SignInPage')}>
                 <Text style={styles.backButtonText}>Back to Log In</Text>
             </TouchableOpacity>
         </View>
@@ -41,10 +41,17 @@ const styles = StyleSheet.create({
       padding: 20,
     },
     header: {
-      fontSize: 24,
+      fontSize: 28,
       fontWeight: 'bold',
       color: 'white',
       marginBottom: 20,
+    },
+    subheader: {
+      fontSize: 15,
+      color: 'white',
+      marginBottom: 20,
+      textAlign: 'center',
+      padding: 10,
     },
     input: {
       width: '100%', 
@@ -57,7 +64,7 @@ const styles = StyleSheet.create({
     },
     button: {
       width: '100%',
-      backgroundColor: '#4b0082', 
+      backgroundColor: '#8075FF', 
       borderRadius: 10,
       paddingVertical: 15,
       alignItems: 'center',

@@ -16,7 +16,7 @@ const VerificationScreen = () => {
         key={index}
         style={styles.codeInput}
         maxLength={1}
-        keyboardType="number-pad"
+        keyboardType="numeric"
         onChangeText={(text) => handleCodeInput(text, index)}
         value={code[index]}
       />

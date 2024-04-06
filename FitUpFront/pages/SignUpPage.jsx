@@ -22,14 +22,10 @@ const SignUpPage = ({ navigation }) => {
         }
     };
 
-    const navigateToForgotPassword = () => {
-        navigation.navigate('ForgotPasswordPage');
-    };
-
-
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Sign Up</Text>
+            <Text style={styles.title}> Sign up with your Emory email! </Text>
+            <Text style={styles.sidetitle}> Email </Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -39,6 +35,7 @@ const SignUpPage = ({ navigation }) => {
                 keyboardType="email-address"
                 placeholderTextColor="#003f5c"
             />
+            <Text style={styles.sidetitle1}> Create password </Text>
             <TextInput
                 style={styles.input}
                 placeholder="Create a password"
@@ -67,9 +64,9 @@ const SignUpPage = ({ navigation }) => {
             onPress={handleSignUp}
             disabled={!canSignUp()}
             >
-                <Text style={styles.buttonText}>Sign Up</Text>
+                <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('LogInPage')}>
+            <TouchableOpacity onPress={() => navigation.navigate('SignInPage')}>
                 <Text style={styles.signInText}>Already have an account? Log in</Text>
             </TouchableOpacity>
         </View>
@@ -80,15 +77,35 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#373F51',
-        alignItems: 'center',
+        paddingVertical: 140, 
+        textAlign: 'center', 
+        width: '100%',
+        height: '100%',
+        alignItems: 'center'
+    },
+    title:{
+        fontWeight: "bold",
+        fontSize: 25,
+        color:"white",
+        textAlign: 'center',
         justifyContent: 'center',
         padding: 20,
+        },
+    sidetitle:{
+        fontWeight: "normal",
+        fontSize:15,
+        color:"white",
+        textAlign: 'left',
+        paddingVertical: 5,
+        paddingRight: 250
     },
-    title: {
-        fontSize: 32,
-        color: 'white',
-        fontWeight: 'bold',
-        marginBottom: 20,
+    sidetitle1:{
+        fontWeight: "normal",
+        fontSize:15,
+        color:"white",
+        textAlign: 'left',
+        paddingVertical: 5,
+        paddingRight: 150
     },
     input: {
         width: '80%',

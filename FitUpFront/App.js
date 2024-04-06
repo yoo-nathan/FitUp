@@ -5,16 +5,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // page or screen
-import ProfileInfoScreen from './pages/ProfileInfoScreen'; 
 import SignInPage from './pages/SignInPage';
 import MainContainer from './navigation/MainContainer';
-// import LogInPage from './pages/LogInPage';
 import SignUpPage from './pages/SignUpPage';
 import SignUpPage1 from './pages/SignUpPage1';
 import SignUpPage2 from './pages/SignUpPage2';
 import WorkoutPreferences from './pages/WorkoutPreferences';
 import ThankYouScreen from './pages/ThankYou';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import VerificationScreen from './pages/VerificationScreen';
 import HomeScreen from './navigation/screens/HomeScreen';
 
 
@@ -59,7 +58,7 @@ const App = () => {
         </Stack.Navigator>
       )} */}
       <Stack.Navigator 
-      initialRouteName="SignUpPage"
+      initialRouteName="VerificationScreen"
       screenOptions={{
         headerShown: false,
       }}>
@@ -70,6 +69,7 @@ const App = () => {
         <Stack.Screen name="WorkoutPreferences" component={WorkoutPreferences} />
         <Stack.Screen name="ThankYou" component={ThankYouScreen} />
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
+        <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
         <Stack.Screen name="MainContainer" component={MainContainer}/>
       </Stack.Navigator>
     </NavigationContainer>
