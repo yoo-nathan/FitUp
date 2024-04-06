@@ -20,6 +20,7 @@ const getUsers = async (req, res) => {
 const register = async (req, res) => {
     try {
         console.log(1)
+        console.log(process.env.DB)
         const { 
             email, 
             password,
