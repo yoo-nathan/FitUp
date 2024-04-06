@@ -1,9 +1,40 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { login } from './../service/authService';
+import { useNavigation } from '@react-navigation/native';
 
-export const LoginPage = () => {
+const SignInPage = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const navigation = useNavigation();
+
+    const signInPress = async () => {
+      try {
+        const tokenData = await login(email, password);
+        
+        if (tokenData) {
+          await AsyncStorage.setItem('userToken', tokenData.token);
+          // Alert.alert("Success", "Successfully logged in!");
+          console.log('Successfully logged in!')
+          // navigation.navigate('Home');
+          // setIsLoggedIn(true);
+        } else {
+          Alert.alert("Login Failed", "Invalid email or password");
+        }
+
+      } catch (error) {
+          console.error(error);
+          const errorMessage = error.token ? error.token.data.message : "An error occurred!";
+          Alert.alert("Error", errorMessage);
+      }
+    }
+
+
     return (
-        <View style={{backgroundColor: 'black'}}>
+        <View style={{backgroundColor: '#373F51'}}>
           <View style = {styles.content}>
             <Text style={styles.title}> Welcome to FitUP!</Text>
             <Text style={styles.subtitle}> Log in with your Emory Email </Text>
@@ -13,6 +44,8 @@ export const LoginPage = () => {
               style={styles.inputText}
               placeholder="example@emory.edu"
               placeholderTextColor="#003f5c"
+              onChangeText={text => setEmail(text)}
+              value={email}
               />
             </View>
             <Text style={styles.sidetitle1}> Password </Text>
@@ -22,13 +55,19 @@ export const LoginPage = () => {
               secureTextEntry
               placeholder="Enter Password"
               placeholderTextColor="#003f5c"
+              onChangeText={text => setPassword(text)}
+              value={password}
               />
             </View>
             <TouchableOpacity style={styles.forgotPwPress} > 
               <Text style={styles.forgotPwText}>Forgot Password? </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} >
-              <Text style={styles.buttonText}>Sign In</Text>
+            <TouchableOpacity 
+            style={styles.button} 
+            onPress={signInPress} >
+              <Text 
+              style={styles.buttonText}
+              >Sign In</Text>
             </TouchableOpacity>
             
           </View>
@@ -38,32 +77,26 @@ export const LoginPage = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 4,
-      backgroundColor: '#000000',
-      //alignItems: 'center',
-      //justifyContent: 'flex-end',
-    },
     content: {
-      paddingVertical: 10, // Adjust this value to position lower on the screen
-      alignItems: 'center', // Centers content horizontally
+      paddingVertical: 10, 
+      textAlign: 'center', 
       width: '100%',
       height: '100%',
+      alignItems: 'center'
     },
     title:{
       marginTop: 130,
       fontWeight: "bold",
       fontSize:30,
       color:"white",
-      alignItems: 'center',
+      textAlign: 'center',
       justifyContent: 'center',
-      //paddingVertical: 10,
       },
     subtitle:{
       fontWeight: "normal",
       fontSize:15,
       color:"white",
-      alignItems: 'center',
+      textAlign: 'center',
       justifyContent: 'center',
       paddingVertical: 10,
       },
@@ -71,7 +104,7 @@ const styles = StyleSheet.create({
         fontWeight: "normal",
         fontSize:15,
         color:"white",
-        alignItems: 'left',
+        textAlign: 'left',
         paddingVertical: 5,
         paddingRight: 250
         },
@@ -79,21 +112,20 @@ const styles = StyleSheet.create({
           fontWeight: "normal",
           fontSize:15,
           color:"white",
-          alignItems: 'left',
+          textAlign: 'left',
           paddingVertical: 5,
           paddingRight: 220
           },
     forgotPwPress: {
-            paddingRight: 200
+            paddingRight: 170
           },
     forgotPwText:{
       fontWeight: "normal",
-      textDecorationLine: 'line',
+      textDecorationLine: 'underline',
       fontSize:14,
       color:"grey",
-      alignItems: 'left',
+      textAlign: 'left',
       paddingVertical: 0,
-      //paddingRight: 220
       },
     inputView:{
         width:"80%",
@@ -119,7 +151,7 @@ const styles = StyleSheet.create({
       padding:20
       },
       button: {
-        backgroundColor: '#4b0082', // Initial background color of the button
+        backgroundColor: '#4b0082', 
         paddingVertical: 15,
         paddingHorizontal: 30,
         borderRadius: 15,
@@ -135,3 +167,4 @@ const styles = StyleSheet.create({
   
   });
   
+export default SignInPage; 
