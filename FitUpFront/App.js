@@ -16,7 +16,7 @@ import WorkoutPreferences from './pages/WorkoutPreferences';
 import ThankYouScreen from './pages/ThankYou';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomeScreen from './navigation/screens/HomeScreen';
-
+import FilterPage from './pages/FilterPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,7 +59,7 @@ const App = () => {
         </Stack.Navigator>
       )} */}
       <Stack.Navigator 
-      initialRouteName="SignUpPage"
+      initialRouteName="MainContainer"
       screenOptions={{
         headerShown: false,
       }}>
@@ -71,6 +71,7 @@ const App = () => {
         <Stack.Screen name="ThankYou" component={ThankYouScreen} />
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         <Stack.Screen name="MainContainer" component={MainContainer}/>
+        <Stack.Screen name="Filter" component={FilterPage}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

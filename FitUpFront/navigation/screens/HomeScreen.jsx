@@ -179,12 +179,19 @@ export default function HomeScreen({ navigation }) {
   const [isFilterVisible, setFilterVisible] = useState(false);
   const showFilter = () => setFilterVisible(true);
   const hideFilter = () => setFilterVisible(false);
-  
+  const useBooleanState = (initialValue) => {
+    const [value, setValue] = useState(initialValue);
+    const toggleValue = () => setValue(previousValue => !previousValue);
+    return [value, toggleValue];
+  };
+  const [isPR, setPR] = useBooleanState(false);
+  const [isWorkSched, setWorkSched] = useBooleanState(false);
+  const [isPurpose, setPurpose] = useBooleanState(false);
   const FilterButton = () => (
     <View>
       <TouchableOpacity 
         style={styles.buttonContainer}
-        onPress={showFilter}
+        onPress={() => navigation.push('Filter')}
         >
         <Image 
           source={require('../../assets/pictures/filter.png')}
