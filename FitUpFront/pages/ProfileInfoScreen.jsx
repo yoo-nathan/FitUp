@@ -15,7 +15,7 @@ const ProfileInfoScreen = () => {
       <Text style={styles.header}>Let us know about you!</Text>
       <Image
         style={styles.profilePic}
-        source={require('../assets/icon.png')}
+        source={require('../assets/pictures/general_user.png')}
       />
       <View style={styles.inputGroup}>
         <View style={styles.row}>
