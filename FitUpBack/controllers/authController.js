@@ -16,7 +16,7 @@ const getUsers = async (req, res) => {
     }
 };
 
-// Register with email and password =================================================================================================
+// Register with email and password
 const register = async (req, res) => {
     try {
         console.log(1)
@@ -73,13 +73,13 @@ const register = async (req, res) => {
     }
 };
 
-// Login API =================================================================================================
+// Login API 
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const [rows] = await pool.query('SELECT * FROM userCredentials WHERE email = ?', [email]);
 
-        if (rows.length == 0) {
+        if (rows.length === 0) {
             return res.status(401).send('Invalid email or password');
         }
 
