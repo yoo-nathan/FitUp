@@ -1,3 +1,6 @@
+//Just in case it breaks
+/*
+
 const express = require('express');
 const bcrypt = require('bcrypt');
 const mysql = require('mysql2/promise');
@@ -7,9 +10,6 @@ require('dotenv').config();
 
 const pool = require('../db');
 
-<<<<<<< HEAD
-// Register with email and password =================================================================================================
-=======
 const getUsers = async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT email FROM login');
@@ -19,8 +19,7 @@ const getUsers = async (req, res) => {
     }
 };
 
-// Register with email and password
->>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
+// Register with email and password =================================================================================================
 const register = async (req, res) => {
     try {
         console.log(1)
@@ -46,7 +45,7 @@ const register = async (req, res) => {
         const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password) VALUES (?, ?, ?)';
 
         const saveCredential = await pool.query(saveCredentialQuery, [UID, email, hashedPassword]);
-
+        console.log(userInfo)
         const {
             first_name,
             last_name,
@@ -60,36 +59,34 @@ const register = async (req, res) => {
             personal_records, 
             partner_preferences,
         } = userInfo;
-
+        console.log(3);
         const saveInfoQuery = 'INSERT INTO userInfo (UID, height, weight, purpose, workout_schedule, gender, workout_style, personal_records, partner_preferences, first_name, last_name, school_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         
         const saveInfo = await pool.query(saveInfoQuery, 
             [UID, height, weight, purpose, JSON.stringify(workout_schedule), gender, workout_style, 
             JSON.stringify(personal_records), JSON.stringify(partner_preferences), first_name, last_name, school_year]);
-
-        return res.status(201).json({
+        console.log(4)
+        res.status(201).json({
             message: 'User registered successfully',
             token: token,
             UID: UID
         });
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
 
-// Login API 
+// Login API =================================================================================================
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const [rows] = await pool.query('SELECT * FROM userCredentials WHERE email = ?', [email]);
-        console.log(rows)
 
-        if (rows.length === 0) {
+        if (rows.length == 0) {
             return res.status(401).send('Invalid email or password');
         }
 
         const user = rows[0];
-        console.log(user.UID)
         const isPasswordValid = await bcrypt.compare(password, user.hashed_password);
 
         if (!isPasswordValid) {
@@ -110,7 +107,9 @@ const login = async (req, res) => {
 };
 
 module.exports = {
+    getUsers,
     register,
     login,
 };
 
+*/

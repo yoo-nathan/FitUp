@@ -15,6 +15,7 @@ import {
   
 } from 'react-native';
 
+
 const USER_DATA = [
   {
     uid: '1',
@@ -178,12 +179,19 @@ export default function HomeScreen({ navigation }) {
   const [isFilterVisible, setFilterVisible] = useState(false);
   const showFilter = () => setFilterVisible(true);
   const hideFilter = () => setFilterVisible(false);
-  
+  const useBooleanState = (initialValue) => {
+    const [value, setValue] = useState(initialValue);
+    const toggleValue = () => setValue(previousValue => !previousValue);
+    return [value, toggleValue];
+  };
+  const [isPR, setPR] = useBooleanState(false);
+  const [isWorkSched, setWorkSched] = useBooleanState(false);
+  const [isPurpose, setPurpose] = useBooleanState(false);
   const FilterButton = () => (
     <View>
       <TouchableOpacity 
         style={styles.buttonContainer}
-        onPress={showFilter}
+        onPress={() => navigation.push('Filter')}
         >
         <Image 
           source={require('../../assets/pictures/filter.png')}
@@ -194,10 +202,30 @@ export default function HomeScreen({ navigation }) {
       </TouchableOpacity>
       <Modal visible={isFilterVisible}
         animationType='fade'
+        transparent
       >
-        <SafeAreaView>
-          <Button title='hide' onPress={hideFilter}/>
-        </SafeAreaView>
+        
+          <Pressable style={styles.upperModal} onPress={hideFilter}/>
+          <View style={styles.lowerModal}>
+            <View>
+              <View style = {{flexDirection:'row', marginHorizontal: 14, marginVertical: 10, justifyContent: 'space-between',}}>
+                <TouchableOpacity onPress={hideFilter}>
+                  <Text 
+                  style={styles.backArrow}
+                  >&#8678;</Text>
+                </TouchableOpacity>
+                <Text style={styles.filterHead}>Filters</Text>
+                <TouchableOpacity>
+                  <Text style={styles.saveText}>Save</Text>
+                </TouchableOpacity>
+                
+              </View>
+            </View>
+            
+            <Button title='hide' onPress={hideFilter}/>
+          </View>
+          
+        
       </Modal>
     </View>
   )
@@ -205,6 +233,9 @@ export default function HomeScreen({ navigation }) {
   return (
     
     <SafeAreaView style={styles.container} >
+      <View style={{backgroundColor: '#373F51'}}>
+
+      
       <Text style={styles.headerText}>  
         Find your GymBuddy!
       </Text>
@@ -223,12 +254,16 @@ export default function HomeScreen({ navigation }) {
           />
         </View>
       </View>
-      <FlatList
-        data = {USER_DATA}
-        renderItem={({item}) => <UserCard DATA={item}/>}
-        keyExtractor={item => item.uid}
-      />
       
+        <FlatList
+          data = {USER_DATA}
+          renderItem={({item}) => <UserCard DATA={item}/>}
+          keyExtractor={item => item.uid}
+          style={{height:565}}
+        />
+      
+      
+      </View>
     </SafeAreaView>
   );
 }
@@ -237,13 +272,30 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex:1,
-    backgroundColor: '#373F51'
   },
   headerText: {
     fontSize: 30,
     fontWeight: '700',
     textAlign: 'center',
     color: 'white',
+    paddingVertical: 12
+  },
+  filterHead: {
+    fontSize: 25,
+    fontWeight: '700',
+    color: 'black',
+    paddingVertical: 12
+  },
+  saveText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#8075FF',
+    paddingVertical: 18
+  },
+  backArrow: {
+    fontSize: 40,
+    fontWeight: '900',
+    color: 'black',
     paddingVertical: 12
   },
   userCard : {
@@ -350,11 +402,12 @@ const styles = StyleSheet.create({
   },
   upperModal: {
     height: 100,
-    backgroundColor: '#DDD',
-    opacity: 0.5
+    backgroundColor: '#373F51',
+    
   },
   lowerModal: {
     flex: 1, 
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderRadius: 25
   }
 })

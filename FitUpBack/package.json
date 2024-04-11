@@ -1,10 +1,10 @@
 {
   "name": "login",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,15 +13,21 @@
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.0",
+    "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+<<<<<<< HEAD
     "moment": "^2.30.1",
+=======
+    "lru-cache": "^10.2.0",
+>>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
     "mysql2": "^3.9.3",
+    "package-name": "^0.1.0",
     "pg": "^8.11.3",
     "socket.io": "^4.7.5",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
-  }
+  },
+  "description": ""
 }

@@ -16,7 +16,7 @@ import WorkoutPreferences from './pages/WorkoutPreferences';
 import ThankYouScreen from './pages/ThankYou';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomeScreen from './navigation/screens/HomeScreen';
-
+import FilterPage from './pages/FilterPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,9 +58,15 @@ const App = () => {
         <Stack.Navigator>
           <Stack.Screen name="SignIn" component={SignInPage} />
         </Stack.Navigator>
+<<<<<<< HEAD
       )}
       {/* <Stack.Navigator 
       initialRouteName="SignUpPage"
+=======
+      )} */}
+      <Stack.Navigator 
+      initialRouteName="MainContainer"
+>>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
       screenOptions={{
         headerShown: false,
       }}>
@@ -72,7 +78,12 @@ const App = () => {
         <Stack.Screen name="ThankYou" component={ThankYouScreen} />
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         <Stack.Screen name="MainContainer" component={MainContainer}/>
+<<<<<<< HEAD
       </Stack.Navigator> */}
+=======
+        <Stack.Screen name="Filter" component={FilterPage}/>
+      </Stack.Navigator>
+>>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
     </NavigationContainer>
   );
 };
@@ -87,3 +98,12 @@ const App = () => {
 // });
 
 export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
