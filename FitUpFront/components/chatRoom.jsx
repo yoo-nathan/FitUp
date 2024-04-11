@@ -1,109 +1,65 @@
-// import * as React from 'react';
-// import { View, Text, StyleSheet, Dimensions } from 'react-native';
-
-// const windowDimensions = Dimensions.get('window');
-// const screenDimensions = Dimensions.get('screen');
-
-// export default function ChatRoom() {
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.imgContainer}>
-//         <Text>image</Text>
-//       </View>
-
-//       <View style={styles.content}>
-//         <Text style={styles.userName}>Name</Text>
-//         <Text style={styles.preview}>This is placeholder for the preview of the chat</Text>
-//       </View>
-//     </View>
-//   )
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     width: screenDimensions.width,
-//     height: screenDimensions.height * 0.12,
-//     borderBottomWidth: 1,
-//     borderBottomColor: '#D9D9D9',
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     paddingLeft: 20,
-//     paddingRight: 10
-//   },
-//   imgContainer: {
-//     width: '14%',
-//     height: '14%',
-//     minWidth: 56,
-//     minHeight: 56,
-//     borderRadius: 56/2,
-//     borderWidth: 1,
-//     // flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginRight: 15
-//   },
-//   content: {
-//     width: screenDimensions.width * 0.66,
-//     height: screenDimensions.height * 0.12,
-//     flex: 1,
-//     justifyContent: 'space-between',
-//     paddingTop: 20,
-//     paddingBottom: 20
-//   }, 
-//   userName : {
-//     fontSize: 15, 
-//     fontWeight: 'bold'
-//   },
-//   preview: {
-//     fontSize: 10,
-//   }
-
-// })
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect, useRef } from 'react';
 import { View, TextInput, TouchableOpacity, Text, FlatList, StyleSheet, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import io from "socket.io-client";
+import { getFirstName } from '../service/getService';
 
-const socket = io("http://localhost:5001");
+
+const socket = io("http://localhost:3000");
 
 export default function ChatRoom() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [userName, setUserName] = useState('');
   const flatListRef = useRef(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
     socket.on("chatting", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
+      // setMessages((prevMessages) => [...prevMessages, data]);
+      setMessages((prevMessages) => {
+        const updatedMessages = [...prevMessages, data];
+        // console.log(updatedMessages); // 새로운 메시지 상태 확인
+        return updatedMessages;
+      });
     });
 
     return () => socket.off("chatting");
   }, []);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (message.trim().length > 0) {
-      socket.emit("chatting", { name: "User Name", msg: message });
+      // console.log('Finding token from storage...')
+      const token = await AsyncStorage.getItem('userToken'); // UID
+      // console.log("Token: " + token);
+      
+      const firstName = await getFirstName(token);
+
+      socket.emit("chatting", { name: firstName, msg: message });
       setMessage('');
+      setUserName(firstName);
       inputRef.current.focus();
     }
   };
 
-  const renderItem = ({ item }) => (
-    <>
-      <View style={{ marginLeft: 10 }}>
-        {item.name != "User Name" && <Text style={styles.senderName}>{item.name}</Text>}
-      </View>
-      <View style={[styles.messageTimeContainer, item.name === "User Name" ? styles.contentMyMessage : styles.contentOtherMessage]}>
-        {item.name === "User Name" && <Text>{item.time}</Text>}
-        <View style={[styles.messageContainer, item.name === "User Name" ? styles.myMessage : styles.otherMessage]}>
-          <View style={[styles.messageContent, item.name === "User Name" ? styles.contentMyMessage : styles.contentOtherMessage]}>
-            <Text style={styles.messageText}>{item.msg}</Text>
-          </View>
+  const renderItem = ({ item }) => {
+    return ( 
+      <>
+        <View style={{ marginLeft: 10 }}>
+          {item.name != userName && <Text style={styles.senderName}>{item.name}</Text>}
         </View>
-        {item.name != "User Name" && <Text>{item.time}</Text>}
-      </View>    
-    </>
-  );
+        <View style={[styles.messageTimeContainer, item.name === userName ? styles.contentMyMessage : styles.contentOtherMessage]}>
+          {item.name === userName && <Text>{item.time}</Text>}
+          <View style={[styles.messageContainer, item.name === userName ? styles.myMessage : styles.otherMessage]}>
+            <View style={[styles.messageContent, item.name === userName ? styles.contentMyMessage : styles.contentOtherMessage]}>
+              <Text style={styles.messageText}>{item.msg}</Text>
+            </View>
+          </View>
+          {item.name != userName && <Text>{item.time}</Text>}
+        </View>    
+      </>
+    )
+  };
 
   useEffect(() => {
     flatListRef.current?.scrollToEnd({ animated: true });

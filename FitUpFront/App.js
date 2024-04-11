@@ -24,23 +24,24 @@ const App = () => {
   const [userToken, setUserToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //     const checkToken = async () => {
-  //       try {
-  //         // AsyncStorage.removeItem('userToken'); // line added for live demo in class. don't forget to remove later.
-  //         const token = await AsyncStorage.getItem('userToken');
-  //         setUserToken(token);
-  //         setIsLoading(false);
-  //       } catch (e) {
-  //         console.error(e);
-  //       }
-  //     };    
-  // }, [userToken]);
+  useEffect(() => {
+      const checkToken = async () => {
+        try {
+          // AsyncStorage.removeItem('userToken'); // line added for live demo in class. don't forget to remove later.
+          const token = await AsyncStorage.getItem('userToken');
+          setUserToken(token);
+          setIsLoading(false);
+        } catch (e) {
+          console.error(e);
+        }
+      };
+      checkToken();    
+  }, [userToken]);
 
-  // if (isLoading) {
-  //   // TODO: create a splash screen
-  //   return null; 
-  // }
+  if (isLoading) {
+    // TODO: create a splash screen
+    return null; 
+  }
 
   return (
     // change userToken to !userToken to see MainContainer
@@ -50,16 +51,22 @@ const App = () => {
     // <MainContainer/>
     // console.log(userToken)
     <NavigationContainer>
-      {/* { userToken ? (
+      { userToken ? (
         // console.log('hello')
         <MainContainer />
       ) : (
         <Stack.Navigator>
           <Stack.Screen name="SignIn" component={SignInPage} />
         </Stack.Navigator>
+<<<<<<< HEAD
+      )}
+      {/* <Stack.Navigator 
+      initialRouteName="SignUpPage"
+=======
       )} */}
       <Stack.Navigator 
       initialRouteName="MainContainer"
+>>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
       screenOptions={{
         headerShown: false,
       }}>
@@ -71,8 +78,12 @@ const App = () => {
         <Stack.Screen name="ThankYou" component={ThankYouScreen} />
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         <Stack.Screen name="MainContainer" component={MainContainer}/>
+<<<<<<< HEAD
+      </Stack.Navigator> */}
+=======
         <Stack.Screen name="Filter" component={FilterPage}/>
       </Stack.Navigator>
+>>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
     </NavigationContainer>
   );
 };
