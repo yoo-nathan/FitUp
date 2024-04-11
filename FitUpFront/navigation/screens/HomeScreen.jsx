@@ -23,7 +23,7 @@ const USER_DATA = [
     height_ft: 6,
     height_in: 1,
     weight: 200,
-    image: require('../../assets/pictures/user1.png'),
+    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
     squat_pr: 200,
     bench_pr: 225,
     deadlift_pr: 320,
@@ -37,7 +37,7 @@ const USER_DATA = [
     height_ft: 6,
     height_in: 4,
     weight: 220,
-    image: require('../../assets/pictures/user1.png'),
+    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
     squat_pr: 300,
     bench_pr: 205,
     deadlift_pr: 220,
@@ -51,7 +51,7 @@ const USER_DATA = [
     height_ft: 5,
     height_in: 10,
     weight: 150,
-    image: require('../../assets/pictures/user1.png'),
+    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
     squat_pr: 250,
     bench_pr: 255,
     deadlift_pr: 220,
@@ -65,7 +65,7 @@ const USER_DATA = [
     height_ft: 7,
     height_in: 1,
     weight: 300,
-    image: require('../../assets/pictures/user1.png'),
+    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
     squat_pr: 300,
     bench_pr: 285,
     deadlift_pr: 420,
@@ -194,7 +194,7 @@ export default function HomeScreen({ navigation }) {
         onPress={() => navigation.push('Filter')}
         >
         <Image 
-          source={require('../../assets/pictures/filter.png')}
+          source={{uri:'https://i.pinimg.com/564x/db/bb/cc/dbbbcc5a04883c6e6215389b0cb5fcc1.jpg'}}
           style={{width: 25,
             height: 25,
             borderRadius: 10}}

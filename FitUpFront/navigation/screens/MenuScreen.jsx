@@ -140,19 +140,19 @@ const HeaderCard = ({MACROS}) => (
       
         <Image resizeMode='contain'
           style={styles.iconImg}
-          source={require('../../assets/pictures/carbs.png')}/>
+          source={{uri:'https://cdn-icons-png.flaticon.com/512/1276/1276022.png'}}/>
         <Text style={styles.cardSubText}>
           : {MACROS.carbs}g 
         </Text>
         <Image resizeMode='contain'
           style={styles.iconImg}
-          source={require('../../assets/pictures/protein.png')}/>
+          source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlkRb734nF_jHC4boc3k3Buo2Sb4hJhQXz3A&s'}}/>
         <Text style={styles.cardSubText}>
           : {MACROS.protein}g 
         </Text>
         <Image resizeMode='contain'
           style={styles.iconImg}
-          source={require('../../assets/pictures/fat.png')}/>
+          source={{uri:'https://static.thenounproject.com/png/3569311-200.png'}}/>
         <Text style={styles.cardSubText}>
           : {MACROS.dairy}g
         </Text>

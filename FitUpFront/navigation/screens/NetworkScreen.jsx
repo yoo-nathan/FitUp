@@ -20,31 +20,31 @@ const FRIENDS = [
   {
     uid: '1',
     name: 'Ally',
-    image: require('../../assets/pictures/general_user.png'),
+    image: {uri:'https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png'},
     activity: 'Active'
   },
   {
     uid: '2',
     name: 'Jangwon',
-    image: require('../../assets/pictures/general_user.png'),
+    image: {uri:'https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png'},
     activity: 'Active'
   },
   {
     uid: '3',
     name: 'Nathan',
-    image: require('../../assets/pictures/general_user.png'),
+    image: {uri:'https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png'},
     activity: 'Active'
   },
   {
     uid: '4',
     name: 'Daniel',
-    image: require('../../assets/pictures/general_user.png'),
+    image: {uri:'https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png'},
     activity: 'Active'
   },
   {
     uid: '5',
     name: 'Justin',
-    image: require('../../assets/pictures/general_user.png'),
+    image: {uri:'https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png'},
     activity: 'Active'
   }
 ]
@@ -69,7 +69,7 @@ export default function NetworkScreen({ navigation }) {
       </View>
       <TouchableOpacity onPress={goToChat}>
         <Image
-        source={require('../../assets/pictures/msg.png')}
+        source={{uri:'https://cdn.iconscout.com/icon/free/png-256/free-message-2367724-1976874.png?f=webp'}}
         style={styles.msgImg}
         />
       </TouchableOpacity>
