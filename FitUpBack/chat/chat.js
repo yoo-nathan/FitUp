@@ -32,13 +32,8 @@ sendButton.addEventListener("click",() =>{
         msg: chatInput.value
 
     }
-    
-    
     socket.emit("chatting", param)
-
 })
-
-
 
 socket.on("chatting", (data)=>{
     const {name, msg, time} = data;

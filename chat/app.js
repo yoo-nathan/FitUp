@@ -1,17 +1,19 @@
 const express = require("express")
 const http = require("http")
-const app = express();
 const path = require("path")
 const server = http.createServer(app);
+const app = express();
 const socketIO = require("socket.io")
 const moment = require("moment")
 
 const io = socketIO(server);
+const cors = require('cors');
+app.use(cors());
 
 
 //Server Side
 app.use(express.static(path.join(__dirname, "src")))
-const PORT = process.env.Port || 5001;
+const PORT = 5001;
 
 io.on("connection",(socket) => {
     socket.on("chatting", (data) =>{
