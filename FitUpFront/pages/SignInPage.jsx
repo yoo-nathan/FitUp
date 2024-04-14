@@ -34,6 +34,14 @@ const SignInPage = () => {
       }
     }
 
+    const handleCreateAcc = () => {
+      navigation.navigate('SignUpPage');
+    }
+
+    const handleForgotPw = () => {
+      navigation.navigate('ForgotPasswordPage');
+    }
+
 
     return (
         <View style={{backgroundColor: '#373F51'}}>
@@ -61,7 +69,9 @@ const SignInPage = () => {
               value={password}
               />
             </View>
-            <TouchableOpacity style={styles.forgotPwPress} > 
+            <TouchableOpacity 
+            style={styles.forgotPwPress}
+            onPress={handleForgotPw} > 
               <Text style={styles.forgotPwText}>Forgot Password? </Text>
             </TouchableOpacity>
             <TouchableOpacity 
@@ -71,6 +81,13 @@ const SignInPage = () => {
               style={styles.buttonText}
               >Sign In</Text>
             </TouchableOpacity>
+            
+            <View style={styles.createAccContainer}>
+              <Text style={{fontSize: 14}}>New to FitUp? </Text>
+              <TouchableOpacity onPress={handleCreateAcc} > 
+                <Text style={styles.creatAcc}>Create an account </Text>
+              </TouchableOpacity>
+            </View>
             
           </View>
         </View>
@@ -166,7 +183,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center'
       },
-  
+      createAccContainer : {
+        position: 'absolute',
+        bottom: 20,
+        flexDirection: 'row'
+      },
+      creatAcc : {
+        color: 'white',
+        fontSize: 14,
+        textDecorationLine: 'underline',
+        textAlign: 'center'
+      }
   });
   
 export default SignInPage; 

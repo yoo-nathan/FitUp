@@ -9,13 +9,10 @@ const pool = require('../db');
 
 const getUserName = async (req, res) => {
     try {
-        const UID = req.userId;
-        console.log("UID from the client: " + UID)
+        const UID = req.query.uid;
         const results = await pool.query('SELECT first_name FROM userInfo WHERE UID = ?', [UID]);
-        console.log('processing userinfo...')
         if (results.length > 0) {
             const userInfo = results[0];
-            console.log("processing userinfo done!")
             res.status(200).json(userInfo[0].first_name);
         } else {
             console.log("User Not Found")

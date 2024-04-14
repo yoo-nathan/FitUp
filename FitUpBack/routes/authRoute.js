@@ -5,7 +5,7 @@ const filter = require('./../filter')
 
 module.exports = router;
 
-router.get('/confirm/:token', verifyEmail);
+// router.get('/confirm/:token', verifyEmail);
 
 
 router.post('/register', authController.register);

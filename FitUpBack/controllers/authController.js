@@ -7,9 +7,6 @@ require('dotenv').config();
 
 const pool = require('../db');
 
-<<<<<<< HEAD
-// Register with email and password =================================================================================================
-=======
 const getUsers = async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT email FROM login');
@@ -20,7 +17,6 @@ const getUsers = async (req, res) => {
 };
 
 // Register with email and password
->>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
 const register = async (req, res) => {
     try {
         console.log(1)

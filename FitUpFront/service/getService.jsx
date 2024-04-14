@@ -1,17 +1,16 @@
 import axios from 'axios';
+const API_URL = 'http://localhost:3000';
 
-export const getFirstName = async (token) => {
+
+export const getFirstName = async (uid) => {
   try {
-    console.log('Fetching userinfo...')
-    const response = await axios.get('http://localhost:3000/getInfo/userName', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
+    const response = await axios.get(`${API_URL}/getInfo/userName`, {
+      params: {
+        uid: uid
+      }
     });
-    // const response = await axios.get('http://localhost:3000/users/authenticate/getInfo');
 
     if (response) {
-      console.log("Fetching complete!");
       return response.data;
     }
   } catch(error) {

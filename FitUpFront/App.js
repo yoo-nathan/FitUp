@@ -17,6 +17,7 @@ import ThankYouScreen from './pages/ThankYou';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomeScreen from './navigation/screens/HomeScreen';
 import FilterPage from './pages/FilterPage';
+import ChatRoom from './components/chatRoom';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,7 +37,7 @@ const App = () => {
         }
       };
       checkToken();    
-  }, [userToken]);
+  }, []);
 
   if (isLoading) {
     // TODO: create a splash screen
@@ -44,29 +45,9 @@ const App = () => {
   }
 
   return (
-    // change userToken to !userToken to see MainContainer
-    // <>
-    //   { userToken ? <MainContainer/> : <SignInPage/> }
-    // </>
-    // <MainContainer/>
-    // console.log(userToken)
     <NavigationContainer>
-      { userToken ? (
-        // console.log('hello')
-        <MainContainer />
-      ) : (
-        <Stack.Navigator>
-          <Stack.Screen name="SignIn" component={SignInPage} />
-        </Stack.Navigator>
-<<<<<<< HEAD
-      )}
-      {/* <Stack.Navigator 
-      initialRouteName="SignUpPage"
-=======
-      )} */}
       <Stack.Navigator 
-      initialRouteName="MainContainer"
->>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
+      initialRouteName={userToken ? "MainContainer" : "SignInPage"}
       screenOptions={{
         headerShown: false,
       }}>
@@ -78,12 +59,9 @@ const App = () => {
         <Stack.Screen name="ThankYou" component={ThankYouScreen} />
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         <Stack.Screen name="MainContainer" component={MainContainer}/>
-<<<<<<< HEAD
-      </Stack.Navigator> */}
-=======
         <Stack.Screen name="Filter" component={FilterPage}/>
+        <Stack.Screen name="ChatRoom" component={ChatRoom}/>
       </Stack.Navigator>
->>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
     </NavigationContainer>
   );
 };
