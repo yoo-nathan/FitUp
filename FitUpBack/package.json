@@ -16,8 +16,11 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "lru-cache": "^10.2.0",
+<<<<<<< Updated upstream
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45",
+=======
+>>>>>>> Stashed changes
     "mysql2": "^3.9.3",
     "package-name": "^0.1.0",
     "pg": "^8.11.3",

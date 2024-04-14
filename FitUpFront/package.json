@@ -12557,6 +12557,7 @@
         }
     },
     "dependencies": {
+<<<<<<< Updated upstream
         "@react-native-async-storage/async-storage": "^1.21.0",
         "@react-native-picker/picker": "^2.6.1",
         "@react-navigation/bottom-tabs": "^6.5.20",
@@ -12581,5 +12582,15 @@
         "tar": "^7.0.0",
         "url-parse": "^1.5.10",
         "uuid": "^9.0.1"
+=======
+        "chalk": "^5.3.0",
+        "metro-cache": "^0.80.8",
+        "react-native": "^0.73.6"
+    },
+    "devDependencies": {
+        "expo": "^49.0.23",
+        "expo-cli": "^4.0.17",
+        "metro": "^0.80.8"
+>>>>>>> Stashed changes
     }
 }
