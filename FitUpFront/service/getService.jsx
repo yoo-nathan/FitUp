@@ -14,6 +14,19 @@ export const getFirstName = async (uid) => {
       return response.data;
     }
   } catch(error) {
+    console.log("Error occurred while fetching username!")
+    console.error(error);
+  }
+}
+
+export const getUserInfo = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/getInfo/homepage`);
+
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
     console.log("Error occurred while fetching userinfo!")
     console.error(error);
   }

@@ -23,6 +23,22 @@ const getUserName = async (req, res) => {
     }
 };
 
+const getUserInfo = async (req, res) => {
+    try {
+        const [results] = await pool.query('SELECT * FROM userInfo');
+        if (results.length > 0) {
+            console.log(results.length)
+            res.status(200).json(results);
+        } else {
+            console.log("No record on the database");
+            res.status(404).send("No record on the database");
+        }
+    } catch (error) {
+        return res.status(500).send('Server error');
+    }
+}
+
 module.exports = {
-    getUserName
+    getUserName,
+    getUserInfo
 };

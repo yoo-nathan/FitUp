@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const FriendItem = ({ DATA, onPress }) => (
-  <TouchableOpacity onPress={() => onPress(DATA.uid)}>
+  <TouchableOpacity onPress={() => onPress(DATA.uid, DATA.name)}>
     <View style={styles.profileView}>
       <View style={{ flexDirection: 'row' }}>
         <Image
@@ -55,12 +55,11 @@ export default function ChatScreen({ navigation }) {
   }, []);
 
 
-  const goToChatRoom = (uid) => {
-    navigation.navigate('ChatRoom', { to_id: uid })
+  const goToChatRoom = (uid, name) => {
+    navigation.navigate('ChatRoom', { to_id: uid, userName: name })
   }
 
   return (
-    
     <View style={styles.mainContainer}>
       <FlatList
         data={chatData}
