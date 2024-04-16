@@ -28,7 +28,7 @@ const SignUpPage = ({ navigation }) => {
             <Text style={styles.sidetitle}> Email </Text>
             <TextInput
                 style={styles.input}
-                placeholder="Email"
+                placeholder="example@emory.edu"
                 value={email}
                 onChangeText={setEmail}
                 autoCapitalize="none"

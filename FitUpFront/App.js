@@ -58,7 +58,7 @@ const App = () => {
         </Stack.Navigator>
       )} */}
       <Stack.Navigator 
-      initialRouteName="VerificationScreen"
+      initialRouteName="SignUpPage"
       screenOptions={{
         headerShown: false,
       }}>
