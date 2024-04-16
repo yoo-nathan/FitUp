@@ -1,20 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import { 
-  View, 
-  Text,
-  Image,
-  StyleSheet,
-  TextInput,
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity
-} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import io from "socket.io-client";
 import { getChatList, getMyID } from '../../service/chatService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getFirstName } from '../../service/getService';
 
 
 const FriendItem = ({ DATA, onPress }) => (
-  <TouchableOpacity onPress={() => onPress(DATA.uid)}>
+  <TouchableOpacity onPress={() => onPress(DATA.uid, DATA.name)}>
     <View style={styles.profileView}>
       <View style={{ flexDirection: 'row' }}>
         <Image
@@ -33,11 +26,14 @@ const FriendItem = ({ DATA, onPress }) => (
 export default function ChatScreen({ navigation }) {
   const [userId, setUserId] = useState('');
   const [chatData, setChatData] = useState([]);
+  const socketRef = useRef(null);
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     const loadChatList = async () => {
-      const token = await AsyncStorage.getItem('userToken');
-      const from_id = await getMyID(token);
+      const userToken = await AsyncStorage.getItem('userToken');
+      setToken(userToken);
+      const from_id = await getMyID(userToken);
       setUserId(from_id);
 
       const chatList = await getChatList(from_id);
@@ -49,18 +45,58 @@ export default function ChatScreen({ navigation }) {
       }));
 
       setChatData(list);
+
+      socketRef.current = io("http://localhost:3000", { query: { token } });
+
+      socketRef.current.on("messageReceived", (newMessage) => {
+        updateChatList(newMessage);
+      });
     };
 
     loadChatList();
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
   }, []);
 
+  const updateChatList = async (newMessage) => {
+    const uid = newMessage.from_id === userId ? newMessage.to_id : newMessage.from_id;
+    const name = await getFirstName(uid);
+    
+    setChatData(currentData => {
+      const index = currentData.findIndex(chat =>
+        chat.uid === uid
+      );
+  
+      if (index !== -1) {
+        return currentData.map((chat, idx) => idx === index ? {
+          ...chat,
+          message: newMessage.message,
+          time: newMessage.timestamp
+        } : chat);
+      } else {
+        return [
+          ...currentData,
+          {
+            uid: uid,
+            name: name,
+            message: newMessage.message,
+            time: newMessage.timestamp
+          }
+        ];
+      }
+    });
+  };
+  
 
-  const goToChatRoom = (uid) => {
-    navigation.navigate('ChatRoom', { to_id: uid })
+  const goToChatRoom = (uid, name) => {
+    navigation.navigate('ChatRoom', { to_id: uid, userName: name })
   }
 
   return (
-    
     <View style={styles.mainContainer}>
       <FlatList
         data={chatData}

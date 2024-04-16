@@ -17,11 +17,8 @@ const SignInPage = () => {
         
         if (tokenData) {
           await AsyncStorage.setItem('userToken', tokenData.token);
-          const token = await AsyncStorage.getItem('userToken');
-          console.log(token)
-          // Alert.alert("Success", "Successfully logged in!");
-          console.log('Successfully logged in!')
-          // navigation.navigate('Home');
+          Alert.alert("Success", "Successfully logged in!");
+          navigation.navigate('MainContainer');
           // setIsLoggedIn(true);
         } else {
           Alert.alert("Login Failed", "Invalid email or password");

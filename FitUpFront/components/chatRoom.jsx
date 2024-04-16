@@ -13,47 +13,46 @@ export default function ChatRoom({ route, navigation }) {
   const [receiverName, setReceiverName] = useState('');
   const flatListRef = useRef(null);
   const inputRef = useRef(null);
+  const socketRef = useRef(null);
   const [fromId, setFromId] = useState('');
   const [toId, setToId] = useState('');
 
-
   useEffect(() => {
-    const loadChatHistory = async () => {
+    async function setupSocket() {
       const token = await AsyncStorage.getItem('userToken');
-
       const from_id = await getMyID(token);
-      const {to_id} = route.params;
+      const { to_id } = route.params;
 
-      setFromId(from_id)
-      setToId(to_id); 
+      setFromId(from_id);
+      setToId(to_id);
 
       const firstName = await getFirstName(to_id);
       setReceiverName(firstName);
-  
+
       const history = await getChatHistory(from_id, to_id);
       setMessages(history['results']);
+
+      socketRef.current = io("http://localhost:3000", { query: { token } });
+
+      socketRef.current.on("messageReceived", (newMessage) => {
+        setMessages(prevMessages => [...prevMessages, newMessage]);
+      });
+    }
+
+    setupSocket();
+
+    return () => {
+      socketRef.current?.disconnect();
     };
-  
-    loadChatHistory();
   }, [route.params]);
 
-  useEffect(() => {
-    socket.on("messageReceived", (newMessage) => {
-      setMessages(prevMessages => [...prevMessages, newMessage]);
-    });
-  
-    return () => {
-      socket.off("messageReceived");
-    };
-  }, []);
   
 
   const sendMessage = async () => {
     if (message.trim().length > 0) {
-      
-      socket.emit("chatting", { from_id: fromId, to_id: toId, message: message });
+      const msgData = { from_id: fromId, to_id: toId, message };
+      socketRef.current.emit("chatting", msgData);
       setMessage('');
-
       inputRef.current.focus();
     }
   };

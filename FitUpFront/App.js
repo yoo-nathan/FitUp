@@ -60,7 +60,7 @@ const App = () => {
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         <Stack.Screen name="MainContainer" component={MainContainer}/>
         <Stack.Screen name="Filter" component={FilterPage}/>
-        <Stack.Screen name="ChatRoom" component={ChatRoom}/>
+        {/* <Stack.Screen name="ChatRoom" component={ChatRoom}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
