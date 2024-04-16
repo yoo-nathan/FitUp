@@ -20,7 +20,7 @@ export default function ProfileScreen({ navigation }) {
       <View style={{alignItems:'center', justifyContent:'center', height: 250}}>
         <Image resizeMode='contain'
             style={styles.iconImg}
-            source={require('../../assets/pictures/general_user.png')}/>
+            source={{uri:'https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png'}}/>
         <Text style={styles.headerText}>{USER.name}</Text>
         <Text style={styles.emailText}>{USER.email}</Text>
       </View>
@@ -29,7 +29,7 @@ export default function ProfileScreen({ navigation }) {
           <View style={{flexDirection: 'row'}}>
             <Image resizeMode='contain'
               style={styles.widgetImg}
-              source={require('../../assets/profile/edit.png')}/>
+              source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmyHi1d3CfsPNafEET3D57VNO3DjPdglAM6Gat9FV6lw&s'}}/>
             <Text style={styles.widgetText}> Edit Profile</Text>
           </View>
           <Text style={styles.arrowText}>&#187;</Text>
@@ -40,7 +40,7 @@ export default function ProfileScreen({ navigation }) {
           <View style={{flexDirection: 'row'}}>
             <Image resizeMode='contain'
               style={styles.widgetImg}
-              source={require('../../assets/profile/invite.png')}/>
+              source={{uri: 'https://cdn0.iconfinder.com/data/icons/basic-ui-75/24/Invite_Friends-512.png'}}/>
             <Text style={styles.widgetText}> Invite Friends</Text>
           </View>
           <Text style={styles.arrowText}>&#187;</Text>
@@ -51,7 +51,7 @@ export default function ProfileScreen({ navigation }) {
           <View style={{flexDirection: 'row'}}>
             <Image resizeMode='contain'
               style={styles.widgetImg}
-              source={require('../../assets/profile/settings.png')}/>
+              source={{uri:'https://static-00.iconduck.com/assets.00/settings-icon-2048x2046-cw28eevx.png'}}/>
             <Text style={styles.widgetText}> Settings</Text>
           </View>
           <Text style={styles.arrowText}>&#187;</Text>
@@ -62,7 +62,7 @@ export default function ProfileScreen({ navigation }) {
           <View style={{flexDirection: 'row'}}>
             <Image resizeMode='contain'
               style={styles.widgetImg}
-              source={require('../../assets/profile/help.png')}/>
+              source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrG5wPpOIB74fs9jyiHy19EAcyS3XLfaNgR5p5rzDWMA&s'}}/>
             <Text style={styles.widgetText}> Help </Text>
           </View>
           <Text style={styles.arrowText}>&#187;</Text>

@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { register } from '../service/authService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 const WorkoutPreferences = ({ navigation }) => {
@@ -54,8 +56,10 @@ const WorkoutPreferences = ({ navigation }) => {
   const signUpPress = async () => {
     try {
       console.log(workoutType);
-      const token = await register(totalInfo);
-      if (token) {
+      const tokenData = await register(totalInfo);
+      if (tokenData) {
+        console.log('here')
+        await AsyncStorage.setItem('userToken', tokenData.token);
         navigation.navigate('ThankYou');
       }
     } catch (error) {

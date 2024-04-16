@@ -15,7 +15,8 @@ import ThankYouScreen from './pages/ThankYou';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import VerificationScreen from './pages/VerificationScreen';
 import HomeScreen from './navigation/screens/HomeScreen';
-
+import FilterPage from './pages/FilterPage';
+import ChatRoom from './components/chatRoom';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,42 +24,29 @@ const App = () => {
   const [userToken, setUserToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //     const checkToken = async () => {
-  //       try {
-  //         // AsyncStorage.removeItem('userToken'); // line added for live demo in class. don't forget to remove later.
-  //         const token = await AsyncStorage.getItem('userToken');
-  //         setUserToken(token);
-  //         setIsLoading(false);
-  //       } catch (e) {
-  //         console.error(e);
-  //       }
-  //     };    
-  // }, [userToken]);
+  useEffect(() => {
+      const checkToken = async () => {
+        try {
+          // AsyncStorage.removeItem('userToken'); // line added for live demo in class. don't forget to remove later.
+          const token = await AsyncStorage.getItem('userToken');
+          setUserToken(token);
+          setIsLoading(false);
+        } catch (e) {
+          console.error(e);
+        }
+      };
+      checkToken();    
+  }, []);
 
-  // if (isLoading) {
-  //   // TODO: create a splash screen
-  //   return null; 
-  // }
+  if (isLoading) {
+    // TODO: create a splash screen
+    return null; 
+  }
 
   return (
-    // change userToken to !userToken to see MainContainer
-    // <>
-    //   { userToken ? <MainContainer/> : <SignInPage/> }
-    // </>
-    // <MainContainer/>
-    // console.log(userToken)
     <NavigationContainer>
-      {/* { userToken ? (
-        // console.log('hello')
-        <MainContainer />
-      ) : (
-        <Stack.Navigator>
-          <Stack.Screen name="SignIn" component={SignInPage} />
-        </Stack.Navigator>
-      )} */}
       <Stack.Navigator 
-      initialRouteName="SignUpPage"
+      initialRouteName={userToken ? "MainContainer" : "SignInPage"}
       screenOptions={{
         headerShown: false,
       }}>
@@ -71,6 +59,8 @@ const App = () => {
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
         <Stack.Screen name="MainContainer" component={MainContainer}/>
+        <Stack.Screen name="Filter" component={FilterPage}/>
+        {/* <Stack.Screen name="ChatRoom" component={ChatRoom}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -86,3 +76,12 @@ const App = () => {
 // });
 
 export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

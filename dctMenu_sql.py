@@ -3,6 +3,34 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import mysql.connector
+
+# Set up MySQL connection
+db_config = {
+    'host': '35.196.58.227',
+    'user': 'daniel',
+    'password': '1q2w3e4r!Q@W#E$R!',
+    'database': 'User'
+}
+
+# Function to save menu items to MySQL database
+def save_to_mysql(menu_items):
+    # Connect to the database
+    connection = mysql.connector.connect(**db_config)
+    cursor = connection.cursor()
+
+    # SQL query to insert data
+    insert_query = "INSERT INTO DCT (menu) VALUES (%s)"
+    
+    # Insert each menu item into the database
+    for menu_name in menu_items:
+        cursor.execute(insert_query, (menu_name,))
+
+    # Commit changes and close the connection
+    connection.commit()
+    print(f"{cursor.rowcount} records inserted.")
+    cursor.close()
+    connection.close()
 
 # Create a new instance of the Chrome driver in headless mode
 chrome_options = webdriver.ChromeOptions()
@@ -23,12 +51,13 @@ page_source = driver.page_source
 soup = BeautifulSoup(page_source, 'html.parser')
 
 # Find all menu items under the specified button class within the brunch section
-menu_items = soup.find_all('button', class_='h4 site-panel__daypart-item-title')
+menu_items_elements = soup.find_all('button', class_='h4 site-panel__daypart-item-title')
 
-# Extract and print the menu item names without the "menu item:" prefix
-for item in menu_items:
-    menu_name = item.text.strip()
-    print(menu_name)
+# Extract the menu item names without the "menu item:" prefix
+menu_items = [item.text.strip() for item in menu_items_elements]
 
 # Close the browser
 driver.quit()
+
+# Save the menu items to the database
+save_to_mysql(menu_items)

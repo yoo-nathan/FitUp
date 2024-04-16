@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
   StyleSheet,
   Text,
@@ -14,6 +14,7 @@ import {
   Pressable,
   
 } from 'react-native';
+import { getUserInfo } from '../../service/getService';
 
 
 const USER_DATA = [
@@ -23,7 +24,7 @@ const USER_DATA = [
     height_ft: 6,
     height_in: 1,
     weight: 200,
-    image: require('../../assets/pictures/user1.png'),
+    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
     squat_pr: 200,
     bench_pr: 225,
     deadlift_pr: 320,
@@ -37,7 +38,7 @@ const USER_DATA = [
     height_ft: 6,
     height_in: 4,
     weight: 220,
-    image: require('../../assets/pictures/user1.png'),
+    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
     squat_pr: 300,
     bench_pr: 205,
     deadlift_pr: 220,
@@ -51,7 +52,7 @@ const USER_DATA = [
     height_ft: 5,
     height_in: 10,
     weight: 150,
-    image: require('../../assets/pictures/user1.png'),
+    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
     squat_pr: 250,
     bench_pr: 255,
     deadlift_pr: 220,
@@ -65,7 +66,7 @@ const USER_DATA = [
     height_ft: 7,
     height_in: 1,
     weight: 300,
-    image: require('../../assets/pictures/user1.png'),
+    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
     squat_pr: 300,
     bench_pr: 285,
     deadlift_pr: 420,
@@ -93,26 +94,39 @@ export default function HomeScreen({ navigation }) {
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user, setUser] = useState(null);
+  const [data, setData] = useState([]);
+
+  const picURL = {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'};
+
   const showModal = (id) => {
     setIsModalVisible(true)
-    const USER = USER_DATA.find(item => item.uid === id)
+    const USER = data.find(item => item.UID === id)
     setUser(USER)
   } 
   const hideModal = () => setIsModalVisible(false);
-  const goToChat = () => { //need to implement new chat with specific person
+  const goToChat = (UID) => { //need to implement new chat with specific person
     setIsModalVisible(false)
-    navigation.navigate('Chat')
+    navigation.navigate('ChatRoom', {to_id: UID})
   }
+
+  useEffect(()=> {
+    const fetchUserInfo = async () =>{
+      const userInfo = await getUserInfo();
+      setData(userInfo);
+    }
+
+    fetchUserInfo();
+  }, [])
   
   const UserCard = ({DATA}) => (
     <SafeAreaView> 
       <TouchableOpacity 
         style={styles.userCard}
-        onPress={() => showModal(DATA.uid)}>
-        <Image resizeMode='contain' style={styles.userImg} source={DATA.image} />
+        onPress={() => showModal(DATA.UID)}>
+        <Image resizeMode='contain' style={styles.userImg} source={picURL} />
         <View style={styles.userInfo}>
-          <Text style={{fontSize:28, fontWeight:'700'}}>{DATA.name}</Text>
-          <Text style={{fontSize: 16, fontWeight:'700'}}>H: {DATA.height_ft}' {DATA.height_in}" / W: {DATA.weight} lbs</Text>
+          <Text style={{fontSize:28, fontWeight:'700'}}>{DATA.first_name} {DATA.last_name}</Text>
+          <Text style={{fontSize: 16, fontWeight:'700'}}>H: {DATA.height} in / W: {DATA.weight} lbs</Text>
           <Text></Text>
           <Text style={{fontSize: 14, fontWeight:'700'}}>Click to view details! </Text>
         </View>
@@ -129,21 +143,21 @@ export default function HomeScreen({ navigation }) {
               <View style={styles.flexRow}>
                 <Image resizeMode='contain' style={styles.userImg} source={user.image} />
                   <View style={styles.userInfo}>
-                    <Text style={{fontSize:28, fontWeight:'700'}}>{user.name}</Text>
+                    <Text style={{fontSize:28, fontWeight:'700'}}>{user.first_name} {user.last_name}</Text>
                     <Text></Text>
-                    <Text style={{fontSize: 12, fontWeight:'700'}}>H: {user.height_ft}' {user.height_in}" / W: {user.weight} lbs</Text>
+                    <Text style={{fontSize: 12, fontWeight:'700'}}>H: {user.height} in / W: {user.weight} lbs</Text>
                     <Text style={{fontSize: 12, fontWeight:'700'}}>Gender: {user.gender}</Text>
                     <Text style={{fontSize: 12, fontWeight:'700'}}>Purpose: {user.purpose}</Text>
-                    <Text style={{fontSize: 12, fontWeight:'700'}}>Usual workout time: {user.workout_time}</Text>
+                    <Text style={{fontSize: 12, fontWeight:'700'}}>Usual workout time: {user.workout_schedule}</Text>
                   </View>
                   
               </View>
               <View style={styles.flexCol}>
                 <View style={styles.hairline}/>
                 <Text style={{fontSize: 15, fontWeight:'700', paddingVertical:6, paddingTop:10}}>Personal Records</Text>
-                <Text style={{fontSize: 12, fontWeight:'700', paddingVertical:3 }}>Squat: {user.squat_pr} lbs</Text>
-                <Text style={{fontSize: 12, fontWeight:'700', paddingVertical:3 }}>Bench: {user.bench_pr} lbs</Text>
-                <Text style={{fontSize: 12, fontWeight:'700', paddingVertical:3 }}>Deadlift: {user.deadlift_pr} lbs</Text>
+                <Text style={{fontSize: 12, fontWeight:'700', paddingVertical:3 }}>Squat: {user.personal_records.squat} lbs</Text>
+                <Text style={{fontSize: 12, fontWeight:'700', paddingVertical:3 }}>Bench: {user.personal_records.benchpress} lbs</Text>
+                <Text style={{fontSize: 12, fontWeight:'700', paddingVertical:3 }}>Deadlift: {user.personal_records.deadlift} lbs</Text>
                 <View style={styles.flexRow}>
                   <TouchableOpacity 
                   onPress={hideModal}
@@ -157,7 +171,7 @@ export default function HomeScreen({ navigation }) {
                   </TouchableOpacity>
                   <TouchableOpacity 
                   style={styles.buttonStyleChat}
-                  onPress={goToChat}
+                  onPress={() => goToChat(user.UID)}
                   >
                     <Text style={{
                       fontSize:15, 
@@ -179,15 +193,22 @@ export default function HomeScreen({ navigation }) {
   const [isFilterVisible, setFilterVisible] = useState(false);
   const showFilter = () => setFilterVisible(true);
   const hideFilter = () => setFilterVisible(false);
-  
+  const useBooleanState = (initialValue) => {
+    const [value, setValue] = useState(initialValue);
+    const toggleValue = () => setValue(previousValue => !previousValue);
+    return [value, toggleValue];
+  };
+  const [isPR, setPR] = useBooleanState(false);
+  const [isWorkSched, setWorkSched] = useBooleanState(false);
+  const [isPurpose, setPurpose] = useBooleanState(false);
   const FilterButton = () => (
     <View>
       <TouchableOpacity 
         style={styles.buttonContainer}
-        onPress={showFilter}
+        onPress={() => navigation.push('Filter')}
         >
         <Image 
-          source={require('../../assets/pictures/filter.png')}
+          source={{uri:'https://i.pinimg.com/564x/db/bb/cc/dbbbcc5a04883c6e6215389b0cb5fcc1.jpg'}}
           style={{width: 25,
             height: 25,
             borderRadius: 10}}
@@ -249,9 +270,9 @@ export default function HomeScreen({ navigation }) {
       </View>
       
         <FlatList
-          data = {USER_DATA}
+          data = {data}
           renderItem={({item}) => <UserCard DATA={item}/>}
-          keyExtractor={item => item.uid}
+          keyExtractor={item => item.UID}
           style={{height:565}}
         />
       
