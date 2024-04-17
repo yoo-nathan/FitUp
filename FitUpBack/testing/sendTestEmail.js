@@ -14,14 +14,14 @@ const transporter = nodemailer.createTransport({
     port: 587,
     secure: false,
     auth: {
-        user: emailUser,
-        pass: emailPass,
+        user: "authenticatemailaddress@gmail.com",
+        pass: "hsqs eiyr eccx ipig"
     },
 });
 
 // Email message options
 const mailOptions = {
-    from: `"Fitup" <${emailUser}>`, 
+    from: `"Fitup" <${"authenticatemailaddress@gmail.com"}>`, 
     to: 'dskoo0416@gmail.com', 
     subject: 'Verification Code from Node.js', 
     text: `Your verification code is: ${verificationCode}`, 

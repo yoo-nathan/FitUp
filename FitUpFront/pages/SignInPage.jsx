@@ -41,21 +41,6 @@ const SignInPage = () => {
 
 
     return (
-<<<<<<< HEAD
-      <View style={{backgroundColor: '#373F51'}}>
-        <View style = {styles.content}>
-          <Text style={styles.title}> Welcome to FitUP!</Text>
-          <Text style={styles.subtitle}> Log in with your Emory email </Text>
-          <Text style={styles.sidetitle}> Email </Text>
-          <View style={styles.inputView}>
-            <TextInput
-            style={styles.inputText}
-            placeholder="example@emory.edu"
-            placeholderTextColor="#003f5c"
-            onChangeText={text => setEmail(text)}
-            value={email}
-            />
-=======
         <View style={{backgroundColor: '#373F51'}}>
           <View style = {styles.content}>
             <Text style={styles.title}> Welcome to FitUP!</Text>
@@ -101,7 +86,6 @@ const SignInPage = () => {
               </TouchableOpacity>
             </View>
             
->>>>>>> 599a8621af91af6bdcb692dd7c7a729a457bef48
           </View>
           <Text style={styles.sidetitle1}> Password </Text>
           <View style={styles.inputView}>
@@ -129,8 +113,7 @@ const SignInPage = () => {
           </TouchableOpacity>
           
         </View>
-      </View>
-      
+      // </View>
     )
 }
 
@@ -194,28 +177,6 @@ const styles = StyleSheet.create({
       justifyContent:"center",
       padding:20
       },
-<<<<<<< HEAD
-  inputText:{
-    height:50,
-    color:"white",
-    opacity: 0.7
-    },
-  button: {
-    backgroundColor: '#8075FF', 
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 15,
-    width :"80%",
-    marginTop:50,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center'
-  },
-  
-=======
       button: {
         backgroundColor: '#4b0082', 
         paddingVertical: 15,
@@ -241,7 +202,6 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         textAlign: 'center'
       }
->>>>>>> 599a8621af91af6bdcb692dd7c7a729a457bef48
   });
   
 export default SignInPage; 

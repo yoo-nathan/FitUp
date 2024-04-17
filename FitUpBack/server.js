@@ -16,12 +16,17 @@ const server = http.createServer(app);
 const io = socketIO(server);
 const pool = require('./db');
 
+
+//check
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "src")))
 app.use('/users/authenticate', authRouter);
 app.use('/getInfo', infoRouter);
 app.use('/chat', chatRouter);
+app.post('/register', register);
+app.post('/login', login);
+app.post('/verify-email', verifyEmail);
 
 // chat 
 io.on("connection", (socket) => {

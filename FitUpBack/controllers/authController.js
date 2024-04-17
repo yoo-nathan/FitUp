@@ -6,34 +6,10 @@ const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+const app = express();
+app.use(express.json());
+
 const pool = require('../db');
-
-const sendVerificationEmail = async (email, verificationCode) => {
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, 
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-        },
-    });
-
-    const mailOptions = {
-        from: `"FitUp" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: 'Verification Code from FitUp',
-        text: `Your verification code is: ${verificationCode}`,
-    };
-
-    try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent:', info.messageId);
-    } catch (error) {
-        console.error('Error sending email:', error);
-        throw error; // Rethrow the error so it can be handled by the caller
-    }
-};
 
 
 const getUsers = async (req, res) => {
@@ -45,7 +21,8 @@ const getUsers = async (req, res) => {
     }
 };
 
-const register = async (req, res) => {
+//Register
+exports.register = async (req, res) => {
     const { email, password, userInfo } = req.body;
 
     try {
@@ -58,7 +35,7 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationCode = Math.floor(10000 + Math.random() * 90000).toString();
 
-        await sendVerificationEmail(email, verificationCode);
+        await exports.sendVerificationEmail(email, verificationCode); // Call below function
 
         const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password, verification_code) VALUES (?, ?, ?, ?)';
         await pool.query(saveCredentialQuery, [UID, email, hashedPassword, verificationCode]);
@@ -104,7 +81,35 @@ const register = async (req, res) => {
     }
 };
 
-// Login API 
+// Send Verification Email
+exports.sendVerificationEmail = async (email, verificationCode) => {
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false, 
+        auth: {
+            user: "authenticatemailaddress@gmail.com",
+            pass: "hsqs eiyr eccx ipig",
+        },
+    });
+
+    const mailOptions = {
+        from: `"FitUp" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'Verification Code from FitUp',
+        text: `Your verification code is: ${verificationCode}`,
+    };
+
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent:', info.messageId);
+    } catch (error) {
+        console.error('Error sending email:', error);
+        throw error;
+    }
+};
+
+//Login
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -136,8 +141,30 @@ const login = async (req, res) => {
     }
 };
 
+
+
+// Verify Email
+exports.verifyEmail = async (req, res) => {
+    const { email, verificationCode } = req.body;
+
+    try {
+        const [users] = await pool.query('SELECT * FROM userCredentials WHERE email = ? AND verification_code = ?', [email, verificationCode]);
+        if (users.length === 0) {
+            return res.status(400).json({ message: 'Invalid verification code or email' });
+        }
+
+        await pool.query('UPDATE userCredentials SET is_verified = 1 WHERE email = ?', [email]);
+        res.json({ message: 'Email successfully verified' });
+    } catch (error) {
+        console.error('Verification error:', error.message);
+        res.status(500).json({ error: 'Failed to verify email.' });
+    }
+};
+
 module.exports = {
     register,
     login,
+    verifyEmail,
+    sendVerificationEmail,
 };
 
