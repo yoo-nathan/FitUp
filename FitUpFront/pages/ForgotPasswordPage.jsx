@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 const ForgotPasswordPage = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -11,24 +11,26 @@ const ForgotPasswordPage = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.header}>Reset Password</Text>
-            <Text style={styles.subheader}>Enter your Emory email below, and we will send you the reset password link to your email.</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="example@emory.edu"
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                keyboardType="email-address"
-            />
-            <TouchableOpacity style={styles.button} onPress={handlePasswordReset}>
-                <Text style={styles.buttonText}>Send Reset Link</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('SignInPage')}>
-                <Text style={styles.backButtonText}>Back to Log In</Text>
-            </TouchableOpacity>
-        </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.container}>
+                <Text style={styles.header}>Reset Password</Text>
+                <Text style={styles.subheader}>Enter your Emory email below, and we will send you the reset password link to your email.</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="example@emory.edu"
+                    value={email}
+                    onChangeText={setEmail}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                />
+                <TouchableOpacity style={styles.button} onPress={handlePasswordReset}>
+                    <Text style={styles.buttonText}>Send Reset Link</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('SignInPage')}>
+                    <Text style={styles.backButtonText}>Back to Log In</Text>
+                </TouchableOpacity>
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 
@@ -83,6 +85,6 @@ const styles = StyleSheet.create({
       fontSize: 16,
       textDecorationLine: 'underline',
     },
-  });
+});
 
 export default ForgotPasswordPage;
