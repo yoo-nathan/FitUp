@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image 
 import { useRoute } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
+import { SafeAreaView } from 'react-native';
 
 
 const SignUpPage1 = ({ navigation }) => {
@@ -58,47 +59,63 @@ const SignUpPage1 = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Let us know about you!</Text>
-      <TouchableOpacity onPress={pickImage}>
-        <Image
-          style={styles.profilePic}
-          source={{ uri: profileImageURI }}
-        />
-      </TouchableOpacity>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputLabel}>First Name</Text>
-        <TextInput style={styles.input} placeholder="John" value={firstName} onChangeText={setFirstName} />
-        <Text style={styles.inputLabel}>Last Name</Text>
-        <TextInput style={styles.input} placeholder="Parker" value={lastName} onChangeText={setLastName} />
-        <Text style={styles.label}>Gender</Text>
-        <View style={styles.pickerContainer}>
-          <Picker selectedValue={gender} onValueChange={setGender}>
-            <Picker.Item label="Male" value="Male" />
-            <Picker.Item label="Female" value="Female" />
-            <Picker.Item label="Other" value="Other" />
-          </Picker>
-        </View>
-        <Text style={styles.label}>Age (years) </Text>
-        <TextInput 
-          style={styles.input} 
-          placeholder="21" value={age} 
-          onChangeText={setAge} 
-          
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Next</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView 
+        style={styles.container}
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled"  // ensure keyboard can be disabled by tapping outside
+      >
+        <Text style={styles.header}>Let us know about you!</Text>
+        <TouchableOpacity onPress={pickImage}>
+          <Image
+            style={styles.profilePic}
+            source={{ uri: profileImageURI }}
+          />
         </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>First Name*</Text>
+          <TextInput style={styles.input} placeholder="John" value={firstName} onChangeText={setFirstName} />
+          <Text style={styles.inputLabel}>Last Name*</Text>
+          <TextInput style={styles.input} placeholder="Parker" value={lastName} onChangeText={setLastName} />
+          <Text style={styles.label}>Gender*</Text>
+          <View style={styles.pickerContainer}>
+            <Picker selectedValue={gender} onValueChange={setGender}>
+              <Picker.Item label="Male" value="Male" />
+              <Picker.Item label="Female" value="Female" />
+              <Picker.Item label="Other" value="Other" />
+            </Picker>
+          </View>
+          <Text style={styles.label}>Age* (years)</Text>
+          <TextInput 
+            style={styles.input} 
+            placeholder="21" value={age} 
+            onChangeText={setAge} 
+            
+          />
+          <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#373F51', 
+  },
   container: {
     flex: 1,
     backgroundColor: '#373F51',
     padding: 20,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between', 
+    padding: 10, 
+    paddingBottom: 50, 
   },
   header: {
     fontSize: 28,
