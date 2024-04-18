@@ -29,34 +29,110 @@ export default function ChatScreen({ navigation }) {
   const socketRef = useRef(null);
   const [token, setToken] = useState(null);
 
+  // useEffect(() => {
+  //   const loadChatList = async () => {
+  //     const userToken = await AsyncStorage.getItem('userToken');
+  //     setToken(userToken);
+  //     const from_id = await getMyID(userToken);
+  //     setUserId(from_id);
+
+  //     const chatList = await getChatList(from_id);
+  //     const list = chatList.map(element => ({
+  //       uid: element.partner_id,
+  //       name: element.partner_name,
+  //       message: element.chat_details.last_message,
+  //       time: element.chat_details.last_message_time
+  //     }));
+  
+  //     setChatData(list);
+  
+
+  //     socketRef.current = io("http://localhost:3000", { query: { token } });
+
+  //     socketRef.current.on("messageReceived", (newMessage) => {
+  //       updateChatList(newMessage);
+  //     });
+  //   };
+
+  //   loadChatList();
+
+  //   return () => {
+  //     if (socketRef.current) {
+  //       socketRef.current.disconnect();
+  //     }
+  //   };
+  // }, []);
+
+  // const updateChatList = async (newMessage) => {
+  //   const uid = newMessage.from_id === userId ? newMessage.to_id : newMessage.from_id;
+  //   const name = await getFirstName(uid);
+    
+  //   setChatData(currentData => {
+  //     const index = currentData.findIndex(chat =>
+  //       chat.uid === uid
+  //     );
+  
+  //     if (index !== -1) {
+  //       return currentData.map((chat, idx) => idx === index ? {
+  //         ...chat,
+  //         message: newMessage.message,
+  //         time: newMessage.timestamp
+  //       } : chat);
+  //     } else {
+  //       return [
+  //         ...currentData,
+  //         {
+  //           uid: uid,
+  //           name: name,
+  //           message: newMessage.message,
+  //           time: newMessage.timestamp
+  //         }
+  //       ];
+  //     }
+  //   });
+  // };
+  const isMounted = useRef(false);
+
   useEffect(() => {
+    isMounted.current = true; 
     const loadChatList = async () => {
-      const userToken = await AsyncStorage.getItem('userToken');
-      setToken(userToken);
-      const from_id = await getMyID(userToken);
-      setUserId(from_id);
+      try {
+        const userToken = await AsyncStorage.getItem('userToken');
+        if (userToken && isMounted.current) {
+          setToken(userToken);
+          const from_id = await getMyID(userToken);
+          if (from_id && isMounted.current) {
+            setUserId(from_id);
 
-      const chatList = await getChatList(from_id);
-      const list = chatList.map(element => ({
-        uid: element.partner_id,
-        name: element.partner_name,
-        message: element.chat_details.last_message,
-        time: element.chat_details.last_message_time
-      }));
-  
-      setChatData(list);
-  
+            const chatList = await getChatList(from_id);
+            const list = chatList.map(element => ({
+              uid: element.partner_id,
+              name: element.partner_name,
+              message: element.chat_details.last_message,
+              time: element.chat_details.last_message_time
+            }));
 
-      socketRef.current = io("http://localhost:3000", { query: { token } });
+            if (isMounted.current) setChatData(list);
 
-      socketRef.current.on("messageReceived", (newMessage) => {
-        updateChatList(newMessage);
-      });
+            socketRef.current = io("http://localhost:3000", { query: { token: userToken } });
+
+            socketRef.current.off("messageReceived");
+            socketRef.current.on("messageReceived", (newMessage) => {
+              updateChatList(newMessage);
+            });
+          }
+        }
+        console.log(chatData);
+      } catch (error) {
+        console.error('Error loading chat list:', error);
+        Alert.alert("Error", "Failed to load chat data");
+      }
     };
 
     loadChatList();
 
     return () => {
+      isMounted.current = false; // 컴포넌트가 언마운트되었음을 설정
       if (socketRef.current) {
         socketRef.current.disconnect();
       }
@@ -64,32 +140,41 @@ export default function ChatScreen({ navigation }) {
   }, []);
 
   const updateChatList = async (newMessage) => {
-    const uid = newMessage.from_id === userId ? newMessage.to_id : newMessage.from_id;
-    const name = await getFirstName(uid);
-    
-    setChatData(currentData => {
-      const index = currentData.findIndex(chat =>
-        chat.uid === uid
-      );
-  
-      if (index !== -1) {
-        return currentData.map((chat, idx) => idx === index ? {
-          ...chat,
-          message: newMessage.message,
-          time: newMessage.timestamp
-        } : chat);
-      } else {
-        return [
-          ...currentData,
-          {
+    try {
+      // const uid = newMessage.from_id === userId ? newMessage.to_id : newMessage.from_id;
+      const uid = newMessage.to_id;
+      const name = await getFirstName(uid);
+
+      setChatData(currentData => {
+        const existingIndex = currentData.findIndex(chat => chat.uid === uid);
+
+      if (existingIndex !== -1) {
+          // 존재하는 채팅 세션 업데이트
+          const updatedData = [...currentData];
+          updatedData[existingIndex] = {
             uid: uid,
             name: name,
             message: newMessage.message,
             time: newMessage.timestamp
-          }
-        ];
-      }
-    });
+          };
+          return updatedData;
+        } else {
+          // 새 채팅 세션 추가
+          return [
+            // ...currentData,
+            {
+              uid: uid,
+              name: name || 'Unknown',
+              message: newMessage.message,
+              time: newMessage.timestamp
+            }
+          ];
+        }
+      });
+    } catch (error) {
+      console.error('Error updating chat list:', error);
+      Alert.alert("Update Error", "Failed to update chat data");
+    }
   };
   
 
