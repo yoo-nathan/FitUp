@@ -11,7 +11,11 @@ const filtering = async (req, res) => {
 
   try {
     
+<<<<<<< HEAD
     const userQuery = 'SELECT height, weight, purpose AS workout_purpose, workout_schedule, gender, workout_style, personal_records, partner_preferences, `first_name`, `last_name`, age FROM userInfo WHERE UID = ?';
+=======
+    const userQuery = 'SELECT height, weight, purpose AS workout_purpose, workout_schedule, gender, workout_style, personal_records, partner_preferences, `first_name`, `last_name`, `school_year` FROM userInfo WHERE UID = ?';
+>>>>>>> a8ee5d680ea51df577c5b31f27345eefe18ce709
     const userResult = await pool.query(userQuery, [UID]);
 
     if (userResult[0].length === 0) {
@@ -45,6 +49,7 @@ const filtering = async (req, res) => {
       queryParams.push(userTotal1RM);
     }
 
+<<<<<<< HEAD
     if (filters.gender) {
       queryParams.push(genders[filters.gender - 1]);
       query += ` AND gender = ?`;
@@ -54,6 +59,17 @@ const filtering = async (req, res) => {
     //   queryParams.push(user.workout_purpose);
     //   query += ` AND purpose = ?`;
     // }
+=======
+    if (filters.gender == 1 || filters.gender == 2) {
+      queryParams.push(filters.gender);
+      query += ` AND gender = ?`;
+    }
+
+    if (filters.similar_workout_purpose == 1) {
+      queryParams.push(user.workout_purpose);
+      query += ` AND purpose = ?`;
+    }
+>>>>>>> a8ee5d680ea51df577c5b31f27345eefe18ce709
 
     if (filters.similar_workout_time == 1) {
       const daysSql = userWorkoutSchedule.map(day => `FIND_IN_SET('${day}', workout_schedule)`).join(' OR ');
