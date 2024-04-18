@@ -22,7 +22,7 @@ const getUsers = async (req, res) => {
 };
 
 //Register
-exports.register = async (req, res) => {
+const register = async (req, res) => {
     const { email, password, userInfo } = req.body;
 
     try {
@@ -35,7 +35,7 @@ exports.register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationCode = Math.floor(10000 + Math.random() * 90000).toString();
 
-        await exports.sendVerificationEmail(email, verificationCode); // Call below function
+        // await sendVerificationEmail(email, verificationCode); // Call below function
 
         const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password, verification_code) VALUES (?, ?, ?, ?)';
         await pool.query(saveCredentialQuery, [UID, email, hashedPassword, verificationCode]);
@@ -44,7 +44,7 @@ exports.register = async (req, res) => {
             first_name,
             last_name,
             gender, 
-            school_year,
+            age,
             height, 
             weight, 
             purpose, 
@@ -52,23 +52,25 @@ exports.register = async (req, res) => {
             workout_style, 
             personal_records, 
             partner_preferences,
+            isActive
         } = userInfo;
 
-        const saveInfoQuery = 'INSERT INTO userInfo (UID, first_name, last_name, gender, school_year, height, weight, purpose, workout_schedule, workout_style, personal_records, partner_preferences) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const saveInfoQuery = 'INSERT INTO userInfo (UID, first_name, last_name, gender, age, height, weight, purpose, workout_schedule, workout_style, personal_records, partner_preferences, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         
         await pool.query(saveInfoQuery, [
             UID, 
             first_name, 
             last_name, 
             gender, 
-            school_year, 
+            age, 
             height, 
             weight, 
             purpose, 
             JSON.stringify(workout_schedule), 
             workout_style, 
             JSON.stringify(personal_records), 
-            JSON.stringify(partner_preferences)
+            JSON.stringify(partner_preferences),
+            isActive
         ]);
 
         res.status(201).json({
@@ -82,7 +84,7 @@ exports.register = async (req, res) => {
 };
 
 // Send Verification Email
-exports.sendVerificationEmail = async (email, verificationCode) => {
+const sendVerificationEmail = async (email, verificationCode) => {
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -144,7 +146,7 @@ const login = async (req, res) => {
 
 
 // Verify Email
-exports.verifyEmail = async (req, res) => {
+const verifyEmail = async (req, res) => {
     const { email, verificationCode } = req.body;
 
     try {

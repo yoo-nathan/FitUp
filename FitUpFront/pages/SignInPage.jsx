@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from './../service/authService';
 import { useNavigation } from '@react-navigation/native';
@@ -12,7 +12,7 @@ const SignInPage = () => {
     const navigation = useNavigation();
 
     const validateEmail = (email) => {
-      return email.endsWith('@emory.edu');
+      return email.endsWith('@gmail.com');
     };
 
     const signInPress = async () => {
@@ -27,9 +27,16 @@ const SignInPage = () => {
         
         if (tokenData) {
           await AsyncStorage.setItem('userToken', tokenData.token);
-          Alert.alert("Success", "Successfully logged in!");
-          navigation.navigate('MainContainer');
-          // setIsLoggedIn(true);
+          Alert.alert(
+            "Success",
+            "Successfully logged in!",
+            [
+              {
+                text: "OK",
+                onPress: () => navigation.navigate('MainContainer'),
+              }
+            ],
+          );
         } else {
           Alert.alert("Login Failed", "Invalid email or password");
         }
@@ -90,8 +97,16 @@ const SignInPage = () => {
             >Sign In</Text>
           </TouchableOpacity>
           
+          <View style={styles.createAccContainer}>
+          <Text style={{fontSize: 14}}>New to FitUp? </Text>
+          <TouchableOpacity onPress={handleCreateAcc} > 
+            <Text style={styles.creatAcc}>Create an account </Text>
+          </TouchableOpacity>
         </View>
-      // </View>
+      </View>
+        </View>
+
+        
     )
 }
 
@@ -129,8 +144,8 @@ const styles = StyleSheet.create({
       },
   sidetitle1:{
       fontWeight: "normal",
-      fontSize:15,
-      color:"white",
+      fontSize: 15,
+      color: "white",
       textAlign: 'left',
       paddingVertical: 5,
       paddingRight: 220

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { 
   StyleSheet,
   Text,
@@ -38,7 +38,11 @@ const FilterPage = ({navigation}) => {
         setWorkSched(null);
         setPurpose(null);
     }
-//style={[styles.optionText, genderPreference === 1 && styles.selectedOptionText]}
+
+    // useEffect(() => {
+        
+    // }, [genderPreference, isPR, isWorkSched, isPurpose]);
+
     return (
         <SafeAreaView style={styles.upperModal}>
             <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
@@ -51,8 +55,6 @@ const FilterPage = ({navigation}) => {
             </View>                       
             <View style={styles.lowerModal}>
                 <View>
-
-                
                 <Text></Text>
                 <Text style={styles.filterText}>Partner Gender Preference: </Text>
                 <View style={styles.buttonView}>             
@@ -119,28 +121,28 @@ const FilterPage = ({navigation}) => {
                     >
                         <Text style={[styles.optionText, isPurpose === 2 && styles.selectedOptionText]}>No</Text>
                     </TouchableOpacity>
-                </View>
-                </View>
-
-                <View style={styles.bottomButtonView}>
                     <TouchableOpacity
-                    onPress={() => navigation.navigate('MainContainer',{
-                        genderPref: genderPreference,
-                        pr: isPR,
-                        workoutSchedule: isWorkSched,
-                        similarPurpose: isPurpose 
+                    onPress={() => navigation.navigate('HomeScreen', {
+                        filters: {
+                            gender: genderPreference,
+                            similar_body_profile: isPR,
+                            similar_workout_purpose: isPurpose,
+                            similar_workout_time: isWorkSched
+                        }
                     })}
-                    style={styles.SaveButtonTO}
                     >
-                        <Text style={styles.saveButton}>Save</Text>
+                        <Text>Save</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={handleReset}
-                    style={styles.CancelButtonTO}
+                        onPress={handleReset}
+                        style={styles.CancelButtonTO}
                     >
                         <Text style={styles.optionText}>Reset Filters</Text>
                     </TouchableOpacity>
                 </View>
+                </View>
+
+
 
             </View>
             

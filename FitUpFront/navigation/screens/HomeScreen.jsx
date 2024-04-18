@@ -15,6 +15,8 @@ import {
   
 } from 'react-native';
 import { getUserInfo } from '../../service/getService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getMyID } from '../../service/chatService';
 
 
 const USER_DATA = [
@@ -89,7 +91,7 @@ const TEST = {
 
 
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ route, navigation }) {
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -100,23 +102,28 @@ export default function HomeScreen({ navigation }) {
 
   const showModal = (id) => {
     setIsModalVisible(true)
-    const USER = data.find(item => item.UID === id)
-    setUser(USER)
+    const USER = data.find(item => item.profile.UID === id);
+    setUser(USER.profile)
   } 
   const hideModal = () => setIsModalVisible(false);
-  const goToChat = (UID) => { //need to implement new chat with specific person
+  const goToChat = (UID) => {
     setIsModalVisible(false)
-    navigation.navigate('ChatRoom', {to_id: UID})
+    navigation.navigate('Chat', {
+      screen: 'ChatRoom',
+      params: { to_id: UID }
+    })
   }
 
-  useEffect(()=> {
+  useEffect(() => {
+    // console.log(route.params?.filters);
     const fetchUserInfo = async () =>{
-      const userInfo = await getUserInfo();
+      const token = await AsyncStorage.getItem('userToken');
+      const uid = await getMyID(token);
+      const userInfo = await getUserInfo(uid, route.params?.filters);
       setData(userInfo);
     }
-
     fetchUserInfo();
-  }, [])
+}, [route.params]);
   
   const UserCard = ({DATA}) => (
     <SafeAreaView> 
@@ -271,8 +278,8 @@ export default function HomeScreen({ navigation }) {
       
         <FlatList
           data = {data}
-          renderItem={({item}) => <UserCard DATA={item}/>}
-          keyExtractor={item => item.UID}
+          renderItem={({item}) => <UserCard DATA={item.profile}/>}
+          keyExtractor={item => item.profile.UID}
           style={{height:565}}
         />
       

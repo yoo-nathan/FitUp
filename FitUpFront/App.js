@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -44,25 +44,26 @@ const App = () => {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator 
-      initialRouteName={userToken ? "MainContainer" : "SignUpPage"}
-      screenOptions={{
-        headerShown: false,
-      }}>
-        <Stack.Screen name="SignInPage" component={SignInPage} />
-        <Stack.Screen name="SignUpPage" component={SignUpPage} />
-        <Stack.Screen name="SignUpPage1" component={SignUpPage1} />
-        <Stack.Screen name="SignUpPage2" component={SignUpPage2} />
-        <Stack.Screen name="WorkoutPreferences" component={WorkoutPreferences} />
-        <Stack.Screen name="ThankYou" component={ThankYouScreen} />
-        <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
-        <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
-        <Stack.Screen name="MainContainer" component={MainContainer}/>
-        <Stack.Screen name="Filter" component={FilterPage}/>
-        {/* <Stack.Screen name="ChatRoom" component={ChatRoom}/> */}
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        
+        <Stack.Navigator 
+        initialRouteName={userToken ? "MainContainer" : "SignInPage"}
+        screenOptions={{
+          headerShown: false,
+        }}>
+          <Stack.Screen name="SignInPage" component={SignInPage} />
+          <Stack.Screen name="SignUpPage" component={SignUpPage} />
+          <Stack.Screen name="SignUpPage1" component={SignUpPage1} />
+          <Stack.Screen name="SignUpPage2" component={SignUpPage2} />
+          <Stack.Screen name="WorkoutPreferences" component={WorkoutPreferences} />
+          <Stack.Screen name="ThankYou" component={ThankYouScreen} />
+          <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
+          <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
+          <Stack.Screen name="MainContainer" component={MainContainer}/>
+          {/* <Stack.Screen name="Filter" component={FilterPage}/> */}
+          {/* <Stack.Screen name="ChatRoom" component={ChatRoom}/> */}
+        </Stack.Navigator>
+      </NavigationContainer>      
   );
 };
 
@@ -76,12 +77,3 @@ const App = () => {
 // });
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

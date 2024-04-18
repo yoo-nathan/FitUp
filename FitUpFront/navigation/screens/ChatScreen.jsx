@@ -37,14 +37,15 @@ export default function ChatScreen({ navigation }) {
       setUserId(from_id);
 
       const chatList = await getChatList(from_id);
-      const list = chatList['chat_result'].map((element, index) => ({
-        uid: element['partner_id'],
-        name: chatList['partner_name'][index],
-        message: element['last_message'],
-        time: element['last_message_time']
+      const list = chatList.map(element => ({
+        uid: element.partner_id,
+        name: element.partner_name,
+        message: element.chat_details.last_message,
+        time: element.chat_details.last_message_time
       }));
-
+  
       setChatData(list);
+  
 
       socketRef.current = io("http://localhost:3000", { query: { token } });
 

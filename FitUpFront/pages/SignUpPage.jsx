@@ -13,6 +13,7 @@ const SignUpPage = ({ navigation }) => {
 
     const handleSignUp = () => {
         if (canSignUp()) {
+            
           // Need to implement sign up logic 
             navigation.navigate('SignUpPage1', 
             { 

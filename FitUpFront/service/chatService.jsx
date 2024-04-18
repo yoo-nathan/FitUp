@@ -46,6 +46,10 @@ export async function getChatHistory(from_id, to_id) {
     if (response){
       return response.data;
     }
+
+    if (response.data.length == 0) {
+      console.log('no result')
+    }
   } catch (error) {
     console.error('Failed to fetch chat history:', error);
     throw error;
@@ -60,9 +64,7 @@ export async function getChatList(user_id) {
       }
     });
 
-    if (response) {
-      return response.data;
-    }
+    return response.data;
   } catch (error) {
     console.error('Failed to fetch chat list:', error);
     throw error;

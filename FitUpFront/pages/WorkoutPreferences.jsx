@@ -26,8 +26,10 @@ const WorkoutPreferences = ({ navigation }) => {
     similarWorkoutStyle: false,
     noPreference: false,
   });
+  
   const route = useRoute();
-  const { email, password, firstName, lastName, gender, schoolYear, height, weight, purpose, workoutSchedule } = route.params;
+
+  const { email, password, firstName, lastName, gender, age, height, weight, purpose, workoutSchedule } = route.params;
 
   const totalInfo = {
     email: email,
@@ -35,7 +37,7 @@ const WorkoutPreferences = ({ navigation }) => {
     first_name: firstName,
     last_name: lastName,
     gender: gender,
-    school_year: schoolYear,
+    age: age,
     height: height,
     weight: weight,
     purpose: purpose,
@@ -46,12 +48,14 @@ const WorkoutPreferences = ({ navigation }) => {
       deadlift: deadliftPR,
       benchpress: benchPressPR
     },
-    partner_preferences: preferences
+    partner_preferences: preferences,
+    isActive: 1
   }
 
   const signUpPress = async () => {
     try {
       const tokenData = await register(totalInfo);
+      console.log(tokenData);
       if (tokenData) {
         await AsyncStorage.setItem('userToken', tokenData.token);
         navigation.navigate('ThankYou');

@@ -89,8 +89,7 @@ const SignUpPage1 = ({ navigation }) => {
           <TextInput 
             style={styles.input} 
             placeholder="21" value={age} 
-            onChangeText={setAge} 
-            
+            onChangeText={setAge}
           />
           <TouchableOpacity style={styles.button} onPress={handleSignUp}>
             <Text style={styles.buttonText}>Next</Text>

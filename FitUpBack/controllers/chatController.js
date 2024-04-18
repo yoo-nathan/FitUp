@@ -113,45 +113,84 @@ const getMostRecentMsg = async (req, res) => {
   }
 }
 
+// const getChatList = async (req, res) => {
+//   try {
+//     const { userId } = req.query;
+
+//     const searchIdQuery = 'SELECT partner_id FROM chat_sessions WHERE user_id = ?';
+//     const searchNameQuery = 'SELECT first_name, last_name FROM userInfo WHERE UID IN (?)';
+//     const searchChatQuery = 'SELECT * FROM chat_sessions WHERE user_id = ? AND partner_id IN (?)'
+
+//     const [idResults] = await pool.query(searchIdQuery, [userId]);
+//     const partnerID = [];
+    
+//     idResults.forEach(element => {
+//       partnerID.push(element['partner_id']);
+//     })
+
+//     const [nameResults] = await pool.query(searchNameQuery, [partnerID]);
+//     const partnerName = [];
+
+//     nameResults.forEach(element => {
+//       partnerName.push(element['first_name'] + " " + element['last_name']);
+//     })
+
+//     const [chatResults] = await pool.query(searchChatQuery, [userId, partnerID]);
+
+//     return res.status(200).json({
+//       partner_id: partnerID,
+//       partner_name: partnerName,
+//       chat_result: chatResults
+//     })
+
+//   } catch (error) {
+//     console.error('Error in getting chat list: ' + error);
+//     return res.status(500).send('Error in getting chat list');
+//   }
+// }
+
 const getChatList = async (req, res) => {
   try {
     const { userId } = req.query;
 
-    const searchIdQuery = 'SELECT partner_id FROM chat_sessions WHERE user_id = ?';
-    const searchNameQuery = 'SELECT first_name, last_name FROM userInfo WHERE UID IN (?)';
-    const searchChatQuery = 'SELECT * FROM chat_sessions WHERE user_id = ? AND partner_id IN (?)'
+    const searchSessionsQuery = `
+      SELECT * FROM chat_sessions 
+      WHERE user_id = ? OR partner_id = ?
+    `;
 
-    const [idResults] = await pool.query(searchIdQuery, [userId]);
-    const partnerID = [];
-    
-    idResults.forEach(element => {
-      partnerID.push(element['partner_id']);
-    })
+    const searchUserInfoQuery = `
+      SELECT UID, first_name, last_name FROM userInfo 
+      WHERE UID IN (?)
+    `;
 
-    const [nameResults] = await pool.query(searchNameQuery, [partnerID]);
-    const partnerName = [];
+    const [sessionsResults] = await pool.query(searchSessionsQuery, [userId, userId]);
+    const userIds = sessionsResults.map(session => session.user_id === userId ? session.partner_id : session.user_id);
 
-    nameResults.forEach(element => {
-      partnerName.push(element['first_name'] + " " + element['last_name']);
-    })
+    if (sessionsResults.length === 0) {
+      return res.status(200).json([]);
+    }
 
-    const [chatResults] = await pool.query(searchChatQuery, [userId, partnerID]);
-    // chatResults.forEach(element => {
-    //   console.log(element['last_message'])
-    // })
-    // console.log(chatResults[0]['last_message'])
+    const [userInfoResults] = await pool.query(searchUserInfoQuery, [userIds]);
+    const userNames = userInfoResults.reduce((acc, user) => ({
+      ...acc,
+      [user.UID]: user.first_name + ' ' + user.last_name
+    }), {});
 
-    return res.status(200).json({
-      partner_id: partnerID,
-      partner_name: partnerName,
-      chat_result: chatResults
-    })
+    const results = sessionsResults.map(session => ({
+      current_user_id: userId, 
+      partner_id: session.user_id === userId ? session.partner_id : session.user_id, 
+      partner_name: userNames[session.user_id === userId ? session.partner_id : session.user_id], 
+      chat_details: session
+    }));
+
+    return res.status(200).json(results);
 
   } catch (error) {
     console.error('Error in getting chat list: ' + error);
     return res.status(500).send('Error in getting chat list');
   }
-}
+};
+
 
 module.exports = {
   convertToEasternTime,

@@ -10,7 +10,7 @@ const SignUpPage2 = ({ navigation }) => {
     const [purpose, setPurpose] = useState('Lose weight');
     const [workoutSchedule, setWorkoutSchedule] = useState([]);
     const route = useRoute();
-    const { email, password, firstName, lastName, gender, schoolYear } = route.params;
+    const { email, password, firstName, lastName, gender, age } = route.params;
 
     const canSignUp = () => {
         return height && weight && purpose && workoutSchedule;
@@ -24,7 +24,7 @@ const SignUpPage2 = ({ navigation }) => {
                 firstName: firstName,
                 lastName: lastName,
                 gender: gender,
-                schoolYear: schoolYear,
+                age: age,
                 height: height,
                 weight: weight,
                 purpose: purpose,

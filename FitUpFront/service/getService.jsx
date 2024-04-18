@@ -19,15 +19,19 @@ export const getFirstName = async (uid) => {
   }
 }
 
-export const getUserInfo = async () => {
+export const getUserInfo = async (uid, filters) => {
   try {
-    const response = await axios.get(`${API_URL}/getInfo/homepage`);
-
+    const response = await axios.get(`${API_URL}/getInfo/homepage`, {
+      params: {
+        UID: uid,
+        filters: filters
+      }
+    });
     if (response) {
       return response.data;
     }
   } catch (error) {
-    console.log("Error occurred while fetching userinfo!")
+    console.log("Error occurred while fetching userinfo in service!")
     console.error(error);
   }
 }

@@ -4,11 +4,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Import screens
 import HomeScreen from './screens/HomeScreen';
+import HomeNavigator from './HomeNavigator';
 import ChatNavigator from './ChatNavigator';
 import MenuScreen from './screens/MenuScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
-const MainContainer = () => {
+const MainContainer = ({route}) => {
   // Screen names
   const homeName = 'Home';
   const chatName = 'Chat';
@@ -38,7 +39,7 @@ const MainContainer = () => {
         },
       })}
       >
-      <Tab.Screen name={homeName} component={HomeScreen}/>
+      <Tab.Screen name={homeName} component={HomeNavigator}/>
       <Tab.Screen name={chatName} component={ChatNavigator}/>
       <Tab.Screen name={menuName} component={MenuScreen}/>
       <Tab.Screen name={profileName} component={ProfileScreen}/>
