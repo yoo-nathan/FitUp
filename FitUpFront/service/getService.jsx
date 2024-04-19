@@ -31,7 +31,23 @@ export const getUserInfo = async (uid, filters) => {
       return response.data;
     }
   } catch (error) {
-    console.log("Error occurred while fetching userinfo in service!")
+    console.log("Error occurred while fetching homepage info in service!")
+    console.error(error);
+  }
+}
+
+export const getUserEmail= async (uid) => {
+  try {
+    const response = await axios.get(`${API_URL}/getInfo/userEmail`, {
+      params: {
+        UID: uid
+      }
+    });
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    console.log("Error occurred while fetching usermail in service!")
     console.error(error);
   }
 }

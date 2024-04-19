@@ -8,6 +8,7 @@ const upload = multer({ storage: storage });
 
 
 infoRouter.get('/userName', infoController.getUserName);
+infoRouter.get('/userEmail', infoController.getUserEmail);
 infoRouter.get('/homepage', filter.filtering);
 infoRouter.post('/changeProfilePic', authenticateToken, upload.single('profilePic'), infoController.changeProfilePicture);
 infoRouter.get('/profilePicture/:uid', authenticateToken, infoController.getProfilePicture);

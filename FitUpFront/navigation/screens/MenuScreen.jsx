@@ -145,8 +145,8 @@ const HeaderCard = ({MACROS}) => (
           : {MACROS.carbs}g 
         </Text>
         <Image resizeMode='contain'
-          style={styles.iconImg}
-          source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlkRb734nF_jHC4boc3k3Buo2Sb4hJhQXz3A&s'}}/>
+          style={styles.iconImg1}
+          source={{uri:'https://png.pngtree.com/png-clipart/20230923/original/pngtree-high-protein-foods-vector-icon-illustration-exercise-body-powder-vector-png-image_12665260.png'}}/>
         <Text style={styles.cardSubText}>
           : {MACROS.protein}g 
         </Text>
@@ -367,6 +367,12 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       paddingHorizontal: 10
     },
+    iconImg1 :{
+      width: 45,
+      height: 45,
+      borderRadius: 5,
+      paddingHorizontal: 10
+    },
     modalViewContainer: { 
       flex: 1, 
       backgroundColor:'rgba(0,0,0,0.6)', 
@@ -386,6 +392,8 @@ const styles = StyleSheet.create({
       backgroundColor: 'black',
       height: 1,
       width: 300,
+      marginLeft:10,
+      opacity:0.5
       
     },
 })

@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect, useRef } from 'react';
 import { View, TextInput, TouchableOpacity, Text, FlatList, StyleSheet, Image, KeyboardAvoidingView, Platform, Button } from 'react-native';
 import io from "socket.io-client";
+import { Message } from './Message';
 import { getFirstName } from '../service/getService';
 import { getMyID, getChatHistory, saveMostRecentOne } from '../service/chatService';
 
@@ -46,8 +47,6 @@ export default function ChatRoom({ route, navigation }) {
     };
   }, [route.params]);
 
-  
-
   const sendMessage = async () => {
     if (message.trim().length > 0) {
       const msgData = { from_id: fromId, to_id: toId, message };
@@ -64,6 +63,7 @@ export default function ChatRoom({ route, navigation }) {
 
   const renderItem = ({ item, index }) => {
     const isMyMessage = item.from_id === fromId;
+    const messageId = item.id;
 
     const containerStyle = isMyMessage ? styles.myMessage : styles.otherMessage;
     const messageStyle = isMyMessage ? styles.contentMyMessage : styles.contentOtherMessage;
@@ -76,9 +76,7 @@ export default function ChatRoom({ route, navigation }) {
         <View style={[styles.messageTimeContainer, messageStyle]}>
           {isMyMessage && <Text>{formatTime(item.timestamp)}</Text>}
           <View key={index} style={[styles.messageContainer, containerStyle]}>
-            <View style={[styles.messageContent, messageStyle]}>
-              <Text style={styles.messageText}>{item['message']}</Text>
-            </View>
+            <Message item={item} fromId={fromId} toId={toId} receiverName={receiverName}></Message>
           </View>          
           {!isMyMessage && <Text>{formatTime(item.timestamp)}</Text>}
         </View>

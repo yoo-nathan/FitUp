@@ -4,13 +4,7 @@ import {
   Text,
   View,
   SafeAreaView,
-  Switch,
   TouchableOpacity,
-  Image,
-  Modal,
-  Button,
-  Pressable,
-  
 } from 'react-native';
 
     
@@ -43,6 +37,111 @@ const FilterPage = ({navigation}) => {
         
     // }, [genderPreference, isPR, isWorkSched, isPurpose]);
 
+    // return (
+    //     <SafeAreaView style={styles.upperModal}>
+    //         <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+    //             <Text style={styles.filterHead}>Filter</Text>
+    //             <TouchableOpacity onPress={()=>navigation.goBack()}>
+    //                 <Text style={styles.filterHead}>&#10005;</Text>
+    //             </TouchableOpacity>
+                
+                
+    //         </View>                       
+    //         <View style={styles.lowerModal}>
+    //             <View>
+    //             <Text></Text>
+    //             <Text style={styles.filterText}>Partner Gender Preference: </Text>
+    //             <View style={styles.buttonView}>             
+    //                 <TouchableOpacity
+    //                     style={[styles.option, genderPreference === 1 && styles.selectedOption]}
+    //                     onPress={() => handleGenderClick(1)}
+    //                 >
+    //                     <Text style={[styles.optionText, genderPreference === 1 && styles.selectedOptionText]} >Male</Text>
+    //                 </TouchableOpacity>
+    //                 <TouchableOpacity
+    //                     style={[styles.option, genderPreference === 2 && styles.selectedOption]}
+    //                     onPress={() => handleGenderClick(2)}
+    //                 >
+    //                     <Text style={[styles.optionText, genderPreference === 2 && styles.selectedOptionText]}>Female</Text>
+    //                 </TouchableOpacity>
+    //                 <TouchableOpacity
+    //                     style={[styles.option, genderPreference === 3 && styles.selectedOption]}
+    //                     onPress={() => handleGenderClick(3)}
+    //                 >
+    //                     <Text style={[styles.optionText, genderPreference === 3 && styles.selectedOptionText]}>None</Text>
+    //                 </TouchableOpacity>
+    //             </View>
+    //             <Text style={styles.filterText}>Similar Personal Record:</Text>
+    //             <View style={styles.buttonView}>             
+    //                 <TouchableOpacity
+    //                     style={[styles.option, isPR === 1 && styles.selectedOption]}
+    //                     onPress={() => handlePRClick(1)}
+    //                 >
+    //                     <Text style={[styles.optionText, isPR === 1 && styles.selectedOptionText]}>Yes</Text>
+    //                 </TouchableOpacity>
+    //                 <TouchableOpacity
+    //                     style={[styles.option, isPR === 2 && styles.selectedOption]}
+    //                     onPress={() => handlePRClick(2)}
+    //                 >
+    //                     <Text style={[styles.optionText, isPR === 2 && styles.selectedOptionText]}>No</Text>
+    //                 </TouchableOpacity>
+    //             </View>
+    //             <Text style={styles.filterText}>Similar Workout Schedule:</Text>
+    //             <View style={styles.buttonView}>             
+    //                 <TouchableOpacity
+    //                     style={[styles.option, isWorkSched === 1 && styles.selectedOption]}
+    //                     onPress={() => handleWorkClick(1)}
+    //                 >
+    //                     <Text style={[styles.optionText, isWorkSched === 1 && styles.selectedOptionText]}>Yes</Text>
+    //                 </TouchableOpacity>
+    //                 <TouchableOpacity
+    //                     style={[styles.option, isWorkSched === 2 && styles.selectedOption]}
+    //                     onPress={() => handleWorkClick(2)}
+    //                 >
+    //                     <Text style={[styles.optionText, isWorkSched === 2 && styles.selectedOptionText]}>No</Text>
+    //                 </TouchableOpacity>
+    //             </View>
+    //             <Text style={styles.filterText}>Similar Purpose:</Text>
+    //             <View style={styles.buttonView}>             
+    //                 <TouchableOpacity
+    //                     style={[styles.option, isPurpose === 1 && styles.selectedOption]}
+    //                     onPress={() => handlePurposeClick(1)}
+    //                 >
+    //                     <Text style={[styles.optionText, isPurpose === 1 && styles.selectedOptionText]}>Yes</Text>
+    //                 </TouchableOpacity>
+    //                 <TouchableOpacity
+    //                     style={[styles.option, isPurpose === 2 && styles.selectedOption]}
+    //                     onPress={() => handlePurposeClick(2)}
+    //                 >
+    //                     <Text style={[styles.optionText, isPurpose === 2 && styles.selectedOptionText]}>No</Text>
+    //                 </TouchableOpacity>
+    //                 <TouchableOpacity
+    //                 onPress={() => navigation.navigate('HomeScreen', {
+    //                     filters: {
+    //                         gender: genderPreference,
+    //                         similar_body_profile: isPR,
+    //                         similar_workout_purpose: isPurpose,
+    //                         similar_workout_time: isWorkSched
+    //                     }
+    //                 })}
+    //                 >
+    //                     <Text>Save</Text>
+    //                 </TouchableOpacity>
+    //                 <TouchableOpacity
+    //                     onPress={handleReset}
+    //                     style={styles.CancelButtonTO}
+    //                 >
+    //                     <Text style={styles.optionText}>Reset Filters</Text>
+    //                 </TouchableOpacity>
+    //             </View>
+    //             </View>
+
+
+
+    //         </View>
+            
+    //     </SafeAreaView>
+    // )
     return (
         <SafeAreaView style={styles.upperModal}>
             <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
@@ -55,6 +154,8 @@ const FilterPage = ({navigation}) => {
             </View>                       
             <View style={styles.lowerModal}>
                 <View>
+
+                
                 <Text></Text>
                 <Text style={styles.filterText}>Partner Gender Preference: </Text>
                 <View style={styles.buttonView}>             
@@ -121,6 +222,10 @@ const FilterPage = ({navigation}) => {
                     >
                         <Text style={[styles.optionText, isPurpose === 2 && styles.selectedOptionText]}>No</Text>
                     </TouchableOpacity>
+                </View>
+                </View>
+
+                <View style={styles.bottomButtonView}>
                     <TouchableOpacity
                     onPress={() => navigation.navigate('HomeScreen', {
                         filters: {
@@ -130,19 +235,17 @@ const FilterPage = ({navigation}) => {
                             similar_workout_time: isWorkSched
                         }
                     })}
+                    style={styles.SaveButtonTO}
                     >
-                        <Text>Save</Text>
+                        <Text style={styles.saveButton}>Save</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={handleReset}
-                        style={styles.CancelButtonTO}
+                    onPress={handleReset}
+                    style={styles.CancelButtonTO}
                     >
                         <Text style={styles.optionText}>Reset Filters</Text>
                     </TouchableOpacity>
                 </View>
-                </View>
-
-
 
             </View>
             

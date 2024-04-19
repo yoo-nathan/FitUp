@@ -70,3 +70,16 @@ export async function getChatList(user_id) {
     throw error;
   }
 }
+
+export async function markAsRead(messageId, toId) {
+  try {
+    const response = await axios.post(`${API_URL}/chat/markAsRead`, {
+      messageId: messageId,
+      toId: toId
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to update read status:', error);
+    throw error;
+  }
+}

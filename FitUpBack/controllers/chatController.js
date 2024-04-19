@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const pool = require('../db');
-const moment = require("moment-timezone")
+const moment = require("moment-timezone");
 
 
 const convertToEasternTime = (utcTimestamp) => {
@@ -44,6 +44,7 @@ const getChatLog = async (req, res) => {
     const query = "SELECT * from chat_log WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?) ORDER BY timestamp ASC";
 
     const results = await pool.query(query, [from_id, to_id, to_id, from_id]);
+    
 
     return res.status(201).json({
       results: results[0]
@@ -57,32 +58,35 @@ const getChatLog = async (req, res) => {
 
 const saveMostRecentMsg = async (user_id, partner_id) => {
   try {
-    const maxIdQuery = 'SELECT MAX(id) AS last_message_id FROM chat_log WHERE from_id = ? AND to_id = ?';
-    const [maxIdResult] = await pool.query(maxIdQuery, [user_id, partner_id]);
-    const maxId = maxIdResult[0]['last_message_id'];
-    // console.log(maxId)
+    const lastMsgQuery = `
+      SELECT message, timestamp 
+      FROM chat_log 
+      WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)
+      ORDER BY id DESC 
+      LIMIT 1`;
+    
+    const [lastMsgResult] = await pool.query(lastMsgQuery, [user_id, partner_id, partner_id, user_id]);
+    
+    if (lastMsgResult.length === 0) {
+      console.log("No messages found between users.");
+      return false;
+    }
 
-    const lastMsgTimeQuery = 'SELECT timestamp FROM chat_log WHERE from_id = ? AND to_id = ? AND id = ?';
-    const [lastMsgTimeResult] = await pool.query(lastMsgTimeQuery, [user_id, partner_id, maxId]);
-    const lastMsgTime = lastMsgTimeResult[0]['timestamp'];
-    // console.log(lastMsgTime);
-
-    const lastMsgQuery = 'SELECT message FROM chat_log WHERE from_id = ? AND to_id = ? AND id = ?';
-    const [lastMsgResult] = await pool.query(lastMsgQuery, [user_id, partner_id, maxId]);
-    const lastMsg = lastMsgResult[0]['message'];
-    // console.log(lastMsg);
+    const { message: lastMsg, timestamp: lastMsgTime } = lastMsgResult[0];
     
     const saveMostRecentMsgQuery = `
-      INSERT INTO chat_sessions (user_id, partner_id, last_message, last_message_time, unread_messages_count)
-      VALUES (?, ?, ?, ?, ?)
-      ON DUPLICATE KEY UPDATE
-      last_message = VALUES(last_message),
-      last_message_time = VALUES(last_message_time)
+        INSERT INTO chat_sessions
+        (user_id, partner_id, last_message, last_message_time, unread_messages_count)
+        VALUES
+        (LEAST(?, ?), GREATEST(?, ?), ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+        last_message = VALUES(last_message),
+        last_message_time = VALUES(last_message_time)
     `;
     // unread_messages_count = unread_messages_count + 1;
     
     const cnt = 1; // NEED TO UPDATE
-    const saveMostRecentMsg = await pool.query(saveMostRecentMsgQuery, [user_id, partner_id, lastMsg, lastMsgTime, cnt]);
+    const saveMostRecentMsg = await pool.query(saveMostRecentMsgQuery, [user_id, partner_id, user_id, partner_id, lastMsg, lastMsgTime, cnt]);
 
     if (saveMostRecentMsg) {
       console.log("Most recent msg saved!");
@@ -113,41 +117,6 @@ const getMostRecentMsg = async (req, res) => {
   }
 }
 
-// const getChatList = async (req, res) => {
-//   try {
-//     const { userId } = req.query;
-
-//     const searchIdQuery = 'SELECT partner_id FROM chat_sessions WHERE user_id = ?';
-//     const searchNameQuery = 'SELECT first_name, last_name FROM userInfo WHERE UID IN (?)';
-//     const searchChatQuery = 'SELECT * FROM chat_sessions WHERE user_id = ? AND partner_id IN (?)'
-
-//     const [idResults] = await pool.query(searchIdQuery, [userId]);
-//     const partnerID = [];
-    
-//     idResults.forEach(element => {
-//       partnerID.push(element['partner_id']);
-//     })
-
-//     const [nameResults] = await pool.query(searchNameQuery, [partnerID]);
-//     const partnerName = [];
-
-//     nameResults.forEach(element => {
-//       partnerName.push(element['first_name'] + " " + element['last_name']);
-//     })
-
-//     const [chatResults] = await pool.query(searchChatQuery, [userId, partnerID]);
-
-//     return res.status(200).json({
-//       partner_id: partnerID,
-//       partner_name: partnerName,
-//       chat_result: chatResults
-//     })
-
-//   } catch (error) {
-//     console.error('Error in getting chat list: ' + error);
-//     return res.status(500).send('Error in getting chat list');
-//   }
-// }
 
 const getChatList = async (req, res) => {
   try {
@@ -191,6 +160,19 @@ const getChatList = async (req, res) => {
   }
 };
 
+const updateReadStatus = async (req, res) => {
+  try {
+    const { messageId, toId } = req.body;
+    const updateQuery = 'UPDATE chat_log SET read_status = 1 WHERE id = ? AND from_id = ?'; // True = 1 / False = 0
+
+    await pool.query(updateQuery, [messageId, toId]);
+    res.send({ success: true, message: 'Message marked as read' });
+  } catch (error) {
+    console.error('Error updating message status:', error);
+    res.status(500).send({ success: false, message: 'Failed to update message status' });
+  }
+}
+
 
 module.exports = {
   convertToEasternTime,
@@ -199,5 +181,6 @@ module.exports = {
   getChatLog,
   saveMostRecentMsg,
   getMostRecentMsg,
-  getChatList
+  getChatList,
+  updateReadStatus
 }
