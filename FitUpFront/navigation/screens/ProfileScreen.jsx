@@ -5,13 +5,15 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
  } from 'react-native';
 import { getFirstName, getUserEmail } from '../../service/getService';
 import { getMyID } from '../../service/chatService';
 
 ////<Text style={styles.headerText}>Profile</Text>
-
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 const USER = {
   name: "John Doe",
   email: "j.doe@emory.edu"
@@ -71,23 +73,29 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.arrowText}>&#187;</Text>
         </TouchableOpacity>
         <View style={styles.hairline}/>
-        <TouchableOpacity style={styles.touchableStyle}>
+        <TouchableOpacity 
+          style={styles.touchableStyle}
+          onPress={() => {console.log('implement logout')}}
+        >
           <View style={{flexDirection: 'row'}}>
             <Image resizeMode='contain'
               style={styles.widgetImg}
-              source={{uri: 'https://cdn0.iconfinder.com/data/icons/basic-ui-75/24/Invite_Friends-512.png'}}/>
-            <Text style={styles.widgetText}> Invite Friends</Text>
+              source={{uri: 'https://i.pinimg.com/564x/b8/c9/9e/b8c99e1eb63169d5a862bbf90b171d28.jpg'}}/>
+            <Text style={styles.widgetText}> Logout </Text>
           </View>
           <Text style={styles.arrowText}>&#187;</Text>
         </TouchableOpacity>
         <View style={styles.hairline}/>
 
-        <TouchableOpacity style={styles.touchableStyle}>
+        <TouchableOpacity 
+          style={styles.touchableStyle}
+          onPress={() => {console.log('implement delete')}}
+        >
           <View style={{flexDirection: 'row'}}>
             <Image resizeMode='contain'
               style={styles.widgetImg}
-              source={{uri:'https://static-00.iconduck.com/assets.00/settings-icon-2048x2046-cw28eevx.png'}}/>
-            <Text style={styles.widgetText}> Settings</Text>
+              source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkEqb7yH6GMN43ZOyS5_LiZvWutK3h5ihP1Q93v7T6qA&s'}}/>
+            <Text style={styles.widgetText}> Delete Account</Text>
           </View>
           <Text style={styles.arrowText}>&#187;</Text>
         </TouchableOpacity>
@@ -131,7 +139,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   lowerView : {
-    height: 500,
+    height: screenHeight*0.6,
     borderRadius: 20,
     backgroundColor: 'white'
   },
