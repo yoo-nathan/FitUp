@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 const USER = {
@@ -136,7 +136,8 @@ const EditProfile = ({navigation}) => {
     </ScrollView>
   );
 };
-
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
       marginBottom: 30, 
     },
     inputGroup: {
-      marginHorizontal: 20, 
+      marginHorizontal: screenWidth * 0.05, 
     },
     row: {
       flexDirection: 'row',
@@ -199,10 +200,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 15,
         borderRadius: 10,
-        width: 230
+        width: screenWidth * 0.575
       },
     inputHalf: {
-      width: 170, 
+      width: screenWidth * 0.425, 
     },
     inputText: {
       color: '#C7C7CD', 

@@ -21,7 +21,7 @@ import { getMyID } from '../../service/chatService';
 
 const USER_DATA = [
   {
-    uid: '1',
+    UID: '1',
     name: "Swoop",
     height_ft: 6,
     height_in: 1,
@@ -35,7 +35,7 @@ const USER_DATA = [
     workout_time: "afternoon"
   },
   {
-    uid: '2',
+    UID: '2',
     name: "Dooley",
     height_ft: 6,
     height_in: 4,
@@ -49,7 +49,7 @@ const USER_DATA = [
     workout_time: "morning"
   },
   {
-    uid: '3',
+    UID: '3',
     name: "Greg Fenves",
     height_ft: 5,
     height_in: 10,
@@ -63,7 +63,7 @@ const USER_DATA = [
     workout_time: "n/a"
   },
   {
-    uid: '4',
+    UID: '4',
     name: "Jangwon",
     height_ft: 7,
     height_in: 1,
