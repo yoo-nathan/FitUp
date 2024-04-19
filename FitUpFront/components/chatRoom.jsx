@@ -18,6 +18,8 @@ export default function ChatRoom({ route, navigation }) {
   const [fromId, setFromId] = useState('');
   const [toId, setToId] = useState('');
 
+
+  //comment to logout
   useEffect(() => {
     async function setupSocket() {
       const token = await AsyncStorage.getItem('userToken');

@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
+
 import { 
   View, 
   Text,
@@ -18,6 +19,9 @@ const USER = {
   name: "John Doe",
   email: "j.doe@emory.edu"
 };
+
+
+
 
 export default function ProfileScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -75,7 +79,20 @@ export default function ProfileScreen({ navigation }) {
         <View style={styles.hairline}/>
         <TouchableOpacity 
           style={styles.touchableStyle}
-          onPress={() => {console.log('implement logout')}}
+          onPress={async () => {
+            try {
+                console.log('Logging out');
+                await AsyncStorage.removeItem('userToken');
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'SignInPage' }], // Use the exact name of your sign-in route
+                });
+                console.log('Logged out successfully');
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        }}
+        
         >
           <View style={{flexDirection: 'row'}}>
             <Image resizeMode='contain'

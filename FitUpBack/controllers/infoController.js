@@ -18,7 +18,8 @@ const getUserName = async (req, res) => {
         const results = await pool.query('SELECT first_name, last_name FROM userInfo WHERE UID = ?', [UID]);
         if (results.length > 0) {
             const userInfo = results[0];
-            res.status(200).json(userInfo[0].first_name + " " + userInfo[0].last_name);
+            res.status(200).json(`${userInfo[0].first_name} ${userInfo[0].last_name}`);
+            //res.status(200).json(userInfo[0].first_name + " " + userInfo[0].last_name); //fix
         } else {
             console.log("User Not Found")
             res.status(404).send('User not found');
@@ -51,7 +52,8 @@ const getUserEmail = async (req, res) => {
 
         if (result.length > 0) {
             return res.status(201).json({
-                email: result[0]['email']
+                email: result[0].email
+                //email: result[0]['email']
             })
         }
     } catch (error) {

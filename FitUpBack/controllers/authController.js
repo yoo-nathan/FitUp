@@ -215,10 +215,9 @@ const updateUserInfo = async (req, res) => {
 };
 
 
-
+//logout
 const logout = async (req, res) => {
-    // Since actual logout logic is handled client-side, just return a successful response
-    res.status(200).send({ message: "Logged out successfully" });
+    res.status(200).send({ message: "Logged out successfully. Please remove the token client-side." });
 };
 
 
@@ -229,5 +228,6 @@ module.exports = {
     verifyEmail,
     sendVerificationEmail,
     updateUserInfo,
+    logout,
 };
 
