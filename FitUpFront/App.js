@@ -12,11 +12,9 @@ import SignUpPage2 from './pages/SignUpPage2';
 import WorkoutPreferences from './pages/WorkoutPreferences';
 import ThankYouScreen from './pages/ThankYou';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import HomeScreen from './navigation/screens/HomeScreen';
-import FilterPage from './pages/FilterPage';
+import VerificationScreen from './pages/VerificationScreen';
 import EditProfile from './pages/EditProfile';
 import ContactUsPage from './pages/ContactUs';
-import VerificationScreen from './pages/VerificationScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -46,48 +44,26 @@ const App = () => {
   }
 
   return (
-    // change userToken to !userToken to see MainContainer
-    // <>
-    //   { userToken ? <MainContainer/> : <SignInPage/> }
-    // </>
-    // <MainContainer/>
-    // console.log(userToken)
-    <NavigationContainer
-    screenOptions={{
-      headerShown: false,
-    }}
-    >
-      {/* 
-      { userToken ? (
-        // console.log('hello')
-        <MainContainer />
-      ) : (
-        <Stack.Navigator
+      <NavigationContainer>
+        
+        <Stack.Navigator 
+        initialRouteName={userToken ? "MainContainer" : "SignInPage"}
         screenOptions={{
           headerShown: false,
         }}>
-          <Stack.Screen name="SignIn" component={SignInPage} />
+          <Stack.Screen name="SignInPage" component={SignInPage} />
+          <Stack.Screen name="SignUpPage" component={SignUpPage} />
+          <Stack.Screen name="SignUpPage1" component={SignUpPage1} />
+          <Stack.Screen name="SignUpPage2" component={SignUpPage2} />
+          <Stack.Screen name="WorkoutPreferences" component={WorkoutPreferences} />
+          <Stack.Screen name="ThankYou" component={ThankYouScreen} />
+          <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
+          <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
+          <Stack.Screen name="MainContainer" component={MainContainer}/>
+          <Stack.Screen name="EditProfile" component={EditProfile}/>
+          <Stack.Screen name="ContactUs" component={ContactUsPage}/>
         </Stack.Navigator>
-      )}
-      */}
-      <Stack.Navigator 
-      initialRouteName="MainContainer"
-      screenOptions={{
-        headerShown: false,
-      }}>
-        <Stack.Screen name="SignInPage" component={SignInPage} />
-        <Stack.Screen name="SignUpPage" component={SignUpPage} />
-        <Stack.Screen name="SignUpPage1" component={SignUpPage1} />
-        <Stack.Screen name="SignUpPage2" component={SignUpPage2} />
-        <Stack.Screen name="WorkoutPreferences" component={WorkoutPreferences} />
-        <Stack.Screen name="ThankYou" component={ThankYouScreen} />
-        <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
-        <Stack.Screen name="MainContainer" component={MainContainer}/>
-        <Stack.Screen name="Filter" component={FilterPage}/>
-        <Stack.Screen name="EditProfile" component={EditProfile}/>
-        <Stack.Screen name="ContactUs" component={ContactUsPage}/>
-      </Stack.Navigator> 
-    </NavigationContainer>
+      </NavigationContainer>      
   );
 };
 
