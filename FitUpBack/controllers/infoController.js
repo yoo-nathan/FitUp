@@ -9,14 +9,11 @@ const pool = require('../db');
 
 const getUserName = async (req, res) => {
     try {
-        const UID = req.userId;
-        console.log("UID from the client: " + UID)
-        const results = await pool.query('SELECT first_name FROM userInfo WHERE UID = ?', [UID]);
-        console.log('processing userinfo...')
+        const UID = req.query.uid;
+        const results = await pool.query('SELECT first_name, last_name FROM userInfo WHERE UID = ?', [UID]);
         if (results.length > 0) {
             const userInfo = results[0];
-            console.log("processing userinfo done!")
-            res.status(200).json(userInfo[0].first_name);
+            res.status(200).json(userInfo[0].first_name + " " + userInfo[0].last_name);
         } else {
             console.log("User Not Found")
             res.status(404).send('User not found');
@@ -26,6 +23,39 @@ const getUserName = async (req, res) => {
     }
 };
 
+const getUserInfo = async (req, res) => {
+    try {
+        const [results] = await pool.query('SELECT * FROM userInfo');
+        if (results.length > 0) {
+            res.status(200).json(results);
+        } else {
+            console.log("No record on the database");
+            res.status(404).send("No record on the database");
+        }
+    } catch (error) {
+        return res.status(500).send('Server error');
+    }
+}
+
+const getUserEmail = async (req, res) => {
+    try {
+        const uid = req.query.UID;
+
+        const searchQuery = 'SELECT email FROM userCredentials WHERE UID = ?';
+        const [result] = await pool.query(searchQuery, [uid]);
+
+        if (result.length > 0) {
+            return res.status(201).json({
+                email: result[0]['email']
+            })
+        }
+    } catch (error) {
+        return res.status(500).send('Server error');
+    }
+}
+
 module.exports = {
-    getUserName
+    getUserName,
+    getUserInfo,
+    getUserEmail
 };

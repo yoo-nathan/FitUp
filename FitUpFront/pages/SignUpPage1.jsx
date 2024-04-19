@@ -2,18 +2,45 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
+import * as ImagePicker from 'expo-image-picker';
+import { SafeAreaView } from 'react-native';
 
 
 const SignUpPage1 = ({ navigation }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('Male');
-  const [schoolYear, setSchoolYear] = useState('');
+  const [age, setAge] = useState('');
   const route = useRoute();
   const { email, password } = route.params;
+  const [profileImageURI, setProfileImageURI] = useState('https://static-00.iconduck.com/assets.00/profile-circle-icon-2048x2048-cqe5466q.png');
+
+  const pickImage = async () => {
+    // request media library permissions
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    try {
+      if (status !== 'granted') {
+        Alert.alert('Sorry, we need camera roll permissions to make this work!');
+        return;
+      }
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setProfileImageURI(result.assets[0].uri);
+        console.log('New image URI:', result.assets[0].uri);
+      }
+    } catch (error) {
+      console.log('Error selecting profile picture:', error)
+    }
+  };
 
   const canSignUp = () => {
-    return firstName && lastName && gender && schoolYear;
+    return firstName && lastName && gender && age;
   };
 
   const handleSignUp = () => {
@@ -24,7 +51,7 @@ const SignUpPage1 = ({ navigation }) => {
         firstName: firstName,
         lastName: lastName,
         gender: gender,
-        schoolYear: schoolYear
+        age: age
       })
     }
 
@@ -32,39 +59,62 @@ const SignUpPage1 = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Let us know about you!</Text>
-      <Image style={styles.profilePic} 
-      // source={require('../assets/profile.png')} 
-      />
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputLabel}>First Name</Text>
-        <TextInput style={styles.input} placeholder="John" value={firstName} onChangeText={setFirstName} />
-        <Text style={styles.inputLabel}>Last Name</Text>
-        <TextInput style={styles.input} placeholder="Doe" value={lastName} onChangeText={setLastName} />
-        <Text style={styles.label}>Gender</Text>
-        <View style={styles.pickerContainer}>
-          <Picker selectedValue={gender} onValueChange={setGender}>
-            <Picker.Item label="Male" value="Male" />
-            <Picker.Item label="Female" value="Female" />
-            <Picker.Item label="Other" value="Other" />
-          </Picker>
-        </View>
-        <Text style={styles.label}>School Year</Text>
-        <TextInput style={styles.input} placeholder="2024" value={schoolYear} onChangeText={setSchoolYear} />
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Next</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView 
+        style={styles.container}
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled"  // ensure keyboard can be disabled by tapping outside
+      >
+        <Text style={styles.header}>Let us know about you!</Text>
+        <TouchableOpacity onPress={pickImage}>
+          <Image
+            style={styles.profilePic}
+            source={{ uri: profileImageURI }}
+          />
         </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>First Name*</Text>
+          <TextInput style={styles.input} placeholder="John" value={firstName} onChangeText={setFirstName} />
+          <Text style={styles.inputLabel}>Last Name*</Text>
+          <TextInput style={styles.input} placeholder="Parker" value={lastName} onChangeText={setLastName} />
+          <Text style={styles.label}>Gender*</Text>
+          <View style={styles.pickerContainer}>
+            <Picker selectedValue={gender} onValueChange={setGender}>
+              <Picker.Item label="Male" value="Male" />
+              <Picker.Item label="Female" value="Female" />
+              <Picker.Item label="Other" value="Other" />
+            </Picker>
+          </View>
+          <Text style={styles.label}>Age* (years)</Text>
+          <TextInput 
+            style={styles.input} 
+            placeholder="21" value={age} 
+            onChangeText={setAge}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#373F51', 
+  },
   container: {
     flex: 1,
     backgroundColor: '#373F51',
     padding: 20,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between', 
+    padding: 10, 
+    paddingBottom: 50, 
   },
   header: {
     fontSize: 28,
@@ -75,8 +125,8 @@ const styles = StyleSheet.create({
   },
   profilePic: {
     alignSelf: 'center',
-    width: 120,
-    height: 120,
+    width: 150,
+    height: 150,
     borderRadius: 60,
     marginBottom: 30,
   },

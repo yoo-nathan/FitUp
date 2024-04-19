@@ -1,21 +1,17 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 const app = express();
-app.use(express.json());
+const pool = require('./db')
 
-const pool = mysql.createPool({
-  host: '35.196.58.227',
-  user: 'daniel',
-  database: 'User', 
-  password: '1q2w3e4r!Q@W#E$R!',
-});
-
+const genders = ['male', 'female', 'none'];
+// const workout_purpose = ['Gain Weight', 'Lose Weight', 'Maintain Weight', 'Better Performance'];
 
 const filtering = async (req, res) => {
-  const { UID, filters = {} } = req.body;
+  const { UID, filters = {} } = req.query;
 
   try {
-    const userQuery = 'SELECT height, weight, purpose AS workout_purpose, workout_schedule, gender, workout_style, personal_records, partner_preferences, `first_name`, `last_name`, `school_year` FROM userInfo WHERE UID = ?';
+    
+    const userQuery = 'SELECT height, weight, purpose AS workout_purpose, workout_schedule, gender, workout_style, personal_records, partner_preferences, `first_name`, `last_name`, age FROM userInfo WHERE UID = ?';
     const userResult = await pool.query(userQuery, [UID]);
 
     if (userResult[0].length === 0) {
@@ -38,35 +34,36 @@ const filtering = async (req, res) => {
     }
 
     const userTotal1RM = parseInt(userPersonalRecords.squat) + parseInt(userPersonalRecords.benchpress) + parseInt(userPersonalRecords.deadlift);
-    console.log(userTotal1RM)
+    // console.log(userTotal1RM)
     const userWorkoutSchedule = user.workout_schedule.split(',');
 
-    let query = 'SELECT UID, personal_records, gender, workout_schedule, purpose AS workout_purpose FROM userInfo WHERE UID != ?';
+    let query = 'SELECT * FROM userInfo WHERE UID != ?';
     let queryParams = [UID];
 
-    if (filters.similar_body_profile) {
+    if (filters.similar_body_profile == 1) {
       query += ` AND ABS((JSON_EXTRACT(personal_records, '$.squat') + JSON_EXTRACT(personal_records, '$.benchpress') + JSON_EXTRACT(personal_records, '$.deadlift')) - ?) <= 50`;
       queryParams.push(userTotal1RM);
     }
 
-    if (filters.gender && filters.gender.toLowerCase() !== "none") {
-      queryParams.push(filters.gender);
+    if (filters.gender) {
+      queryParams.push(genders[filters.gender - 1]);
       query += ` AND gender = ?`;
     }
 
-    if (filters.similar_workout_purpose) {
-      queryParams.push(user.workout_purpose);
-      query += ` AND purpose = ?`;
-    }
+    // if (filters.similar_workout_purpose == 1) {
+    //   queryParams.push(user.workout_purpose);
+    //   query += ` AND purpose = ?`;
+    // }
 
-    if (filters.similar_workout_time && userWorkoutSchedule.length > 0) {
+    if (filters.similar_workout_time == 1) {
       const daysSql = userWorkoutSchedule.map(day => `FIND_IN_SET('${day}', workout_schedule)`).join(' OR ');
+      // console.log(daysSql)
       if (daysSql) {
         query += ` AND (${daysSql})`;
       }
     }
     const filteredResults = await pool.query(query, queryParams);
-    console.log(filteredResults);
+    // console.log(filteredResults);
     const profiles = filteredResults[0].filter(profile => profile.UID !== UID).map(profile => {
       let personalRecords;
 
@@ -94,17 +91,14 @@ const filtering = async (req, res) => {
       const similarityScore = bodyProfileSimilarity + purposeSimilarity + scheduleSimilarity + genderSimilarity;
       
       return {
-        UID: profile.UID,
-        total_1rm: parseInt(personalRecords.squat) + parseInt(personalRecords.benchpress) + parseInt(personalRecords.deadlift),
-        gender: profile.gender,
-        workout_purpose: profile.workout_purpose,
+        profile,
         similarityScore, // Add the similarity score to the result
       };
     });
 
     // Sort profiles by similarityScore in descending order (higher scores first)
     profiles.sort((a, b) => b.similarityScore - a.similarityScore);
-    console.log('Filtered Profiles:', profiles);
+    // console.log('Filtered Profiles:', profiles);
     res.json(profiles);
   } catch (error) {
     console.error('Error fetching or processing data', error);

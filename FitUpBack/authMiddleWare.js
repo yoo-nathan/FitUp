@@ -2,12 +2,11 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const authenticateToken = (req, res, next) => {
-  console.log("in the process of middleware...")
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   // console.log(token)
   
-  if (!token) return res.sendStatus(401);
+  if (!token) return res.status(401).send('token is empty!');
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
@@ -16,8 +15,6 @@ const authenticateToken = (req, res, next) => {
     }
     
     req.userId = user.id;
-    console.log("middleware passed!")
-    console.log(req.userId)
     next();
   });
 };

@@ -1,13 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const VerificationScreen = () => {
   const [code, setCode] = useState(['', '', '', '', '', '']);
+  const navigation = useNavigation(); 
 
   const handleCodeInput = (text, index) => {
     const newCode = [...code];
     newCode[index] = text;
     setCode(newCode);
+  };
+
+  const handleResendCode = () => {
+    Alert.alert("Email Sent", "The verification code has been resent to your email.");
+  };
+
+  const handleSubmit = () => {
+    navigation.navigate('SignUpPage1');
+  };
+
+  const handleCancel = () => {
+    navigation.navigate('SignUpPage');
   };
 
   const renderCodeInputs = () => {
@@ -16,7 +30,7 @@ const VerificationScreen = () => {
         key={index}
         style={styles.codeInput}
         maxLength={1}
-        keyboardType="number-pad"
+        keyboardType="numeric"
         onChangeText={(text) => handleCodeInput(text, index)}
         value={code[index]}
       />
@@ -32,13 +46,13 @@ const VerificationScreen = () => {
       <View style={styles.codeInputContainer}>
         {renderCodeInputs()}
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleResendCode}>
         <Text style={styles.buttonText}>Resend the code</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.submitButton]}>
+      <TouchableOpacity style={[styles.button, styles.submitButton]} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.cancelButton]}>
+      <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancel}>
         <Text style={styles.buttonText}>Cancel</Text>
       </TouchableOpacity>
     </View>
@@ -51,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#373F51', 
+    backgroundColor: '#373F51',
   },
   title: {
     fontSize: 22,
@@ -94,10 +108,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   submitButton: {
-    backgroundColor: '#6a0dad', 
+    backgroundColor: '#6a0dad',
   },
   cancelButton: {
-    backgroundColor: 'grey', 
+    backgroundColor: 'grey',
   },
 });
 

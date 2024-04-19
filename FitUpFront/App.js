@@ -1,14 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // page or screen
-import ProfileInfoScreen from './pages/ProfileInfoScreen'; 
 import SignInPage from './pages/SignInPage';
 import MainContainer from './navigation/MainContainer';
-// import LogInPage from './pages/LogInPage';
 import SignUpPage from './pages/SignUpPage';
 import SignUpPage1 from './pages/SignUpPage1';
 import SignUpPage2 from './pages/SignUpPage2';
@@ -19,6 +16,8 @@ import HomeScreen from './navigation/screens/HomeScreen';
 import FilterPage from './pages/FilterPage';
 import EditProfile from './pages/EditProfile';
 import ContactUsPage from './pages/ContactUs';
+import VerificationScreen from './pages/VerificationScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -34,11 +33,12 @@ const App = () => {
           setUserToken(token);
           setIsLoading(false);
         } catch (e) {
+          AsyncStorage.removeItem('userToken');
           console.error(e);
         }
       };
       checkToken();    
-  }, [userToken]);
+  }, []);
 
   if (isLoading) {
     // TODO: create a splash screen
@@ -91,22 +91,5 @@ const App = () => {
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff', 
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

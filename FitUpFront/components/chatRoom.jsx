@@ -1,65 +1,89 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, Text, FlatList, StyleSheet, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, FlatList, StyleSheet, Image, KeyboardAvoidingView, Platform, Button } from 'react-native';
 import io from "socket.io-client";
 import { getFirstName } from '../service/getService';
-
+import { getMyID, getChatHistory, saveMostRecentOne } from '../service/chatService';
 
 const socket = io("http://localhost:3000");
 
-export default function ChatRoom() {
+export default function ChatRoom({ route, navigation }) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [userName, setUserName] = useState('');
+  const [receiverName, setReceiverName] = useState('');
   const flatListRef = useRef(null);
   const inputRef = useRef(null);
+  const socketRef = useRef(null);
+  const [fromId, setFromId] = useState('');
+  const [toId, setToId] = useState('');
 
   useEffect(() => {
-    socket.on("chatting", (data) => {
-      // setMessages((prevMessages) => [...prevMessages, data]);
-      setMessages((prevMessages) => {
-        const updatedMessages = [...prevMessages, data];
-        // console.log(updatedMessages); // 새로운 메시지 상태 확인
-        return updatedMessages;
-      });
-    });
+    async function setupSocket() {
+      const token = await AsyncStorage.getItem('userToken');
+      const from_id = await getMyID(token);
+      const { to_id } = route.params;
 
-    return () => socket.off("chatting");
-  }, []);
+      setFromId(from_id);
+      setToId(to_id);
+
+      const firstName = await getFirstName(to_id);
+      setReceiverName(firstName);
+
+      const history = await getChatHistory(from_id, to_id);
+      setMessages(history['results']);
+
+      socketRef.current = io("http://localhost:3000", { query: { token } });
+
+      socketRef.current.on("messageReceived", (newMessage) => {
+        setMessages(prevMessages => [...prevMessages, newMessage]);
+      });
+    }
+
+    setupSocket();
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, [route.params]);
 
   const sendMessage = async () => {
     if (message.trim().length > 0) {
-      // console.log('Finding token from storage...')
-      const token = await AsyncStorage.getItem('userToken'); // UID
-      // console.log("Token: " + token);
-      
-      const firstName = await getFirstName(token);
-
-      socket.emit("chatting", { name: firstName, msg: message });
+      const msgData = { from_id: fromId, to_id: toId, message };
+      socketRef.current.emit("chatting", msgData);
       setMessage('');
-      setUserName(firstName);
       inputRef.current.focus();
     }
   };
 
-  const renderItem = ({ item }) => {
-    return ( 
-      <>
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  };
+
+  const renderItem = ({ item, index }) => {
+    const isMyMessage = item.from_id === fromId;
+
+    const containerStyle = isMyMessage ? styles.myMessage : styles.otherMessage;
+    const messageStyle = isMyMessage ? styles.contentMyMessage : styles.contentOtherMessage;
+    
+    return (
+      <View>
         <View style={{ marginLeft: 10 }}>
-          {item.name != userName && <Text style={styles.senderName}>{item.name}</Text>}
+          {!isMyMessage && <Text style={styles.senderName}>{receiverName}</Text>}
         </View>
-        <View style={[styles.messageTimeContainer, item.name === userName ? styles.contentMyMessage : styles.contentOtherMessage]}>
-          {item.name === userName && <Text>{item.time}</Text>}
-          <View style={[styles.messageContainer, item.name === userName ? styles.myMessage : styles.otherMessage]}>
-            <View style={[styles.messageContent, item.name === userName ? styles.contentMyMessage : styles.contentOtherMessage]}>
-              <Text style={styles.messageText}>{item.msg}</Text>
+        <View style={[styles.messageTimeContainer, messageStyle]}>
+          {isMyMessage && <Text>{formatTime(item.timestamp)}</Text>}
+          <View key={index} style={[styles.messageContainer, containerStyle]}>
+            <View style={[styles.messageContent, messageStyle]}>
+              <Text style={styles.messageText}>{item['message']}</Text>
             </View>
-          </View>
-          {item.name != userName && <Text>{item.time}</Text>}
-        </View>    
-      </>
+          </View>          
+          {!isMyMessage && <Text>{formatTime(item.timestamp)}</Text>}
+        </View>
+      </View>
     )
   };
+
 
   useEffect(() => {
     flatListRef.current?.scrollToEnd({ animated: true });

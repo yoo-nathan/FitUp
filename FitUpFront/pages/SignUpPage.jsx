@@ -13,6 +13,7 @@ const SignUpPage = ({ navigation }) => {
 
     const handleSignUp = () => {
         if (canSignUp()) {
+            
           // Need to implement sign up logic 
             navigation.navigate('SignUpPage1', 
             { 
@@ -22,23 +23,20 @@ const SignUpPage = ({ navigation }) => {
         }
     };
 
-    const navigateToForgotPassword = () => {
-        navigation.navigate('ForgotPasswordPage');
-    };
-
-
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Sign Up</Text>
+            <Text style={styles.title}> Sign up with your Emory email! </Text>
+            <Text style={styles.sidetitle}> Email </Text>
             <TextInput
                 style={styles.input}
-                placeholder="Email"
+                placeholder="example@emory.edu"
                 value={email}
                 onChangeText={setEmail}
                 autoCapitalize="none"
                 keyboardType="email-address"
                 placeholderTextColor="#003f5c"
             />
+            <Text style={styles.sidetitle1}> Create password </Text>
             <TextInput
                 style={styles.input}
                 placeholder="Create a password"
@@ -67,9 +65,9 @@ const SignUpPage = ({ navigation }) => {
             onPress={handleSignUp}
             disabled={!canSignUp()}
             >
-                <Text style={styles.buttonText}>Sign Up</Text>
+                <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('LogInPage')}>
+            <TouchableOpacity onPress={() => navigation.navigate('SignInPage')}>
                 <Text style={styles.signInText}>Already have an account? Log in</Text>
             </TouchableOpacity>
         </View>
@@ -80,15 +78,35 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#373F51',
-        alignItems: 'center',
+        paddingVertical: 130, 
+        textAlign: 'center', 
+        width: '100%',
+        height: '100%',
+        alignItems: 'center'
+    },
+    title:{
+        fontWeight: "bold",
+        fontSize: 27,
+        color:"white",
+        textAlign: 'center',
         justifyContent: 'center',
         padding: 20,
+        },
+    sidetitle:{
+        fontWeight: "normal",
+        fontSize:15,
+        color:"white",
+        textAlign: 'left',
+        paddingVertical: 5,
+        paddingRight: 250
     },
-    title: {
-        fontSize: 32,
-        color: 'white',
-        fontWeight: 'bold',
-        marginBottom: 20,
+    sidetitle1:{
+        fontWeight: "normal",
+        fontSize:15,
+        color:"white",
+        textAlign: 'left',
+        paddingVertical: 5,
+        paddingRight: 150
     },
     input: {
         width: '80%',
@@ -98,7 +116,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     button: {
-        backgroundColor: '#4b0082',
+        backgroundColor: '#8075FF',
         padding: 15,
         borderRadius: 8,
         width: '80%',
