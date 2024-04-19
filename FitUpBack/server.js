@@ -25,6 +25,8 @@ app.use('/users/authenticate', authRouter);
 app.use('/getInfo', infoRouter);
 app.use('/chat', chatRouter);
 
+
+
 // chat 
 io.on("connection", (socket) => {
   socket.on("chatting", async (data) => {

@@ -35,8 +35,8 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationCode = Math.floor(10000 + Math.random() * 90000).toString();
 
-        // await sendVerificationEmail(email, verificationCode); // Call below function
-
+        await exports.sendVerificationEmail(email, verificationCode); 
+        
         const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password, verification_code) VALUES (?, ?, ?, ?)';
         await pool.query(saveCredentialQuery, [UID, email, hashedPassword, verificationCode]);
 
@@ -55,22 +55,21 @@ const register = async (req, res) => {
             isActive
         } = userInfo;
 
-        const saveInfoQuery = 'INSERT INTO userInfo (UID, first_name, last_name, gender, age, height, weight, purpose, workout_schedule, workout_style, personal_records, partner_preferences, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const saveInfoQuery = 'INSERT INTO userInfo (UID, first_name, last_name, gender, school_year, height, weight, purpose, workout_schedule, workout_style, personal_records, partner_preferences) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         
         await pool.query(saveInfoQuery, [
             UID, 
             first_name, 
             last_name, 
             gender, 
-            age, 
+            school_year, 
             height, 
             weight, 
             purpose, 
             JSON.stringify(workout_schedule), 
             workout_style, 
             JSON.stringify(personal_records), 
-            JSON.stringify(partner_preferences),
-            isActive
+            JSON.stringify(partner_preferences)
         ]);
 
         res.status(201).json({
@@ -144,7 +143,6 @@ const login = async (req, res) => {
 };
 
 
-
 // Verify Email
 const verifyEmail = async (req, res) => {
     const { email, verificationCode } = req.body;
@@ -163,10 +161,73 @@ const verifyEmail = async (req, res) => {
     }
 };
 
+
+const updateUserInfo = async (req, res) => {
+    // Extract user ID from the JWT token assumed to be included in the user object by authentication middleware
+    const UID = req.user.id;  // Assuming 'id' is a property in JWT payload
+
+    // Extract user data from the request body
+    const {
+        first_name,
+        last_name,
+        gender,
+        age,
+        height,
+        weight,
+        purpose,
+        workout_schedule,
+        workout_style,
+        personal_records,
+        partner_preferences,
+        isActive
+    } = req.body;
+
+    try {
+        // Prepare and execute the SQL query to update user information
+        const updateQuery = `
+            UPDATE userInfo
+            SET
+                first_name = ?,
+                last_name = ?,
+                gender = ?,
+                age = ?,
+                height = ?,
+                weight = ?,
+                purpose = ?,
+                workout_schedule = ?,
+                workout_style = ?,
+                personal_records = ?,
+                partner_preferences = ?,
+                isActive = ?
+            WHERE UID = ?`;
+
+        await pool.query(updateQuery, [
+            first_name, last_name, gender, age, height, weight, purpose,
+            JSON.stringify(workout_schedule), workout_style, JSON.stringify(personal_records),
+            JSON.stringify(partner_preferences), isActive, UID
+        ]);
+
+        res.json({ message: "User profile updated successfully." });
+    } catch (error) {
+        console.error('Error updating user profile:', error.message);
+        res.status(500).json({ message: "Failed to update user profile.", error: error.message });
+    }
+};
+
+
+
+const logout = async (req, res) => {
+    // Since actual logout logic is handled client-side, just return a successful response
+    res.status(200).send({ message: "Logged out successfully" });
+};
+
+
+
 module.exports = {
     register,
     login,
     verifyEmail,
     sendVerificationEmail,
+    updateUserInfo,
 };
 
