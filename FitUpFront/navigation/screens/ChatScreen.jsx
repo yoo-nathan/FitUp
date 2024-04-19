@@ -5,6 +5,10 @@ import { getChatList, getMyID } from '../../service/chatService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirstName } from '../../service/getService';
 
+const formatTime = (timestamp) => {
+  const date = new Date(timestamp);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+};
 
 const FriendItem = ({ DATA, onPress }) => (
   <TouchableOpacity onPress={() => onPress(DATA.uid, DATA.name)}>
@@ -17,6 +21,7 @@ const FriendItem = ({ DATA, onPress }) => (
         <View style={{ flexDirection: 'column' }}>
           <Text style={styles.profileText}>{DATA.name}</Text>
           <Text>{DATA.message}</Text>
+          <Text>{formatTime(DATA.time)}</Text>
         </View>
       </View>
     </View>
@@ -24,17 +29,32 @@ const FriendItem = ({ DATA, onPress }) => (
 );
 
 export default function ChatScreen({ navigation }) {
-  const [userId, setUserId] = useState('');
+  // const [userId, setUserId] = useState('');
   const [chatData, setChatData] = useState([]);
   const socketRef = useRef(null);
+<<<<<<< Updated upstream
   const [token, setToken] = useState(null);
+=======
+  // const [token, setToken] = useState(null);
+  const isMounted = useRef(false);
+>>>>>>> Stashed changes
 
   useEffect(() => {
     const loadChatList = async () => {
+<<<<<<< Updated upstream
       const userToken = await AsyncStorage.getItem('userToken');
       setToken(userToken);
       const from_id = await getMyID(userToken);
       setUserId(from_id);
+=======
+      try {
+        const userToken = await AsyncStorage.getItem('userToken');
+        if (userToken && isMounted.current) {
+          // setToken(userToken);
+          const from_id = await getMyID(userToken);
+          if (from_id && isMounted.current) {
+            // setUserId(from_id);
+>>>>>>> Stashed changes
 
       const chatList = await getChatList(from_id);
       const list = chatList['chat_result'].map((element, index) => ({
@@ -48,21 +68,40 @@ export default function ChatScreen({ navigation }) {
 
       socketRef.current = io("http://localhost:3000", { query: { token } });
 
+<<<<<<< Updated upstream
       socketRef.current.on("messageReceived", (newMessage) => {
         updateChatList(newMessage);
       });
+=======
+            socketRef.current.off("messageReceived");
+            socketRef.current.on("messageReceived", (newMessage) => {
+              updateChatList(newMessage);
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error loading chat list:', error);
+        Alert.alert("Error", "Failed to load chat data");
+      }
+>>>>>>> Stashed changes
     };
 
     loadChatList();
 
     return () => {
+<<<<<<< Updated upstream
       if (socketRef.current) {
         socketRef.current.disconnect();
       }
+=======
+      isMounted.current = false;
+      socketRef.current?.disconnect();
+>>>>>>> Stashed changes
     };
   }, []);
 
   const updateChatList = async (newMessage) => {
+<<<<<<< Updated upstream
     const uid = newMessage.from_id === userId ? newMessage.to_id : newMessage.from_id;
     const name = await getFirstName(uid);
     
@@ -81,14 +120,48 @@ export default function ChatScreen({ navigation }) {
         return [
           ...currentData,
           {
+=======
+    try {
+      // const uid = newMessage.from_id === userId ? newMessage.to_id : newMessage.from_id;
+      const uid = newMessage.to_id;
+      const name = await getFirstName(uid);
+
+      setChatData(currentData => {
+        const existingIndex = currentData.findIndex(chat => chat.uid === uid);
+
+      if (existingIndex !== -1) {
+          const updatedData = [...currentData];
+          updatedData[existingIndex] = {
+>>>>>>> Stashed changes
             uid: uid,
             name: name,
             message: newMessage.message,
             time: newMessage.timestamp
+<<<<<<< Updated upstream
           }
         ];
       }
     });
+=======
+          };
+          return updatedData;
+        } else {
+          return [
+            ...currentData,
+            {
+              uid: uid,
+              name: name || 'Unknown',
+              message: newMessage.message,
+              time: newMessage.timestamp
+            }
+          ];
+        }
+      });
+    } catch (error) {
+      console.error('Error updating chat list:', error);
+      Alert.alert("Update Error", "Failed to update chat data");
+    }
+>>>>>>> Stashed changes
   };
   
 

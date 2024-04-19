@@ -1,5 +1,8 @@
 import React, {useState, useEffect} from 'react';
+<<<<<<< Updated upstream
 import { StyleSheet, View } from 'react-native';
+=======
+>>>>>>> Stashed changes
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,7 +20,10 @@ import ThankYouScreen from './pages/ThankYou';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomeScreen from './navigation/screens/HomeScreen';
 import FilterPage from './pages/FilterPage';
-import ChatRoom from './components/chatRoom';
+import EditProfile from './pages/EditProfile';
+import ContactUsPage from './pages/ContactUs';
+import VerificationScreen from './pages/VerificationScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +39,7 @@ const App = () => {
           setUserToken(token);
           setIsLoading(false);
         } catch (e) {
+          AsyncStorage.removeItem('userToken');
           console.error(e);
         }
       };
@@ -45,9 +52,38 @@ const App = () => {
   }
 
   return (
+<<<<<<< Updated upstream
     <NavigationContainer>
       <Stack.Navigator 
       initialRouteName={userToken ? "MainContainer" : "SignInPage"}
+=======
+    // change userToken to !userToken to see MainContainer
+    // <>
+    //   { userToken ? <MainContainer/> : <SignInPage/> }
+    // </>
+    // <MainContainer/>
+    // console.log(userToken)
+    <NavigationContainer
+    screenOptions={{
+      headerShown: false,
+    }}
+    >
+      {/* 
+      { userToken ? (
+        // console.log('hello')
+        <MainContainer />
+      ) : (
+        <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+          <Stack.Screen name="SignIn" component={SignInPage} />
+        </Stack.Navigator>
+      )}
+      */}
+      <Stack.Navigator 
+      initialRouteName="MainContainer"
+>>>>>>> Stashed changes
       screenOptions={{
         headerShown: false,
       }}>
@@ -60,20 +96,18 @@ const App = () => {
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         <Stack.Screen name="MainContainer" component={MainContainer}/>
         <Stack.Screen name="Filter" component={FilterPage}/>
+<<<<<<< Updated upstream
         {/* <Stack.Screen name="ChatRoom" component={ChatRoom}/> */}
       </Stack.Navigator>
+=======
+        <Stack.Screen name="EditProfile" component={EditProfile}/>
+        <Stack.Screen name="ContactUs" component={ContactUsPage}/>
+      </Stack.Navigator> 
+>>>>>>> Stashed changes
     </NavigationContainer>
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff', 
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
 
 export default App;
 

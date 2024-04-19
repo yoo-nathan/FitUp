@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
       justifyContent:"center",
       padding:20
       },
+<<<<<<< Updated upstream
       button: {
         backgroundColor: '#4b0082', 
         paddingVertical: 15,
@@ -191,6 +192,39 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         textAlign: 'center'
       }
+=======
+  inputText:{
+    height:50,
+    color:"white",
+    opacity: 0.7
+    },
+  button: {
+    backgroundColor: '#8075FF', 
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 15,
+    width :"80%",
+    marginTop:50,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center'
+  },
+  createAccContainer : {
+    position: 'absolute',
+    bottom: 20,
+    flexDirection: 'row'
+  },
+  creatAcc : {
+    color: 'white',
+    fontSize: 14,
+    textDecorationLine: 'underline',
+    textAlign: 'center'
+  }
+  
+>>>>>>> Stashed changes
   });
   
 export default SignInPage; 
