@@ -15,7 +15,7 @@ const MainContainer = () => {
   // Screen names
   const homeName = 'Home';
   const chatName = 'Chat';
-  const networkName = 'Network';
+  const networkName = 'Messages';
   const menuName = 'Menu';
   const profileName = 'Profile'
 
@@ -24,7 +24,8 @@ const MainContainer = () => {
     // <NavigationContainer>
     <Tab.Navigator
       initialRouteName={homeName}
-      screenOptions={({route}) => ({
+      screenOptions={
+      ({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
           let rn = route.name;
@@ -46,7 +47,7 @@ const MainContainer = () => {
       })}
       >
       <Tab.Screen name="Home" component={HomeScreen}/>
-      <Tab.Screen name={chatName} component={ChatRoom}/>
+      {/*<Tab.Screen name={chatName} component={ChatRoom}/>*/}
       <Tab.Screen name={networkName} component={NetworkScreen}/>
       <Tab.Screen name={menuName} component={MenuScreen}/>
       <Tab.Screen name={profileName} component={ProfileScreen}/>

@@ -17,6 +17,8 @@ import ThankYouScreen from './pages/ThankYou';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomeScreen from './navigation/screens/HomeScreen';
 import FilterPage from './pages/FilterPage';
+import EditProfile from './pages/EditProfile';
+import ContactUsPage from './pages/ContactUs';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,23 +52,26 @@ const App = () => {
     // </>
     // <MainContainer/>
     // console.log(userToken)
-    <NavigationContainer>
+    <NavigationContainer
+    screenOptions={{
+      headerShown: false,
+    }}
+    >
+      {/* 
       { userToken ? (
         // console.log('hello')
         <MainContainer />
       ) : (
-        <Stack.Navigator>
+        <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
           <Stack.Screen name="SignIn" component={SignInPage} />
         </Stack.Navigator>
-<<<<<<< HEAD
       )}
-      {/* <Stack.Navigator 
-      initialRouteName="SignUpPage"
-=======
-      )} */}
+      */}
       <Stack.Navigator 
       initialRouteName="MainContainer"
->>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
       screenOptions={{
         headerShown: false,
       }}>
@@ -78,12 +83,10 @@ const App = () => {
         <Stack.Screen name="ThankYou" component={ThankYouScreen} />
         <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         <Stack.Screen name="MainContainer" component={MainContainer}/>
-<<<<<<< HEAD
-      </Stack.Navigator> */}
-=======
         <Stack.Screen name="Filter" component={FilterPage}/>
-      </Stack.Navigator>
->>>>>>> dde8360266a377b4e3ec6d01bf5386c8e398539f
+        <Stack.Screen name="EditProfile" component={EditProfile}/>
+        <Stack.Screen name="ContactUs" component={ContactUsPage}/>
+      </Stack.Navigator> 
     </NavigationContainer>
   );
 };

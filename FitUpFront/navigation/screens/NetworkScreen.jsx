@@ -77,29 +77,6 @@ export default function NetworkScreen({ navigation }) {
   )
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.headerView}>
-        <TouchableOpacity>
-          <Image 
-          source={require('../../assets/profile/settings.png')}
-          style={styles.iconImg}
-          
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerText} >Friends</Text>
-        <TouchableOpacity>
-          <Image 
-          source={require('../../assets/profile/invite.png')}
-          style={styles.iconImg}
-          />
-        </TouchableOpacity>
-      </View>
-      <TextInput
-          style={styles.inputText}
-          placeholder="Search ..."
-          onChangeText={newSearch => setSearch(newSearch)}
-          defaultValue= {searchText}
-          placeholderTextColor="lightgrey"
-      />
       <FlatList
       data = {FRIENDS}
       renderItem={({item}) => <FriendItem DATA={item}/>}

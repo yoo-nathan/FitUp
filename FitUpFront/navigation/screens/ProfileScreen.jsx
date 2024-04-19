@@ -25,17 +25,32 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.emailText}>{USER.email}</Text>
       </View>
       <View style={styles.lowerView}>
-        <TouchableOpacity style={styles.touchableStyle}>
+        <TouchableOpacity style={styles.touchableStyle}
+        onPress={() => navigation.navigate('EditProfile')}
+        >
           <View style={{flexDirection: 'row'}}>
             <Image resizeMode='contain'
               style={styles.widgetImg}
-              source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmyHi1d3CfsPNafEET3D57VNO3DjPdglAM6Gat9FV6lw&s'}}/>
+              source={{uri:'https://static-00.iconduck.com/assets.00/edit-profile-icon-512x421-6kngp5gu.png'}}/>
             <Text style={styles.widgetText}> Edit Profile</Text>
           </View>
           <Text style={styles.arrowText}>&#187;</Text>
         </TouchableOpacity>
         <View style={styles.hairline}/>
 
+        <TouchableOpacity 
+        style={styles.touchableStyle}
+        onPress={() => navigation.navigate('ContactUs')}
+        >
+          <View style={{flexDirection: 'row'}}>
+            <Image resizeMode='contain'
+              style={styles.widgetImg}
+              source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrG5wPpOIB74fs9jyiHy19EAcyS3XLfaNgR5p5rzDWMA&s'}}/>
+            <Text style={styles.widgetText}> Contact FitUp </Text>
+          </View>
+          <Text style={styles.arrowText}>&#187;</Text>
+        </TouchableOpacity>
+        <View style={styles.hairline}/>
         <TouchableOpacity style={styles.touchableStyle}>
           <View style={{flexDirection: 'row'}}>
             <Image resizeMode='contain'
@@ -56,17 +71,9 @@ export default function ProfileScreen({ navigation }) {
           </View>
           <Text style={styles.arrowText}>&#187;</Text>
         </TouchableOpacity>
-        <View style={styles.hairline}/>
+        
 
-        <TouchableOpacity style={styles.touchableStyle}>
-          <View style={{flexDirection: 'row'}}>
-            <Image resizeMode='contain'
-              style={styles.widgetImg}
-              source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrG5wPpOIB74fs9jyiHy19EAcyS3XLfaNgR5p5rzDWMA&s'}}/>
-            <Text style={styles.widgetText}> Help </Text>
-          </View>
-          <Text style={styles.arrowText}>&#187;</Text>
-        </TouchableOpacity>
+        
         
         
       </View>
