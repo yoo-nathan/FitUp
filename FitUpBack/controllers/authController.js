@@ -74,7 +74,7 @@ const register = async (req, res) => {
         ]);
 
         res.status(201).json({
-            message: 'User registered successfully. Please verify your email.',
+            message: 'User registered successfully.',
             UID: UID
         });
     } catch (error) {

@@ -1,4 +1,5 @@
-import * as React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react';
 import { 
   View, 
   Text,
@@ -6,6 +7,8 @@ import {
   Image,
   TouchableOpacity
  } from 'react-native';
+import { getFirstName, getUserEmail } from '../../service/getService';
+import { getMyID } from '../../service/chatService';
 
 ////<Text style={styles.headerText}>Profile</Text>
 
@@ -15,14 +18,31 @@ const USER = {
 };
 
 export default function ProfileScreen({ navigation }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    const fetchInfo = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      const uid = await getMyID(token);
+      const userName = await getFirstName(uid);
+      setName(userName);
+
+      const userEmail = await getUserEmail(uid);
+      setEmail(userEmail.email);
+      // console.log(userEmail)
+    }
+    fetchInfo();
+  }, [])
+
   return (
     <View style={styles.mainContainer}>
       <View style={{alignItems:'center', justifyContent:'center', height: 250}}>
         <Image resizeMode='contain'
             style={styles.iconImg}
             source={{uri:'https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png'}}/>
-        <Text style={styles.headerText}>{USER.name}</Text>
-        <Text style={styles.emailText}>{USER.email}</Text>
+        <Text style={styles.headerText}>{name}</Text>
+        <Text style={styles.emailText}>{email}</Text>
       </View>
       <View style={styles.lowerView}>
         <TouchableOpacity style={styles.touchableStyle}>

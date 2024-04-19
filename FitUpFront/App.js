@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,9 +13,7 @@ import WorkoutPreferences from './pages/WorkoutPreferences';
 import ThankYouScreen from './pages/ThankYou';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import VerificationScreen from './pages/VerificationScreen';
-import HomeScreen from './navigation/screens/HomeScreen';
-import FilterPage from './pages/FilterPage';
-import ChatRoom from './components/chatRoom';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +29,7 @@ const App = () => {
           setUserToken(token);
           setIsLoading(false);
         } catch (e) {
+          AsyncStorage.removeItem('userToken');
           console.error(e);
         }
       };
@@ -60,20 +58,10 @@ const App = () => {
           <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
           <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
           <Stack.Screen name="MainContainer" component={MainContainer}/>
-          {/* <Stack.Screen name="Filter" component={FilterPage}/> */}
-          {/* <Stack.Screen name="ChatRoom" component={ChatRoom}/> */}
         </Stack.Navigator>
       </NavigationContainer>      
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff', 
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
 
 export default App;

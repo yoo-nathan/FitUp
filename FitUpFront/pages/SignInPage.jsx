@@ -189,6 +189,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center'
   },
+  createAccContainer : {
+    position: 'absolute',
+    bottom: 20,
+    flexDirection: 'row'
+  },
+  creatAcc : {
+    color: 'white',
+    fontSize: 14,
+    textDecorationLine: 'underline',
+    textAlign: 'center'
+  }
   
   });
   

@@ -46,8 +46,6 @@ export default function ChatRoom({ route, navigation }) {
     };
   }, [route.params]);
 
-  
-
   const sendMessage = async () => {
     if (message.trim().length > 0) {
       const msgData = { from_id: fromId, to_id: toId, message };
