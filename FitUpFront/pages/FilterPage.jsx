@@ -5,9 +5,11 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Dimensions
 } from 'react-native';
 
-    
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const FilterPage = ({navigation}) => {
     const [genderPreference, setGender] = useState(null);
@@ -224,6 +226,7 @@ const FilterPage = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
                 </View>
+                
 
                 <View style={styles.bottomButtonView}>
                     <TouchableOpacity
@@ -261,7 +264,7 @@ const styles = StyleSheet.create({
         
     },
     lowerModal: {
-        height: 700, 
+        height: screenHeight * 0.7, 
         backgroundColor: 'white',
         borderRadius: 20,
         justifyContent:'space-between'
@@ -283,7 +286,7 @@ const styles = StyleSheet.create({
     option: {
         height: 45,
         flex:1,
-        marginHorizontal:10,
+        marginHorizontal:screenWidth * 0.02,
         borderRadius: 25,
         
         backgroundColor: 'rgba(225,225,225,1)',
