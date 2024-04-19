@@ -160,6 +160,19 @@ const getChatList = async (req, res) => {
   }
 };
 
+const updateReadStatus = async (req, res) => {
+  try {
+    const { messageId, toId } = req.body;
+    const updateQuery = 'UPDATE chat_log SET read_status = 1 WHERE id = ? AND from_id = ?'; // True = 1 / False = 0
+
+    await pool.query(updateQuery, [messageId, toId]);
+    res.send({ success: true, message: 'Message marked as read' });
+  } catch (error) {
+    console.error('Error updating message status:', error);
+    res.status(500).send({ success: false, message: 'Failed to update message status' });
+  }
+}
+
 
 module.exports = {
   convertToEasternTime,
@@ -168,5 +181,6 @@ module.exports = {
   getChatLog,
   saveMostRecentMsg,
   getMostRecentMsg,
-  getChatList
+  getChatList,
+  updateReadStatus
 }
