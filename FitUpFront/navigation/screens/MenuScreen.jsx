@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   Modal,
   Button,
-  Image
+  Image,
+  Dimensions
   } from 'react-native';
 
 export default function MenuScreen({ navigation }) {
@@ -285,6 +286,8 @@ const ALL = [
   }
 ];
 
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   containerOld: {
@@ -306,10 +309,10 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       padding: 10,
       marginVertical: 10,
-      marginHorizontal: 6,
+      marginHorizontal: screenWidth *0.04,
       borderRadius: 25, 
-      width: 375, // Fixed width for each item
-      height: 120, // Fixed height for each item
+      width: screenWidth *0.92, // Fixed width for each item
+      height: screenHeight * 0.15, // Fixed height for each item
       justifyContent: 'center',
       alignContent:'center'
       
@@ -334,10 +337,10 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       padding: 10,
       marginVertical: 8,
-      marginHorizontal: 6,
+      marginHorizontal: screenWidth* 0.04,
       borderRadius: 25,
-      width: 375, // Fixed width for each item
-      height: 100,
+      width: screenWidth* 0.92, // Fixed width for each item
+      height: screenHeight * 0.15,
       justifyContent: 'center',
       alignContent:'center'
     },
@@ -391,7 +394,7 @@ const styles = StyleSheet.create({
     hairline: {
       backgroundColor: 'black',
       height: 1,
-      width: 300,
+      width: screenWidth * 0.8,
       marginLeft:10,
       opacity:0.5
       
