@@ -3,6 +3,7 @@ const infoRouter = express.Router();
 const infoController = require('../controllers/infoController');
 const authenticateToken = require('../authMiddleWare');
 const filter = require('../filter');
+const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 

@@ -115,7 +115,7 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const [rows] = await pool.query('SELECT * FROM userCredentials WHERE email = ?', [email]);
-        console.log(rows)
+        // console.log(rows)
 
         if (rows.length === 0) {
             return res.status(401).send('Invalid email or password');

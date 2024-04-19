@@ -42,6 +42,23 @@ const getUserInfo = async (req, res) => {
     }
 }
 
+const getUserEmail = async (req, res) => {
+    try {
+        const uid = req.query.UID;
+
+        const searchQuery = 'SELECT email FROM userCredentials WHERE UID = ?';
+        const [result] = await pool.query(searchQuery, [uid]);
+
+        if (result.length > 0) {
+            return res.status(201).json({
+                email: result[0]['email']
+            })
+        }
+    } catch (error) {
+        return res.status(500).send('Server error');
+    }
+}
+
 const getProfilePicture = async (req, res) => {
     const UID = req.params.uid;  // UID passed as a URL parameter
 
@@ -84,5 +101,7 @@ const changeProfilePicture = async (req, res) => {
 module.exports = {
     getUserName,
     getUserInfo,
-    getUserEmail
+    getUserEmail,
+    getProfilePicture,
+    changeProfilePicture
 };
