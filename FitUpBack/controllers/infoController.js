@@ -37,9 +37,6 @@ const getUserInfo = async (req, res) => {
     }
 }
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
 const getProfilePicture = async (req, res) => {
     const UID = req.params.uid;  // UID passed as a URL parameter
 
@@ -78,7 +75,7 @@ const changeProfilePicture = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
-=======
+
 const getUserEmail = async (req, res) => {
     try {
         const uid = req.query.UID;
@@ -95,9 +92,7 @@ const getUserEmail = async (req, res) => {
         return res.status(500).send('Server error');
     }
 }
->>>>>>> a7c53c9da86a1f1198a063924b463ba0b1ae33b2
 
->>>>>>> Stashed changes
 module.exports = {
     getUserName,
     getUserInfo,
