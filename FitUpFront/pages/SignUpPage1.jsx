@@ -23,6 +23,7 @@ const SignUpPage1 = ({ navigation }) => {
         Alert.alert('Sorry, we need camera roll permissions to make this work!');
         return;
       }
+      // biome-ignore lint/style/useConst: <explanation>
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
