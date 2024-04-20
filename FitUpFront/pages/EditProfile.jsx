@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-community/async-storage';
+
+
 
 const USER = {
-    'height' : 5.9,
-    'weight': 160,
+    height : 5.9,
+    weight: 160,
 
 }
+
 
 const EditProfile = ({navigation}) => {
   const [height, setHeight] = useState('');
@@ -19,8 +23,10 @@ const EditProfile = ({navigation}) => {
   const handleSave = () => {
     navigation.navigate('MainContainer')
   }
-  // Add other state variables as needed for tracking input
 
+
+
+  // Add other state variables as needed for tracking input
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Edit Profile</Text>
@@ -265,5 +271,8 @@ const styles = StyleSheet.create({
         
     },
   });
+
+
+
 
 export default EditProfile;

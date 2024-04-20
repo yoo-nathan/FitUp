@@ -33,7 +33,7 @@ export default function ChatRoom({ route, navigation }) {
       setReceiverName(firstName);
 
       const history = await getChatHistory(from_id, to_id);
-      setMessages(history['results']);
+      setMessages(history.results);
 
       socketRef.current = io("http://localhost:3000", { query: { token } });
 
@@ -78,7 +78,7 @@ export default function ChatRoom({ route, navigation }) {
         <View style={[styles.messageTimeContainer, messageStyle]}>
           {isMyMessage && <Text>{formatTime(item.timestamp)}</Text>}
           <View key={index} style={[styles.messageContainer, containerStyle]}>
-            <Message item={item} fromId={fromId} toId={toId} receiverName={receiverName}></Message>
+            <Message item={item} fromId={fromId} toId={toId} receiverName={receiverName} />
           </View>          
           {!isMyMessage && <Text>{formatTime(item.timestamp)}</Text>}
         </View>
@@ -87,6 +87,7 @@ export default function ChatRoom({ route, navigation }) {
   };
 
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     flatListRef.current?.scrollToEnd({ animated: true });
   }, [messages]);

@@ -10,6 +10,7 @@ export const Message = ({ item, fromId, toId }) => {
 
   const messageStyle = isMyMessage ? styles.contentMyMessage : styles.contentOtherMessage;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const markMsgAsRead = async () => {
       try {
@@ -26,7 +27,7 @@ export const Message = ({ item, fromId, toId }) => {
   
   return (
     <View style={[styles.messageContent, messageStyle]}>
-      <Text>{item['message']}</Text>
+      <Text>{item.message}</Text>
     </View>
   )
 };
