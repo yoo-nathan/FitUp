@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
+  // biome-ignore lint/complexity/useOptionalChain: <explanation>
   const token = authHeader && authHeader.split(' ')[1];
   
   if (!token) return res.status(401).send('token is empty!');

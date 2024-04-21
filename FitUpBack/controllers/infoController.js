@@ -5,12 +5,16 @@
 // const jwt = require('jsonwebtoken');
 
 const multer = require('multer');
+const path = require('node:path');
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const pool = require('../db'); 
+
+
+
 
 require('dotenv').config();
 
-const pool = require('../db');
+
 
 const getUserName = async (req, res) => {
     try {
@@ -61,49 +65,93 @@ const getUserEmail = async (req, res) => {
     }
 }
 
-const getProfilePicture = async (req, res) => {
-    const UID = req.params.uid;  // UID passed as a URL parameter
+
+const fileFilter = (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimetype && extname) {
+    cb(null, true);
+    } else {
+    cb(new Error('Only images are allowed!'), false);
+    }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter }).single('profilePic');
+
+
+
+const changePic = (req, res) => {
+    upload(req, res, async (err) => {
+        if (err instanceof multer.MulterError) {
+            console.error('MulterError:', err);
+            return res.status(500).send('A Multer error occurred when uploading.');
+        // biome-ignore lint/style/noUselessElse: <explanation>
+        } else if (err) {
+            // An unknown error occurred when uploading.
+            console.error('Unknown error during upload:', err);
+            return res.status(500).send('An unknown error occurred when uploading.');
+        }
+        
+        // If `req.file` is undefined, it means no file was uploaded
+        if (!req.file) {
+            return res.status(400).send('No file uploaded.');
+        }
+
+        const { UID } = req.body; // UID is taken from the body, ensure you're sending it in the body
+
+        try {
+            const [existingEntry] = await pool.query('SELECT * FROM image WHERE UID = ?', [UID]);
+            
+            if (existingEntry.length > 0) {
+                // Update existing image
+                await pool.query('UPDATE image SET profilePic = ? WHERE UID = ?', [req.file.buffer, UID]);
+                return res.status(200).send('Image updated successfully.');
+            // biome-ignore lint/style/noUselessElse: <explanation>
+            } else {
+                // Insert new image
+                await pool.query('INSERT INTO image (UID, profilePic) VALUES (?, ?)', [UID, req.file.buffer]);
+                return res.status(201).send('Image added successfully.');
+            }
+        } catch (error) {
+            console.error('Database error:', error);
+            return res.status(500).send('Server error');
+        }
+    });
+};
+
+
+const getPic = async (req, res) => {
+    const UID = req.headers['uid']; // Assuming you're passing 'UID' as the header key
+
+    console.log("Fetching image for UID:", UID); // Debugging log
 
     try {
-        const [results] = await pool.query('SELECT profilePic FROM image WHERE UID = ?', [UID]);
-        if (results.length > 0) {
-            // Send the image as a buffer
-            res.writeHead(200, {
-                'Content-Type': 'image/jpeg',  // Adjust content type based on your image format
-                'Content-Length': results[0].profilePic.length
-            });
-            res.end(results[0].profilePic);  // Sending the BLOB data as an image
+        const [rows] = await pool.query('SELECT profilePic FROM image WHERE UID = ?', [UID]);
+        console.log("Query result:", rows); // Debugging log
+
+        if (rows && rows.length > 0) {
+            const imageBuffer = rows[0].profilePic;
+            res.setHeader('Content-Type', 'image/jpeg');
+            res.send(imageBuffer);
         } else {
-            res.status(404).send('No profile picture found');
+            res.status(404).send('No image found for this UID');
         }
     } catch (error) {
-        console.error('Error fetching profile picture:', error.message);
-        res.status(500).send('Server error');
+        console.error('Database error:', error);
+        res.status(500).send('Failed to retrieve image');
     }
 };
 
 
-const changeProfilePicture = async (req, res) => {
-    if (!req.file) {
-        return res.status(400).send('No file uploaded');
-    }
 
-    const UID = req.body.uid;  
-    const imageBuffer = req.file.buffer;
-    
-    try {
-        await pool.query('UPDATE image SET profilePic = ? WHERE UID = ?', [imageBuffer, UID]);
-        res.status(200).send('Profile picture updated successfully');
-    } catch (error) {
-        console.error('Error updating profile picture:', error.message);
-        res.status(500).send('Server error');
-    }
-};
+
 
 module.exports = {
     getUserName,
     getUserInfo,
     getUserEmail,
-    getProfilePicture,
-    changeProfilePicture
+    changePic,
+    getPic
 };

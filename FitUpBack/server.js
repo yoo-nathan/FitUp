@@ -8,7 +8,9 @@ const chatRouter = require('./routes/chatRoute');
 const chatController = require('./controllers/chatController');
 
 // chat export
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
 const http = require("http")
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
 const path = require("path")
 const socketIO = require("socket.io")
 const cors = require('cors');
@@ -16,6 +18,8 @@ const server = http.createServer(app);
 const io = socketIO(server);
 const pool = require('./db');
 
+const infoRoute = require('./routes/infoRoute');
+app.use('/', infoRoute);
 
 //check
 app.use(cors());
@@ -24,7 +28,7 @@ app.use(express.static(path.join(__dirname, "src")))
 app.use('/users/authenticate', authRouter);
 app.use('/getInfo', infoRouter);
 app.use('/chat', chatRouter);
-
+app.use(express.json()); 
 
 
 // chat 
@@ -48,6 +52,7 @@ io.on("connection", (socket) => {
         console.log("Successfully saved message")
       }
 
+      // biome-ignore lint/complexity/useLiteralKeys: <explanation>
       const easternTimeStamp = chatController.convertToEasternTime(savedMessage["timestamp"])
 
       io.emit("messageReceived", {
