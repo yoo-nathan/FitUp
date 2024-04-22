@@ -6,7 +6,7 @@ import { Message } from './Message';
 import { getFirstName } from '../service/getService';
 import { getMyID, getChatHistory, saveMostRecentOne } from '../service/chatService';
 
-const socket = io("http://localhost:3000");
+const socket = io("https://cs-370-420520.ue.r.appspot.com");
 
 export default function ChatRoom({ route, navigation }) {
   const [message, setMessage] = useState('');
@@ -35,7 +35,7 @@ export default function ChatRoom({ route, navigation }) {
       const history = await getChatHistory(from_id, to_id);
       setMessages(history.results);
 
-      socketRef.current = io("http://localhost:3000", { query: { token } });
+      socketRef.current = io("https://cs-370-420520.ue.r.appspot.com", { query: { token } });
 
       socketRef.current.on("messageReceived", (newMessage) => {
         setMessages(prevMessages => [...prevMessages, newMessage]);

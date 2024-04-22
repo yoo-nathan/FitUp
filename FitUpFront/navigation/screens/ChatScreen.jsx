@@ -56,7 +56,7 @@ export default function ChatScreen({ navigation }) {
 
             if (isMounted.current) setChatData(list);
 
-            socketRef.current = io("http://localhost:3000", { query: { token: userToken } });
+            socketRef.current = io("https://cs-370-420520.ue.r.appspot.com", { query: { token: userToken } });
 
             socketRef.current.off("messageReceived");
             socketRef.current.on("messageReceived", (newMessage) => {
@@ -96,6 +96,7 @@ export default function ChatScreen({ navigation }) {
             time: newMessage.timestamp
           };
           return updatedData;
+        // biome-ignore lint/style/noUselessElse: <explanation>
         } else {
           return [
             ...currentData,

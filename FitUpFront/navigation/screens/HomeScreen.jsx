@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+
+
 import { 
   StyleSheet,
   Text,
@@ -19,75 +21,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMyID } from '../../service/chatService';
 
 
-const USER_DATA = [
-  {
-    UID: '1',
-    name: "Swoop",
-    height_ft: 6,
-    height_in: 1,
-    weight: 200,
-    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
-    squat_pr: 200,
-    bench_pr: 225,
-    deadlift_pr: 320,
-    gender: "M",
-    purpose: "Bodybuilding",
-    workout_time: "afternoon"
-  },
-  {
-    UID: '2',
-    name: "Dooley",
-    height_ft: 6,
-    height_in: 4,
-    weight: 220,
-    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
-    squat_pr: 300,
-    bench_pr: 205,
-    deadlift_pr: 220,
-    gender: "M",
-    purpose: "Cutting",
-    workout_time: "morning"
-  },
-  {
-    UID: '3',
-    name: "Greg Fenves",
-    height_ft: 5,
-    height_in: 10,
-    weight: 150,
-    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
-    squat_pr: 250,
-    bench_pr: 255,
-    deadlift_pr: 220,
-    gender: "M",
-    purpose: "n/a",
-    workout_time: "n/a"
-  },
-  {
-    UID: '4',
-    name: "Jangwon",
-    height_ft: 7,
-    height_in: 1,
-    weight: 300,
-    image: {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'},
-    squat_pr: 300,
-    bench_pr: 285,
-    deadlift_pr: 420,
-    gender: "M",
-    purpose: "Bodybuilding",
-    workout_time: "Anytime"
-  }
-]
-const TEST = {
-  name: "Jangwon",
-    height_ft: 7,
-    height_in: 1,
-    weight: 300,
-    image: require('../../assets/pictures/user1.png')
-}
 
-/*
 
-*/
 
 
 
@@ -134,7 +69,7 @@ export default function HomeScreen({ route, navigation }) {
         <View style={styles.userInfo}>
           <Text style={{fontSize:28, fontWeight:'700'}}>{DATA.first_name} {DATA.last_name}</Text>
           <Text style={{fontSize: 16, fontWeight:'700'}}>H: {DATA.height} in / W: {DATA.weight} lbs</Text>
-          <Text></Text>
+          <Text/>
           <Text style={{fontSize: 14, fontWeight:'700'}}>Click to view details! </Text>
         </View>
       </TouchableOpacity>
@@ -151,7 +86,7 @@ export default function HomeScreen({ route, navigation }) {
                 <Image resizeMode='contain' style={styles.userImg} source={user.image} />
                   <View style={styles.userInfo}>
                     <Text style={{fontSize:28, fontWeight:'700'}}>{user.first_name} {user.last_name}</Text>
-                    <Text></Text>
+                    <Text />
                     <Text style={{fontSize: 12, fontWeight:'700'}}>H: {user.height} in / W: {user.weight} lbs</Text>
                     <Text style={{fontSize: 12, fontWeight:'700'}}>Gender: {user.gender}</Text>
                     <Text style={{fontSize: 12, fontWeight:'700'}}>Purpose: {user.purpose}</Text>
@@ -341,6 +276,7 @@ const styles = StyleSheet.create({
   },
   toggleView: {
     flexDirection:'row',
+    // biome-ignore lint/suspicious/noDuplicateObjectKeys: <explanation>
     justifyContent:'flex-end', 
     marginHorizontal:25,
     justifyContent: 'space-between',
@@ -432,3 +368,5 @@ const styles = StyleSheet.create({
     borderRadius: 25
   }
 })
+
+

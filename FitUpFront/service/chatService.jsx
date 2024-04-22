@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = "https://cs-370-420520.ue.r.appspot.com";
 
 export const getMyID = async(token) => {
   try {
@@ -47,7 +47,7 @@ export async function getChatHistory(from_id, to_id) {
       return response.data;
     }
 
-    if (response.data.length == 0) {
+    if (response.data.length === 0) {
       console.log('no result')
     }
   } catch (error) {

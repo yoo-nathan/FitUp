@@ -123,7 +123,7 @@ const changePic = (req, res) => {
 
 
 const getPic = async (req, res) => {
-    const UID = req.headers['uid']; // Assuming you're passing 'UID' as the header key
+    const UID = req.headers.uid; // Assuming you're passing 'UID' as the header key
 
     console.log("Fetching image for UID:", UID); // Debugging log
 

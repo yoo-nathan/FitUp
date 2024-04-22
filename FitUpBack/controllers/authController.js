@@ -168,10 +168,6 @@ const updateUserInfo = async (req, res) => {
 
     // Extract user data from the request body
     const {
-        first_name,
-        last_name,
-        gender,
-        age,
         height,
         weight,
         purpose,
@@ -179,7 +175,6 @@ const updateUserInfo = async (req, res) => {
         workout_style,
         personal_records,
         partner_preferences,
-        isActive
     } = req.body;
 
     try {
@@ -215,10 +210,11 @@ const updateUserInfo = async (req, res) => {
 };
 
 
-//logout
+/*
 const logout = async (req, res) => {
     res.status(200).send({ message: "Logged out successfully. Please remove the token client-side." });
 };
+*/
 
 
 
@@ -228,6 +224,6 @@ module.exports = {
     verifyEmail,
     sendVerificationEmail,
     updateUserInfo,
-    logout,
+    //logout,
 };
 
