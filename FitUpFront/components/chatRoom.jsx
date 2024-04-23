@@ -4,9 +4,9 @@ import { View, TextInput, TouchableOpacity, Text, FlatList, StyleSheet, Image, K
 import io from "socket.io-client";
 import { Message } from './Message';
 import { getFirstName } from '../service/getService';
-import { getMyID, getChatHistory, saveMostRecentOne } from '../service/chatService';
+import { getMyID, getChatHistory } from '../service/chatService';
+import { markAsRead } from '../service/chatService';
 
-const socket = io("https://cs-370-420520.ue.r.appspot.com");
 
 export default function ChatRoom({ route, navigation }) {
   const [message, setMessage] = useState('');
@@ -17,77 +17,135 @@ export default function ChatRoom({ route, navigation }) {
   const socketRef = useRef(null);
   const [fromId, setFromId] = useState('');
   const [toId, setToId] = useState('');
+  const [roomId, setRoomId] = useState('');
 
+const convertUtcToEst = (utcDate) => {
+  return moment(utcDate).tz('America/New_York').format('YYYY-MM-DD HH:mm:ss');
+};
 
-  //comment to logout
+  function createRoomId(uid1, uid2) {
+    const sortedUids = [uid1, uid2].sort();
+  
+    const newRoomId = sortedUids.join('_');
+    return newRoomId;
+  }
+
   useEffect(() => {
-    async function setupSocket() {
+    const setupSocketAndFetchData = async () => {
       const token = await AsyncStorage.getItem('userToken');
       const from_id = await getMyID(token);
       const { to_id } = route.params;
-
+  
       setFromId(from_id);
       setToId(to_id);
-
+  
+      const room_id = createRoomId(from_id, to_id);
+      setRoomId(room_id);
+  
       const firstName = await getFirstName(to_id);
       setReceiverName(firstName);
-
+  
       const history = await getChatHistory(from_id, to_id);
       setMessages(history.results);
-
+  
       socketRef.current = io("https://cs-370-420520.ue.r.appspot.com", { query: { token } });
-
+      socketRef.current.emit("joinRoom", { roomId: room_id, userId: from_id });
+  
+      setupEventListeners(from_id, to_id, room_id);
+    };
+  
+    const setupEventListeners = (from_id, to_id, room_id) => {
+      socketRef.current.on("userJoined", async (data) => {
+        if (data.userId !== from_id) { 
+          console.log(`${data.userId} has joined the room.`);
+          const update = await markAsRead(room_id, to_id);
+          if (update.success) {
+            updateMessageReadStatus(from_id);
+          } else {
+            console.error('Failed to mark message as read');
+          }
+        }
+      });
+  
+      socketRef.current.on("updateReadStatus", async () => {
+        const update = await markAsRead(room_id, to_id);
+        if (update.success) {
+          updateMessageReadStatus(from_id);
+        } else {
+          console.error('Failed to mark message as read');
+        }
+      });
+  
       socketRef.current.on("messageReceived", (newMessage) => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
       });
-    }
-
-    setupSocket();
-
+    };
+  
+    const updateMessageReadStatus = (from_id) => {
+      setMessages(prevMessages => prevMessages.map(msg => {
+        if (msg.from_id !== from_id && msg.read_status === 1) {
+          return { ...msg, read_status: 0 };
+        }
+        return msg;
+      }));
+    };
+  
+    setupSocketAndFetchData();
+  
     return () => {
-      socketRef.current?.disconnect();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current.off("userJoined");
+        socketRef.current.off("updateReadStatus");
+        socketRef.current.off("messageReceived");
+      }
     };
   }, [route.params]);
+  
+  
 
   const sendMessage = async () => {
     if (message.trim().length > 0) {
-      const msgData = { from_id: fromId, to_id: toId, message };
+      const msgData = {
+        room_id: roomId,
+        from_id: fromId, 
+        to_id: toId, 
+        message: message,
+        read_status: 1
+      };
+
       socketRef.current.emit("chatting", msgData);
       setMessage('');
       inputRef.current.focus();
     }
   };
 
-  const formatTime = (timestamp) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-  };
-
   const renderItem = ({ item, index }) => {
     const isMyMessage = item.from_id === fromId;
-    const messageId = item.id;
-
-    const containerStyle = isMyMessage ? styles.myMessage : styles.otherMessage;
-    const messageStyle = isMyMessage ? styles.contentMyMessage : styles.contentOtherMessage;
     
     return (
       <View>
         <View style={{ marginLeft: 10 }}>
           {!isMyMessage && <Text style={styles.senderName}>{receiverName}</Text>}
         </View>
-        <View style={[styles.messageTimeContainer, messageStyle]}>
-          {isMyMessage && <Text>{formatTime(item.timestamp)}</Text>}
-          <View key={index} style={[styles.messageContainer, containerStyle]}>
-            <Message item={item} fromId={fromId} toId={toId} receiverName={receiverName} />
-          </View>          
-          {!isMyMessage && <Text>{formatTime(item.timestamp)}</Text>}
-        </View>
+        <Message 
+        item={item} 
+        index={index}
+        isMyMessage={isMyMessage}
+        />
       </View>
     )
   };
 
+  const Header = () => {
+    return (
+      <View style={styles.headerContainer}>
+        <Text style={[{fontSize: 18}, styles.senderName]}>{receiverName}</Text>
+      </View>
+    )
+  }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+
   useEffect(() => {
     flatListRef.current?.scrollToEnd({ animated: true });
   }, [messages]);
@@ -95,6 +153,7 @@ export default function ChatRoom({ route, navigation }) {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 20}>
       <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 10 }}>
+        <Header/>
         <FlatList
           ref={flatListRef}
           data={messages}
@@ -140,35 +199,15 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
-  messageContainer: {
-    padding: 10,
-    margin: 5,
-    borderRadius: 10,
-    maxWidth: '75%',
-  },
-  myMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#daf8cb',
-  },
-  otherMessage: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#f0f0f0',
-  },
   senderName: {
     fontWeight: 'bold',
   },
-  messageContent: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
-  },
-  contentMyMessage: {
-    justifyContent: 'flex-end', 
-  },
-  contentOtherMessage: {
-    justifyContent: 'flex-start', 
-  },
-  messageTimeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center'
+  headerContainer: {
+    backgroundColor: 'white',
+    width: "100%",
+    height: "7%",
+    justifyContent: 'center',
+    paddingLeft: 20,
+    paddingBottom: 10
   }
 });

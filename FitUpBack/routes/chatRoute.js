@@ -10,5 +10,7 @@ chatRouter.get('/getMyUid', authenticateToken, chatController.getMyUID);
 chatRouter.get('/getHistory', chatController.getChatLog);
 chatRouter.get('/getRecentMsg', chatController.getMostRecentMsg);
 chatRouter.get('/getList', chatController.getChatList);
+chatRouter.get('/howManyUnRead', chatController.countUnReadMsg);
+chatRouter.get('/getReadStatus', chatController.isRead);
 
 module.exports = chatRouter;
