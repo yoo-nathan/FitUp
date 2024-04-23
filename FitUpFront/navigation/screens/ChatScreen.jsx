@@ -1,10 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Dimensions} from 'react-native';
 import io from "socket.io-client";
 import { getChatList, getMyID } from '../../service/chatService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirstName } from '../../service/getService';
 
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 const formatTime = (timestamp) => {
   const date = new Date(timestamp);
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
@@ -18,11 +20,14 @@ const FriendItem = ({ DATA, onPress }) => (
           source={require('../../assets/pictures/general_user.png')}
           style={styles.profileImg}
         />
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.profileText}>{DATA.name}</Text>
-          <Text>{DATA.message}</Text>
-          <Text>{formatTime(DATA.time)}</Text>
+        <View style={{ flexDirection: 'column', width : screenWidth * 0.7 , marginVertical: 3}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.profileText}>{DATA.name}</Text>
+            <Text style={{paddingVertical: 10, fontWeight: '500'}}>{formatTime(DATA.time)}</Text>
+          </View>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={{fontSize: 20, color:'grey'}}>{DATA.message}</Text>
         </View>
+
       </View>
     </View>
   </TouchableOpacity>
@@ -177,9 +182,9 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   profileImg : {
-    width: 55,
+    width: screenWidth * 0.14,
     height: 55,
-    marginHorizontal: 20,
+    marginHorizontal: screenWidth * 0.05,
     marginVertical: 10,
     
   },
