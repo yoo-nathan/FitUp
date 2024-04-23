@@ -20,6 +20,12 @@ import { getUserInfo } from '../../service/getService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMyID } from '../../service/chatService';
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> ab16acbdb0f972c8d503c70bcb1a2e36bd8a92f8
 export default function HomeScreen({ route, navigation }) {
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -84,7 +90,10 @@ export default function HomeScreen({ route, navigation }) {
                     <Text style={{fontSize: 12, fontWeight:'700'}}>H: {user.height} in / W: {user.weight} lbs</Text>
                     <Text style={{fontSize: 12, fontWeight:'700'}}>Gender: {user.gender}</Text>
                     <Text style={{fontSize: 12, fontWeight:'700'}}>Purpose: {user.purpose}</Text>
-                    <Text style={{fontSize: 12, fontWeight:'700'}}>Usual workout time: {user.workout_schedule}</Text>
+                    <View style={{width: "90%"}}>
+                      <Text style={{fontSize: 12, fontWeight:'700'}}>Usual workout time: {user.workout_schedule.slice(1, -1).replace(/"/g, '')}</Text>
+                    </View>
+                    
                   </View>
                   
               </View>
@@ -267,6 +276,8 @@ const styles = StyleSheet.create({
   userInfo : {
     flexDirection: 'column',
     marginHorizontal: 10,
+    
+    
   },
   toggleView: {
     flexDirection:'row',
@@ -300,7 +311,8 @@ const styles = StyleSheet.create({
     justifyContent : "center" 
   }, 
   flexRow: {
-    flexDirection:'row' 
+    flexDirection:'row' ,
+    marginTop: 20
   },
   flexCol : { 
     flexDirection: 'column'  
