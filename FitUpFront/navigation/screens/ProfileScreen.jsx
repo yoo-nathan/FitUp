@@ -81,13 +81,13 @@ export default function ProfileScreen({ navigation }) {
           style={styles.touchableStyle}
           onPress={async () => {
             try {
-                console.log('Logging out');
+                // console.log('Logging out');
                 await AsyncStorage.removeItem('userToken');
                 navigation.reset({
                     index: 0,
-                    routes: [{ name: 'SignInPage' }], // Use the exact name of your sign-in route
+                    routes: [{ name: 'SignInPage' }],
                 });
-                console.log('Logged out successfully');
+                // console.log('Logged out successfully');
             } catch (error) {
                 console.error('Logout failed:', error);
             }

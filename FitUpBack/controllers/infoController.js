@@ -9,11 +9,7 @@ const path = require('node:path');
 const storage = multer.memoryStorage();
 const pool = require('../db'); 
 
-
-
-
 require('dotenv').config();
-
 
 
 const getUserName = async (req, res) => {
@@ -23,7 +19,6 @@ const getUserName = async (req, res) => {
         if (results.length > 0) {
             const userInfo = results[0];
             res.status(200).json(`${userInfo[0].first_name} ${userInfo[0].last_name}`);
-            //res.status(200).json(userInfo[0].first_name + " " + userInfo[0].last_name); //fix
         } else {
             console.log("User Not Found")
             res.status(404).send('User not found');
