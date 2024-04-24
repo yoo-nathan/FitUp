@@ -1,17 +1,17 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 const app = express();
-app.use(express.json());
+const pool = require('./db')
 
-const pool = mysql.createPool({
-  host: '35.196.58.227',
-  user: 'daniel',
-  database: 'User', 
-  password: '1q2w3e4r!Q@W#E$R!',
+const pool = mysql.createPool ( {
+  'host': '34.148.35.120',
+  'user': 'dev',
+  'password': '1q2w3e4r!Q@W#E$R!',
+  'database': 'User'
 });
 
 const BMRcal = async (req, res) => {
-    const { UID } = req.params;
+    const { UID } = req.query;
     
     function calculateBMR(gender, weight, height, age, workoutnum) {
         let bmr;
@@ -45,14 +45,14 @@ const BMRcal = async (req, res) => {
         // Fetch user info and workout purpose from database
         const query = 'SELECT gender, weight, height, age, purpose, workout_schedule FROM userInfo WHERE UID = ?';
         const [rows] = await pool.query(query, [UID]);
-    
+        
         if (rows.length === 0) {
           return res.status(404).json({ error: 'User not found' });
         }
         
         const user = rows[0];
         const workoutSchedule = JSON.parse(user.workout_schedule);
-
+        console.log(user.weight)
         // Calculate the number of workout days
         const numberOfWorkoutDays = workoutSchedule.length;
         let bmr = calculateBMR(user.gender, user.weight, user.height, user.age, numberOfWorkoutDays);
@@ -67,9 +67,12 @@ const BMRcal = async (req, res) => {
             break;
           // No default action needed; if it's neither case, do nothing
         }
-    
+        fat = bmr * 0.3 / 9
+        carbo = bmr * 0.55 / 4
+        protein = user.weight * 0.9
+        array = [bmr.toFixed(2),carbo.toFixed(2),protein.toFixed(2),fat.toFixed(2)]
         // Return the adjusted BMR result
-        res.json({ UID, bmr: `The calculated BMR (adjusted for workout purpose) is: ${bmr.toFixed(2)} kcal/day` });
+        res.json(array);
       } catch (error) {
         console.error('Error fetching user data or calculating BMR', error);
         res.status(500).json({ error: 'Server error' });

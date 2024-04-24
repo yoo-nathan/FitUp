@@ -18,8 +18,8 @@ const server = http.createServer(app);
 const io = socketIO(server);
 const pool = require('./db');
 
-const infoRoute = require('./routes/infoRoute');
-app.use('/', infoRoute);
+// const infoRoute = require('./routes/infoRoute');
+// app.use('/', infoRoute);
 
 //check
 app.use(cors());
@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, "src")))
 app.use('/users/authenticate', authRouter);
 app.use('/getInfo', infoRouter);
 app.use('/chat', chatRouter);
-app.use(express.json()); 
+// app.use(express.json()); 
 
 
 // chat 

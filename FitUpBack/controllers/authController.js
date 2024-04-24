@@ -114,6 +114,7 @@ const sendVerificationEmail = async (email, verificationCode) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log(password)
         const [rows] = await pool.query('SELECT * FROM userCredentials WHERE email = ?', [email]);
         // console.log(rows)
 

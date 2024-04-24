@@ -22,10 +22,6 @@ import { getMyID } from '../../service/chatService';
 
 
 
-
-
-
-
 export default function HomeScreen({ route, navigation }) {
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);

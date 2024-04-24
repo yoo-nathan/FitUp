@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = "https://cs-370-420520.ue.r.appspot.com";
+//const API_URL = "https://cs-370-420520.ue.r.appspot.com";
+const API_URL = "http://localhost:3000";
 
 export const getMyID = async(token) => {
   try {

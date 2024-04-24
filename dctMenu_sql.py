@@ -7,8 +7,8 @@ import mysql.connector
 
 # Set up MySQL connection
 db_config = {
-    'host': '35.196.58.227',
-    'user': 'daniel',
+    'host': '34.148.35.120',
+    'user': 'dev',
     'password': '1q2w3e4r!Q@W#E$R!',
     'database': 'User'
 }
@@ -18,7 +18,9 @@ def save_to_mysql(menu_items):
     # Connect to the database
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
-
+    # SQL query to delete existing data
+    delete_query = "DELETE FROM DCT"
+    cursor.execute(delete_query)
     # SQL query to insert data
     insert_query = "INSERT INTO DCT (menu) VALUES (%s)"
     
@@ -56,6 +58,7 @@ menu_items_elements = soup.find_all('button', class_='h4 site-panel__daypart-ite
 # Extract the menu item names without the "menu item:" prefix
 menu_items = [item.text.strip() for item in menu_items_elements]
 
+print(menu_items)
 # Close the browser
 driver.quit()
 

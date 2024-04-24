@@ -37,13 +37,6 @@ export default function ProfileScreen({ navigation }) {
       const userEmail = await getUserEmail(uid);
       setEmail(userEmail.email);
       // console.log(userEmail)
-
-
-      
-
-
-
-
     }
     fetchInfo();
   }, [])
