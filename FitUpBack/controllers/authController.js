@@ -35,10 +35,9 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationCode = Math.floor(10000 + Math.random() * 90000).toString();
 
-        await exports.sendVerificationEmail(email, verificationCode); 
         
         const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password, verification_code) VALUES (?, ?, ?, ?)';
-        await pool.query(saveCredentialQuery, [UID, email, hashedPassword, verificationCode]);
+        await pool.query(saveCredentialQuery, [UID, email, hashedPassword]);
 
         const {
             first_name,
@@ -114,7 +113,6 @@ const sendVerificationEmail = async (email, verificationCode) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log(password)
         const [rows] = await pool.query('SELECT * FROM userCredentials WHERE email = ?', [email]);
         // console.log(rows)
 
@@ -143,6 +141,25 @@ const login = async (req, res) => {
     }
 };
 
+const triggerEmailVerification = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const [user] = await pool.query('SELECT verification_code FROM userCredentials WHERE email = ?', [email]);
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const verificationCode = user[0].verification_code;
+        await sendVerificationEmail(email, verificationCode);
+        res.json({ message: 'Verification email sent.' });
+    } catch (error) {
+        console.error('Error sending verification email:', error.message);
+        res.status(500).json({ error: 'Failed to send verification email.' });
+    }
+};
+
+
 
 // Verify Email
 const verifyEmail = async (req, res) => {
@@ -162,52 +179,51 @@ const verifyEmail = async (req, res) => {
     }
 };
 
+
 const updateUserInfo = async (req, res) => {
-    const { UID, userInfo } = req.body;
+    // Extract user ID from the JWT token assumed to be included in the user object by authentication middleware
+    const UID = req.user.id;  // Assuming 'id' is a property in JWT payload
+
+    // Extract user data from the request body
+    const {
+        height,
+        weight,
+        purpose,
+        workout_schedule,
+        workout_style,
+        personal_records,
+        partner_preferences,
+    } = req.body;
 
     try {
-        const {
-            height,
-            weight,
-            purpose,
-            bench,
-            squat,
-            deadlift,
-            preferredWorkoutSchedule
-        } = userInfo
-;
+        // Prepare and execute the SQL query to update user information
+        const updateQuery = `
+            UPDATE userInfo
+            SET
+                first_name = ?,
+                last_name = ?,
+                gender = ?,
+                age = ?,
+                height = ?,
+                weight = ?,
+                purpose = ?,
+                workout_schedule = ?,
+                workout_style = ?,
+                personal_records = ?,
+                partner_preferences = ?,
+                isActive = ?
+            WHERE UID = ?`;
 
-        const updateInfoQuery = `
-            UPDATE userInfo 
-            SET 
-                height = ?, 
-                weight = ?, 
-                purpose = ?, 
-                benchPR = ?, 
-                squatPR = ?, 
-                deadliftPR = ?, 
-                preferred_workout_schedule = ?
-            WHERE 
-                UID = ?
-        `;
-        
-        await pool.query(updateInfoQuery, [
-            height, 
-            weight, 
-            purpose, 
-            bench, 
-            squat, 
-            deadlift, 
-            JSON.stringify(preferredWorkoutSchedule),
-            UID
+        await pool.query(updateQuery, [
+            first_name, last_name, gender, age, height, weight, purpose,
+            JSON.stringify(workout_schedule), workout_style, JSON.stringify(personal_records),
+            JSON.stringify(partner_preferences), isActive, UID
         ]);
 
-        res.status(200).json({
-            message: 'User information updated successfully.'
-        });
+        res.json({ message: "User profile updated successfully." });
     } catch (error) {
-        console.error('Update user info error:', error.message);
-        res.status(500).json({ error: 'Failed to update user information.' });
+        console.error('Error updating user profile:', error.message);
+        res.status(500).json({ message: "Failed to update user profile.", error: error.message });
     }
 };
 
@@ -226,6 +242,5 @@ module.exports = {
     verifyEmail,
     sendVerificationEmail,
     updateUserInfo,
-    //logout,
+    triggerEmailVerification,
 };
-

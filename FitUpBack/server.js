@@ -28,6 +28,8 @@ app.use(express.static(path.join(__dirname, "src")))
 app.use('/users/authenticate', authRouter);
 app.use('/getInfo', infoRouter);
 app.use('/chat', chatRouter);
+app.use('/users/authenticate', authRouter);
+
 // app.use(express.json()); 
 
 

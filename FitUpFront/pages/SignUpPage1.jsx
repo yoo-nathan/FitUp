@@ -4,6 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const SignUpPage1 = ({ navigation }) => {

@@ -9,6 +9,7 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/filtering-users', filter.filtering);
 router.post('/updateUserInfo', authenticateToken, authController.updateUserInfo);
+router.post('/triggerEmailVerification', authController.triggerEmailVerification); // Add this line
 
 
 
