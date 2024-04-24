@@ -20,10 +20,6 @@ import { getUserInfo } from '../../service/getService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMyID } from '../../service/chatService';
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 492074596842f0d981ce4cae0361ef7a210d119a
 export default function HomeScreen({ route, navigation }) {
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
