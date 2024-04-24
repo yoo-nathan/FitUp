@@ -37,10 +37,7 @@ app.use(express.static(path.join(__dirname, "src")))
 app.use('/users/authenticate', authRouter);
 app.use('/getInfo', infoRouter);
 app.use('/chat', chatRouter);
-<<<<<<< HEAD
 // app.use(express.json()); 
-=======
->>>>>>> origin/main
 
 
 // chat 

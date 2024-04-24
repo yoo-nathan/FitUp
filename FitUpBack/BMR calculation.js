@@ -3,12 +3,6 @@ const mysql = require('mysql2/promise');
 const app = express();
 const pool = require('./db')
 
-const pool = mysql.createPool ( {
-  'host': '34.148.35.120',
-  'user': 'dev',
-  'password': '1q2w3e4r!Q@W#E$R!',
-  'database': 'User'
-});
 
 const BMRcal = async (req, res) => {
     const { UID } = req.query;
@@ -52,7 +46,6 @@ const BMRcal = async (req, res) => {
         
         const user = rows[0];
         const workoutSchedule = JSON.parse(user.workout_schedule);
-        console.log(user.weight)
         // Calculate the number of workout days
         const numberOfWorkoutDays = workoutSchedule.length;
         let bmr = calculateBMR(user.gender, user.weight, user.height, user.age, numberOfWorkoutDays);
@@ -70,7 +63,7 @@ const BMRcal = async (req, res) => {
         fat = bmr * 0.3 / 9
         carbo = bmr * 0.55 / 4
         protein = user.weight * 0.9
-        array = [bmr.toFixed(2),carbo.toFixed(2),protein.toFixed(2),fat.toFixed(2)]
+        array = [bmr.toFixed(0),carbo.toFixed(0),protein.toFixed(0),fat.toFixed(0)]
         // Return the adjusted BMR result
         res.json(array);
       } catch (error) {
