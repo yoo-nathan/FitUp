@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Switch } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUpPage = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ const SignUpPage = ({ navigation }) => {
         if (canSignUp()) {
             
           // Need to implement sign up logic 
-            navigation.navigate('SignUpPage1', 
+            navigation.navigate('VerificationScreen', 
             { 
                 email: email,
                 password: password

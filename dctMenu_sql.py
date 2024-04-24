@@ -8,7 +8,7 @@ import mysql.connector
 # Set up MySQL connection
 db_config = {
     'host': '35.196.58.227',
-    'user': 'daniel',
+    'user': 'dev',
     'password': '1q2w3e4r!Q@W#E$R!',
     'database': 'User'
 }

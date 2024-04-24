@@ -26,6 +26,7 @@ const FriendItem = ({ DATA, onPress }) => (
           source={require('../../assets/pictures/general_user.png')}
           style={styles.profileImg}
         />
+<<<<<<< HEAD
         <View style={{ flexDirection: 'column', width : screenWidth * 0.7 , marginVertical: 3}}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.profileText}>{DATA.name}</Text>
@@ -43,6 +44,15 @@ const FriendItem = ({ DATA, onPress }) => (
             }
           </View>
           
+=======
+        <View style={{ flexDirection: 'column' }}>
+          <Text style={styles.profileText}>{DATA.name}</Text>
+          <Text>{DATA.message}</Text>
+          <Text>{formatTime(convertUtcToEst(DATA.time))}</Text>
+        </View>
+        <View>
+          {DATA.unread_count > 0 && <Text>{DATA.unread_count}</Text>}
+>>>>>>> 492074596842f0d981ce4cae0361ef7a210d119a
         </View>
 
       </View>
@@ -79,7 +89,11 @@ export default function ChatScreen({ navigation }) {
             }));
   
             if (isMounted.current) setChatData(list);
-  
+
+            socketRef.current = io("https://cs-370-420520.ue.r.appspot.com", { query: { token: userToken } });
+            //socketRef.current = io("localhost:3000", { query: { token: userToken } });
+
+            socketRef.current.off("messageReceived");
             socketRef.current.on("messageReceived", (newMessage) => {
               updateChatList(newMessage);
             });

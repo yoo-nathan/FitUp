@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 const API_URL = "https://cs-370-420520.ue.r.appspot.com";
 
 
@@ -32,6 +33,39 @@ export const getUserInfo = async (uid, filters) => {
     }
   } catch (error) {
     console.log("Error occurred while fetching homepage info in service!")
+    console.error(error);
+  }
+}
+
+export const getBMR = async (uid) => {
+  try {
+    console.log(uid)
+    const response = await axios.get(`${API_URL}/getInfo/BMR`, {
+      params: {
+        UID: uid,
+      }
+    });
+    console.log('dkdk')
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    console.log("Error occurred while fetching BMR info in service!")
+    console.error(error);
+  }
+}
+export const getDCT = async (uid) => {
+  try {
+    const response = await axios.get(`${API_URL}/getInfo/dct`, {
+      params: {
+        UID: uid,
+      }
+    });
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    console.log("Error occurred while fetching DCT info in service!")
     console.error(error);
   }
 }

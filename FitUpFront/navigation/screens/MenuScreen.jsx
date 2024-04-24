@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
   StyleSheet,
   Text,
@@ -12,10 +12,19 @@ import {
   Image,
   Dimensions
   } from 'react-native';
+import { getBMR } from '../../service/getService';
+import { getDCT } from '../../service/getService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getMyID } from '../../service/chatService';
+
+
 
 export default function MenuScreen({ navigation }) {
   const [menu, setMenu] = useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [data, setData] = useState({});
+  const [dct, setDCT] = useState([]);
+
   const showModal = (id) => {
     setIsModalVisible(true);
     const MENU = ALL.find(item => item.mid === id)
@@ -24,6 +33,25 @@ export default function MenuScreen({ navigation }) {
     //console.log(id)
   }
   const hideModal = () => setIsModalVisible(false);
+
+  useEffect(() => {
+    const fetchBMRInfo = async () =>{
+      const token = await AsyncStorage.getItem('userToken');
+      const uid = await getMyID(token);
+      const BMRInfo = await getBMR(uid);
+      const DCTInfo = await getDCT(uid);
+      setData(BMRInfo);
+      setDCT(DCTInfo);
+    }
+    fetchBMRInfo();
+  }, []);
+
+  const MACROS = {
+    targetCalorie: data[0],
+    carbs: data[1], 
+    protein: data[2],
+    fat: data[3]
+  };
   
   const Item = ({item}) => (
     <SafeAreaView>
@@ -155,49 +183,45 @@ const HeaderCard = ({MACROS}) => (
           style={styles.iconImg}
           source={{uri:'https://static.thenounproject.com/png/3569311-200.png'}}/>
         <Text style={styles.cardSubText}>
-          : {MACROS.dairy}g
+          : {MACROS.fat}g
         </Text>
       </View>
   </View>
 )
 
-const MACROS = {
-  targetCalorie: 2500,
-  carbs: 100,
-  protein: 50,
-  dairy: 20
-};
+
+
 
 const DCT = [
-  {  
-    mid: '11',  
-    menu: "1 serving of Noodle 1 serving of Noodle 1 serving of Noodle",
+  {
+    mid: '24',
+    menu: "Maru Bowl w/ Ginger Chicken Gochujang sauce",
     carbs: 20,
     protein: 23,
     fat: 10,
-    location: "Fire and Spice",
-    price: "Meal Swipe"
-
+    location: "Maru",
+    price: "11.89"
   },
   { 
-    mid: '12',  
-    menu: "2 pieces of Rotisserie Chicken",
+    mid: '25',  
+    menu: "Steak Nachos",
     carbs: 20,
     protein: 23,
     fat: 10,
-    location: "605 Kitchen",
-    price: "Meal Swipe"
+    location: "Twisted Taco",
+    price: "10.09"
   },
   { 
-    mid: '13',  
-    menu: "Turkey Dog",
+    mid: '26',  
+    menu: "Cheese Pizza",
     carbs: 20,
     protein: 23,
     fat: 10,
-    location: "Flatiron",
-    price: "Meal Swipe"
+    location: "Ray's Pizza",
+    price: "3.75"
   }
 ];
+
 const COX = [
   {
     mid: '24',

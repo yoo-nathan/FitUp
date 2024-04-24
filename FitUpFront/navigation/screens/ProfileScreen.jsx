@@ -28,6 +28,10 @@ export default function ProfileScreen({ navigation }) {
 
       const userEmail = await getUserEmail(uid);
       setEmail(userEmail.email);
+<<<<<<< HEAD
+=======
+      // console.log(userEmail)
+>>>>>>> 492074596842f0d981ce4cae0361ef7a210d119a
     }
     fetchInfo();
   }, [])

@@ -7,6 +7,7 @@ import { getFirstName } from '../service/getService';
 import { getMyID, getChatHistory } from '../service/chatService';
 import { markAsRead } from '../service/chatService';
 
+const socket = io("https://cs-370-420520.ue.r.appspot.com");
 
 export default function ChatRoom({ route, navigation }) {
   const [message, setMessage] = useState('');
@@ -43,35 +44,10 @@ export default function ChatRoom({ route, navigation }) {
   
       const history = await getChatHistory(from_id, to_id);
       setMessages(history.results);
-  
+
       socketRef.current = io("https://cs-370-420520.ue.r.appspot.com", { query: { token } });
-      socketRef.current.emit("joinRoom", { roomId: room_id, userId: from_id });
-  
-      setupEventListeners(from_id, to_id, room_id);
-    };
-  
-    const setupEventListeners = (from_id, to_id, room_id) => {
-      socketRef.current.on("userJoined", async (data) => {
-        if (data.userId !== from_id) { 
-          console.log(`${data.userId} has joined the room.`);
-          const update = await markAsRead(room_id, to_id);
-          if (update.success) {
-            updateMessageReadStatus(from_id);
-          } else {
-            console.error('Failed to mark message as read');
-          }
-        }
-      });
-  
-      socketRef.current.on("updateReadStatus", async () => {
-        const update = await markAsRead(room_id, to_id);
-        if (update.success) {
-          updateMessageReadStatus(from_id);
-        } else {
-          console.error('Failed to mark message as read');
-        }
-      });
-  
+      //socketRef.current = io("localhost:3000", { query: { token } });
+
       socketRef.current.on("messageReceived", (newMessage) => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
       });

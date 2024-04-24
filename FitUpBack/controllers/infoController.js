@@ -28,6 +28,7 @@ const getUserName = async (req, res) => {
     }
 };
 
+
 const getUserInfo = async (req, res) => {
     try {
         const [results] = await pool.query('SELECT * FROM userInfo');

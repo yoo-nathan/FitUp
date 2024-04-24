@@ -35,10 +35,9 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationCode = Math.floor(10000 + Math.random() * 90000).toString();
 
-        await exports.sendVerificationEmail(email, verificationCode); 
         
         const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password, verification_code) VALUES (?, ?, ?, ?)';
-        await pool.query(saveCredentialQuery, [UID, email, hashedPassword, verificationCode]);
+        await pool.query(saveCredentialQuery, [UID, email, hashedPassword]);
 
         const {
             first_name,
@@ -143,6 +142,25 @@ const login = async (req, res) => {
     }
 };
 
+const triggerEmailVerification = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const [user] = await pool.query('SELECT verification_code FROM userCredentials WHERE email = ?', [email]);
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const verificationCode = user[0].verification_code;
+        await sendVerificationEmail(email, verificationCode);
+        res.json({ message: 'Verification email sent.' });
+    } catch (error) {
+        console.error('Error sending verification email:', error.message);
+        res.status(500).json({ error: 'Failed to send verification email.' });
+    }
+};
+
+
 
 // Verify Email
 const verifyEmail = async (req, res) => {
@@ -215,6 +233,5 @@ module.exports = {
     verifyEmail,
     sendVerificationEmail,
     updateUserInfo,
-    //logout,
+    triggerEmailVerification,
 };
-

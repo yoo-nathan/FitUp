@@ -26,7 +26,7 @@ const App = () => {
   useEffect(() => {
       const checkToken = async () => {
         try {
-          // await AsyncStorage.removeItem('userToken');
+          // await AsyncStorage.removeItem('userToken'); 
           const token = await AsyncStorage.getItem('userToken');
           setUserToken(token);
           setIsLoading(false);

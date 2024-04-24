@@ -14,7 +14,7 @@
         "@babel/plugin-transform-runtime": "^7.24.3",
         "@babel/preset-react": "^7.23.3",
         "@expo/config-types": "^50.0.0",
-        "@react-native-async-storage/async-storage": "1.21.0",
+        "@react-native-async-storage/async-storage": "^1.21.0",
         "@react-native-picker/picker": "2.6.1",
         "@react-navigation/bottom-tabs": "^6.5.20",
         "@react-navigation/native": "^6.1.17",
