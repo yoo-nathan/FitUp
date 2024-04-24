@@ -23,7 +23,9 @@ const SignInPage = () => {
       }
 
       try {
+        console.log(email)
         const tokenData = await login(email, password);
+        console.log(tokenData)
         
         if (tokenData) {
           await AsyncStorage.setItem('userToken', tokenData.token);
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
       },
   inputText:{
     height:50,
-    color:"white",
+    color:"black",
     opacity: 0.7
     },
   button: {

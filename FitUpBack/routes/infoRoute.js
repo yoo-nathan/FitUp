@@ -3,7 +3,9 @@ const infoRouter = express.Router();
 const infoController = require('../controllers/infoController');
 //const authenticateToken = require('../authMiddleWare');
 const filter = require('../filter');
-
+<<<<<<< HEAD
+const BMR = require('../BMR calculation');
+const DCT = require('../dctrec');
 
 const multer = require('multer');
 const storage = multer.memoryStorage();
@@ -12,15 +14,16 @@ const { getPic } = require('../controllers/infoController');
 
 
 
-
-
-
+=======
+>>>>>>> origin/main
 
 infoRouter.get('/userName', infoController.getUserName);
 infoRouter.get('/userEmail', infoController.getUserEmail);
+infoRouter.get('/BMR', BMR.BMRcal);
+infoRouter.get('/dct', DCT.getDietPlan);
 infoRouter.get('/homepage', filter.filtering);
 infoRouter.post('/changePic', infoController.changePic);
-infoRouter.get('/getPic', getPic); 
+infoRouter.get('/getPic', infoController.getPic); 
 
 
 
