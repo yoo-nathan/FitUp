@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
-
-
-const USER = {
-    height : 5.9,
-    weight: 160,
-
-}
-
+import { updateProfile } from '../service/authService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfile = ({navigation}) => {
   const [height, setHeight] = useState('');
@@ -19,13 +12,20 @@ const EditProfile = ({navigation}) => {
   const [squatPR, setSquatPR] = useState('');
   const [benchPressPR, setBenchPressPR] = useState('');
   const [deadliftPR, setDeadliftPR] = useState('');
-  const handleSave = () => {
-    navigation.navigate('MainContainer')
+
+  const handleSave = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    const UID = await getMyID(userToken);
+
+    const info = [UID, height, weight, purpose, squatPR, benchPressPR, deadliftPR, workoutSchedule]
+
+    const res = await updateProfile(info);
+    
+    if (res) {
+      navigation.navigate('MainContainer');
+    }
   }
 
-
-
-  // Add other state variables as needed for tracking input
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Edit Profile</Text>
@@ -133,7 +133,7 @@ const EditProfile = ({navigation}) => {
         {/* Save button */}
         <TouchableOpacity 
         style={styles.button}
-        
+        onPress={handleSave}
         >
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>

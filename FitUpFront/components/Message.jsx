@@ -13,20 +13,18 @@ export const Message = ({ item, index, isMyMessage }) => {
   };
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'UTC' });
   };
 
   return (
     <View style={[styles.messageTimeContainer, messageStyle]}>
-      {/* {isMyMessage && item.read_status === 0 && <Text style={[styles.isReadStyle, styles.r_mg]}>read</Text>} */}
-      {isMyMessage && <Text>{formatTime(convertUtcToEst(item.timestamp))}</Text>}
+      {isMyMessage && <Text>{formatTime(item.timestamp)}</Text>}
       <View key={index} style={[styles.messageContainer, containerStyle]}>
         <View style={[styles.messageContent, messageStyle]}>
           <Text>{item.message}</Text>
         </View>
       </View>
       {!isMyMessage && <Text>{formatTime(convertUtcToEst(item.timestamp))}</Text>}          
-      {/* {!isMyMessage && item.read_status === 0 && <Text style={[styles.isReadStyle, styles.l_mg]}>read</Text>} */}
     </View>
   )
 };

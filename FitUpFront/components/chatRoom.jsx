@@ -19,10 +19,6 @@ export default function ChatRoom({ route, navigation }) {
   const [toId, setToId] = useState('');
   const [roomId, setRoomId] = useState('');
 
-const convertUtcToEst = (utcDate) => {
-  return moment(utcDate).tz('America/New_York').format('YYYY-MM-DD HH:mm:ss');
-};
-
   function createRoomId(uid1, uid2) {
     const sortedUids = [uid1, uid2].sort();
   
@@ -159,7 +155,8 @@ const convertUtcToEst = (utcDate) => {
           data={messages}
           renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: 60 }}
+          contentContainerStyle={{ paddingBottom: 50 }}
+          // onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
         />
         <View style={styles.bottomContainer}>
           <TextInput

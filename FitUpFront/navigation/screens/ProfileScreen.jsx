@@ -12,16 +12,8 @@ import {
 import { getFirstName, getUserEmail } from '../../service/getService';
 import { getMyID } from '../../service/chatService';
 
-////<Text style={styles.headerText}>Profile</Text>
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-const USER = {
-  name: "John Doe",
-  email: "j.doe@emory.edu"
-};
-
-
-
 
 export default function ProfileScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -36,14 +28,6 @@ export default function ProfileScreen({ navigation }) {
 
       const userEmail = await getUserEmail(uid);
       setEmail(userEmail.email);
-      // console.log(userEmail)
-
-
-      
-
-
-
-
     }
     fetchInfo();
   }, [])
@@ -194,5 +178,5 @@ const styles = StyleSheet.create({
     paddingVertical: 22, 
     justifyContent: 'space-between',
     paddingHorizontal: 10
-  }
+  },
 })

@@ -55,21 +55,22 @@ const register = async (req, res) => {
             isActive
         } = userInfo;
 
-        const saveInfoQuery = 'INSERT INTO userInfo (UID, first_name, last_name, gender, school_year, height, weight, purpose, workout_schedule, workout_style, personal_records, partner_preferences) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const saveInfoQuery = 'INSERT INTO userInfo (UID, first_name, last_name, gender, age, height, weight, purpose, workout_schedule, workout_style, personal_records, partner_preferences, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         
         await pool.query(saveInfoQuery, [
             UID, 
             first_name, 
             last_name, 
             gender, 
-            school_year, 
+            age, 
             height, 
             weight, 
             purpose, 
             JSON.stringify(workout_schedule), 
             workout_style, 
             JSON.stringify(personal_records), 
-            JSON.stringify(partner_preferences)
+            JSON.stringify(partner_preferences),
+            isActive
         ]);
 
         res.status(201).json({
@@ -163,44 +164,34 @@ const verifyEmail = async (req, res) => {
 
 
 const updateUserInfo = async (req, res) => {
-    // Extract user ID from the JWT token assumed to be included in the user object by authentication middleware
-    const UID = req.user.id;  // Assuming 'id' is a property in JWT payload
-
-    // Extract user data from the request body
     const {
+        UID,
         height,
         weight,
         purpose,
+        squatPR,
+        benchpressPR,
+        deadliftPR,
         workout_schedule,
-        workout_style,
-        personal_records,
-        partner_preferences,
     } = req.body;
 
     try {
-        // Prepare and execute the SQL query to update user information
         const updateQuery = `
             UPDATE userInfo
             SET
-                first_name = ?,
-                last_name = ?,
-                gender = ?,
-                age = ?,
                 height = ?,
                 weight = ?,
                 purpose = ?,
-                workout_schedule = ?,
-                workout_style = ?,
                 personal_records = ?,
-                partner_preferences = ?,
-                isActive = ?
+                workout_schedule = ?,
             WHERE UID = ?`;
 
-        await pool.query(updateQuery, [
-            first_name, last_name, gender, age, height, weight, purpose,
-            JSON.stringify(workout_schedule), workout_style, JSON.stringify(personal_records),
-            JSON.stringify(partner_preferences), isActive, UID
-        ]);
+        const personal_records = {
+            squatPR,
+            benchpressPR,
+            deadliftPR
+        }
+        await pool.query(updateQuery, [height, weight, purpose, JSON.stringify(personal_records), workout_schedule, UID]);
 
         res.json({ message: "User profile updated successfully." });
     } catch (error) {
