@@ -13,7 +13,7 @@ app.use(cors());
 
 //Server Side
 app.use(express.static(path.join(__dirname, "src")))
-const PORT = 5001;
+const PORT = 65080;
 
 io.on("connection",(socket) => {
     socket.on("chatting", (data) =>{

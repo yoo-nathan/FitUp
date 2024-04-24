@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { updateUserInfo } from '../../FitUpBack/controllers/authController';
 
 
 
 const USER = {
-    height : 5.9,
-    weight: 160,
+    height : '',
+    weight: '',
 
 }
 
 
 const EditProfile = ({navigation}) => {
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState(USER.height.toString()); 
+  const [weight, setWeight] = useState(USER.weight.toString()); 
   const [workoutSchedule, setWorkoutSchedule] = useState([]);
   const [purpose, setPurpose] = useState('Lose weight');
   const [squatPR, setSquatPR] = useState('');
@@ -22,6 +23,21 @@ const EditProfile = ({navigation}) => {
   const handleSave = () => {
     navigation.navigate('MainContainer')
   }
+
+  const signUpPress = async () => {
+    try {
+      const tokenData = await updateUserInfo(totalInfo);
+      console.log(tokenData);
+      if (tokenData) {
+        await AsyncStorage.setItem('userToken', tokenData.token);
+        navigation.navigate('ProfileScreen');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+
 
 
 

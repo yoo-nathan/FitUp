@@ -161,51 +161,52 @@ const verifyEmail = async (req, res) => {
     }
 };
 
-
 const updateUserInfo = async (req, res) => {
-    // Extract user ID from the JWT token assumed to be included in the user object by authentication middleware
-    const UID = req.user.id;  // Assuming 'id' is a property in JWT payload
-
-    // Extract user data from the request body
-    const {
-        height,
-        weight,
-        purpose,
-        workout_schedule,
-        workout_style,
-        personal_records,
-        partner_preferences,
-    } = req.body;
+    const { UID, userInfo } = req.body;
 
     try {
-        // Prepare and execute the SQL query to update user information
-        const updateQuery = `
-            UPDATE userInfo
-            SET
-                first_name = ?,
-                last_name = ?,
-                gender = ?,
-                age = ?,
-                height = ?,
-                weight = ?,
-                purpose = ?,
-                workout_schedule = ?,
-                workout_style = ?,
-                personal_records = ?,
-                partner_preferences = ?,
-                isActive = ?
-            WHERE UID = ?`;
+        const {
+            height,
+            weight,
+            purpose,
+            bench,
+            squat,
+            deadlift,
+            preferredWorkoutSchedule
+        } = userInfo
+;
 
-        await pool.query(updateQuery, [
-            first_name, last_name, gender, age, height, weight, purpose,
-            JSON.stringify(workout_schedule), workout_style, JSON.stringify(personal_records),
-            JSON.stringify(partner_preferences), isActive, UID
+        const updateInfoQuery = `
+            UPDATE userInfo 
+            SET 
+                height = ?, 
+                weight = ?, 
+                purpose = ?, 
+                benchPR = ?, 
+                squatPR = ?, 
+                deadliftPR = ?, 
+                preferred_workout_schedule = ?
+            WHERE 
+                UID = ?
+        `;
+        
+        await pool.query(updateInfoQuery, [
+            height, 
+            weight, 
+            purpose, 
+            bench, 
+            squat, 
+            deadlift, 
+            JSON.stringify(preferredWorkoutSchedule),
+            UID
         ]);
 
-        res.json({ message: "User profile updated successfully." });
+        res.status(200).json({
+            message: 'User information updated successfully.'
+        });
     } catch (error) {
-        console.error('Error updating user profile:', error.message);
-        res.status(500).json({ message: "Failed to update user profile.", error: error.message });
+        console.error('Update user info error:', error.message);
+        res.status(500).json({ error: 'Failed to update user information.' });
     }
 };
 
