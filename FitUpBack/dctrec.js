@@ -7,7 +7,7 @@ const { BMRcal } = require('./BMR calculation');
 const OpenAI = require('openai');
 
 const openai = new OpenAI({
-    apiKey : "sk-proj-oHF7tbU3HPbNx7Q55lZzT3BlbkFJHDPdDIn4goILbP1Di2PR"
+    apiKey : "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"
 });
 
 async function fetchMenus() {
@@ -67,12 +67,12 @@ const getDietPlan = async (req, res) => {
                         menu:"1 serving of certain menu",
                         calorie: "calories in kcal",
                         carbs: "carbohydrates in gram",
-                        protein: "protein in gram",
+                        protein: "protein in gram",no
                         fat: "fat in gram"
                        }
                     ]
-                      don't say anything else than this json format `;
-                       // Assuming the method and path are correct as per the latest SDK documentation
+                      don't say anything else than this json format.  `;
+                       
       
   
        const response = await openai.chat.completions.create( {
