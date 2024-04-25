@@ -50,6 +50,7 @@ const getDietPlan = async (req, res) => {
                        `${BMRInfo[3]} grams fat, and ${BMRInfo[2]} grams protein. For the nutrition information of menus, just make a prediction. Make sure the sum of the calories of foods add up to the target calorie. Return the response in the following json format:
                        [
                        {
+                        mid: '1'
                         menu:"1 serving of certain menu",
                         calorie: "calories in kcal",
                         carbs: "carbohydrates in gram",
@@ -57,6 +58,7 @@ const getDietPlan = async (req, res) => {
                         fat: "fat in gram"
                        },
                        {
+                        mid: '2'
                         menu:"1 serving of certain menu",
                         calorie: "calories in kcal",
                         carbs: "carbohydrates in gram",
@@ -64,6 +66,7 @@ const getDietPlan = async (req, res) => {
                         fat: "fat in gram"
                        },
                        {
+                        mid: '3'
                         menu:"1 serving of certain menu",
                         calorie: "calories in kcal",
                         carbs: "carbohydrates in gram",
@@ -71,7 +74,7 @@ const getDietPlan = async (req, res) => {
                         fat: "fat in gram"
                        }
                     ]
-                      don't say anything else than this json format.  `;
+                      mid stands for menu id. can you assign mid to each menu in order of 1, 2, 3, .... ? don't say anything else than this json format.  `;
                        
       
   
