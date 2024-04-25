@@ -90,7 +90,7 @@ export default function MenuScreen({ navigation }) {
           <Text style={styles.subhead}>DCT Menu Recommendation</Text>
           <FlatList
               horizontal={true}
-              data={DCT}
+              data={dct}
               renderItem={({item}) => <Item item={item} />}
               style={styles.flatList}
           />
