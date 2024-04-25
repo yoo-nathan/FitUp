@@ -7,7 +7,7 @@ const { BMRcal } = require('./BMR calculation');
 const OpenAI = require('openai');
 
 const openai = new OpenAI({
-    apiKey : "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"
+    apiKey : process.env.OPENAI_API_KEY
 });
 
 async function fetchMenus() {
