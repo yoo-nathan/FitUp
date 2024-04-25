@@ -122,6 +122,8 @@ export default function ChatRoom({ route, navigation }) {
     flatListRef.current?.scrollToEnd({ animated: true });
   }, [messages]);
 
+
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 20}>
       <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 10 }}>
@@ -132,6 +134,7 @@ export default function ChatRoom({ route, navigation }) {
           renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={{ paddingBottom: 50 }}
+          inverted
           // onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
         />
         <View style={styles.bottomContainer}>

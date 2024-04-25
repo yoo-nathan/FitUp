@@ -7,7 +7,7 @@ export const login = async(email, password) => {
         console.log('login')
         const response = await axios.post(`${API_URL}/users/authenticate/login`, {
             email: email,
-            password: password,
+            password: password
         });
         console.log("response" + response)
         if (response) {
