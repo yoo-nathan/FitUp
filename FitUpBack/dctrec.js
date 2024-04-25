@@ -74,7 +74,7 @@ const getDietPlan = async (req, res) => {
                         fat: "fat in gram"
                        }
                     ]
-                      mid stands for menu id. can you assign mid to each menu in order of 1, 2, 3, .... ? don't say anything else than this json format.  `;
+                      mid stands for menu id. can you assign mid to each menu in order of 1, 2, 3, .... ? don't say anything else than this json format. Even for the json format, don't add the title, just the data.  `;
                        
       
   
