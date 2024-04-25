@@ -26,6 +26,7 @@ export default function MenuScreen({ navigation }) {
   const [data, setData] = useState({});
   const [dct, setDCT] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMENU, setLoadingMENU] = useState(true);
 
   const showModal = (id) => {
     setIsModalVisible(true);
@@ -43,8 +44,9 @@ export default function MenuScreen({ navigation }) {
       const BMRInfo = await getBMR(uid);
       const DCTInfo = await getDCT(uid);
       setData(BMRInfo);
-      setDCT(DCTInfo);
       setLoading(false);
+      setDCT(DCTInfo);
+      setLoadingMENU(false);
     }
     fetchBMRInfo();
   }, []);
@@ -88,12 +90,23 @@ export default function MenuScreen({ navigation }) {
           <Text style={styles.pageHead}> Diet Recommendation </Text>
           <HeaderCard MACROS={MACROS} loading={loading}/>
           <Text style={styles.subhead}>DCT Menu Recommendation</Text>
-          <FlatList
+          {loadingMENU ? (
+            <ActivityIndicator 
+            size='large' 
+            style={{
+              padding:'5%'
+            }}
+            />
+          ) : (
+            <FlatList
               horizontal={true}
               data={dct}
               renderItem={({item}) => <Item item={item} />}
               style={styles.flatList}
-          />
+            />
+          )}
+
+          
           
           
       </SafeAreaView>
