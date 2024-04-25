@@ -37,7 +37,7 @@ const filtering = async (req, res) => {
     // console.log(userTotal1RM)
     const userWorkoutSchedule = user.workout_schedule.split(',');
 
-    let query = 'SELECT * FROM userInfo WHERE UID != ?';
+    let query = 'SELECT * FROM userInfo WHERE UID != ? AND isActive = 1';
     let queryParams = [UID];
 
     if (filters.similar_body_profile == 1) {

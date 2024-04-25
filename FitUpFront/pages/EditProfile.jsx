@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimens
 import { Picker } from '@react-native-picker/picker';
 import { updateProfile } from '../service/authService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getMyID } from '../service/chatService';
 
 const EditProfile = ({navigation}) => {
   const [height, setHeight] = useState('');
@@ -16,9 +17,9 @@ const EditProfile = ({navigation}) => {
   const handleSave = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
     const UID = await getMyID(userToken);
+    console.log(UID)
 
-    const info = [UID, height, weight, purpose, squatPR, benchPressPR, deadliftPR, workoutSchedule]
-
+    const info = {UID, height, weight, purpose, squatPR, benchPressPR, deadliftPR, workoutSchedule}
     const res = await updateProfile(info);
     
     if (res) {

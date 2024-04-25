@@ -1,25 +1,10 @@
 const nodemailer = require('nodemailer');
-const express = require('express');
 const bcrypt = require('bcrypt');
-const mysql = require('mysql2/promise');
 const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const app = express();
-app.use(express.json());
-
 const pool = require('../db');
-
-
-const getUsers = async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT email FROM login');
-        res.json(rows);
-    } catch (error) {
-        res.status(500).send('Server error');
-    }
-};
 
 //Register
 const register = async (req, res) => {
@@ -33,10 +18,9 @@ const register = async (req, res) => {
 
         const UID = uuidv4();
         const hashedPassword = await bcrypt.hash(password, 10);
-        const verificationCode = Math.floor(10000 + Math.random() * 90000).toString();
 
         
-        const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password, verification_code) VALUES (?, ?, ?, ?)';
+        const saveCredentialQuery = 'INSERT INTO userCredentials (UID, email, hashed_password) VALUES (?, ?, ?)';
         await pool.query(saveCredentialQuery, [UID, email, hashedPassword]);
 
         const {
@@ -82,15 +66,16 @@ const register = async (req, res) => {
     }
 };
 
-// Send Verification Email
-const sendVerificationEmail = async (email, verificationCode) => {
+const sendVerificationEmail = async (req, res) => {
+    const verificationCode = Math.floor(10000 + Math.random() * 90000).toString();
+    const { email } = req.body;
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
         secure: false, 
         auth: {
-            user: "authenticatemailaddress@gmail.com",
-            pass: "hsqs eiyr eccx ipig",
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_APP_PASSWORD,
         },
     });
 
@@ -104,11 +89,13 @@ const sendVerificationEmail = async (email, verificationCode) => {
     try {
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent:', info.messageId);
+        return { verificationCode };
     } catch (error) {
         console.error('Error sending email:', error);
-        throw error;
+        return { error: 'Failed to send verification email.' };
     }
 };
+    
 
 //Login
 const login = async (req, res) => {
@@ -142,44 +129,6 @@ const login = async (req, res) => {
     }
 };
 
-const triggerEmailVerification = async (req, res) => {
-    const { email } = req.body;
-
-    try {
-        const [user] = await pool.query('SELECT verification_code FROM userCredentials WHERE email = ?', [email]);
-        if (user.length === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        const verificationCode = user[0].verification_code;
-        await sendVerificationEmail(email, verificationCode);
-        res.json({ message: 'Verification email sent.' });
-    } catch (error) {
-        console.error('Error sending verification email:', error.message);
-        res.status(500).json({ error: 'Failed to send verification email.' });
-    }
-};
-
-
-
-// Verify Email
-const verifyEmail = async (req, res) => {
-    const { email, verificationCode } = req.body;
-
-    try {
-        const [users] = await pool.query('SELECT * FROM userCredentials WHERE email = ? AND verification_code = ?', [email, verificationCode]);
-        if (users.length === 0) {
-            return res.status(400).json({ message: 'Invalid verification code or email' });
-        }
-
-        await pool.query('UPDATE userCredentials SET is_verified = 1 WHERE email = ?', [email]);
-        res.json({ message: 'Email successfully verified' });
-    } catch (error) {
-        console.error('Verification error:', error.message);
-        res.status(500).json({ error: 'Failed to verify email.' });
-    }
-};
-
 
 const updateUserInfo = async (req, res) => {
     const {
@@ -201,7 +150,7 @@ const updateUserInfo = async (req, res) => {
                 weight = ?,
                 purpose = ?,
                 personal_records = ?,
-                workout_schedule = ?,
+                workout_schedule = ?
             WHERE UID = ?`;
 
         const personal_records = {
@@ -219,19 +168,9 @@ const updateUserInfo = async (req, res) => {
 };
 
 
-/*
-const logout = async (req, res) => {
-    res.status(200).send({ message: "Logged out successfully. Please remove the token client-side." });
-};
-*/
-
-
-
 module.exports = {
     register,
     login,
-    verifyEmail,
     sendVerificationEmail,
     updateUserInfo,
-    triggerEmailVerification,
 };
