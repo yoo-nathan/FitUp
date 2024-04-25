@@ -10,7 +10,8 @@ import {
   Modal,
   Button,
   Image,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
   } from 'react-native';
 import { getBMR } from '../../service/getService';
 import { getDCT } from '../../service/getService';
@@ -24,6 +25,7 @@ export default function MenuScreen({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [data, setData] = useState({});
   const [dct, setDCT] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const showModal = (id) => {
     setIsModalVisible(true);
@@ -42,6 +44,7 @@ export default function MenuScreen({ navigation }) {
       const DCTInfo = await getDCT(uid);
       setData(BMRInfo);
       setDCT(DCTInfo);
+      setLoading(false);
     }
     fetchBMRInfo();
   }, []);
@@ -58,7 +61,7 @@ export default function MenuScreen({ navigation }) {
       <TouchableOpacity 
         style={styles.item}
         onPress={() => showModal(item.mid)}>
-          <Text style={styles.itemTitle}>
+          <Text style={styles.optionTitle}>
               {item.menu}
           </Text>
       </TouchableOpacity>
@@ -69,7 +72,7 @@ export default function MenuScreen({ navigation }) {
           <View style={styles.modalViewContainer}>
             <View style={styles.modalCardView}>
               <ModalPopUp item = {menu}/>
-              <Button title='hide' onPress={hideModal}/>
+              <Button title='Close' onPress={hideModal}/>
               
             </View>
           </View>
@@ -83,7 +86,7 @@ export default function MenuScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
           <Text style={styles.pageHead}> Diet Recommendation </Text>
-          <HeaderCard MACROS={MACROS}/>
+          <HeaderCard MACROS={MACROS} loading={loading}/>
           <Text style={styles.subhead}>DCT Menu Recommendation</Text>
           <FlatList
               horizontal={true}
@@ -91,13 +94,7 @@ export default function MenuScreen({ navigation }) {
               renderItem={({item}) => <Item item={item} />}
               style={styles.flatList}
           />
-          <Text style={styles.subhead}>Cox Menu Recommendation</Text>
-          <FlatList
-              horizontal={true}
-              data={COX}
-              renderItem={({item}) => <Item item={item} />}
-              style={styles.flatList}
-          />
+          
           
       </SafeAreaView>
   );
@@ -113,13 +110,9 @@ const ModalPopUp = ({item}) => (
       marginHorizontal: 5
     }}
     >{item.menu}</Text>
-    <Text style={{
-      fontSize: 18,
-      fontWeight:'600',
-      paddingVertical: 10,
-      marginHorizontal: 10
-    }}>Find this menu at: {item.location}!</Text>
-    <View style={styles.hairline}/>
+    
+    <Text></Text>
+    
     <Text style={{
       fontSize: 16,
       fontWeight:'600',
@@ -127,6 +120,12 @@ const ModalPopUp = ({item}) => (
       marginHorizontal: 10,
       marginTop: 20
     }}>Nutritional Information:</Text>
+    <Text style={{
+      fontSize: 16,
+      fontWeight:'400',
+      paddingVertical: 5,
+      marginHorizontal: 25
+    }}>Total Calories: {item.carbs}kcal</Text>
     <Text style={{
       fontSize: 16,
       fontWeight:'400',
@@ -145,23 +144,25 @@ const ModalPopUp = ({item}) => (
       paddingVertical: 5,
       marginHorizontal: 25
     }}>Fat: {item.fat}g</Text>
-    <Text style={{
-      fontSize: 16,
-      fontWeight:'400',
-      paddingVertical: 5,
-      marginHorizontal: 25,
-      marginTop: 15,
-      color: 'red'
-    }}>Price: {item.price}</Text>
   </View>
 )
 
 
-const HeaderCard = ({MACROS}) => (
+const HeaderCard = ({MACROS, loading}) => (
   <View style = {styles.headerCard}>
-      <Text style = {styles.cardText}>
+      
+      {loading ? (
+          <View style = {{flexDirection:'row', marginRight: 10, alignContent:'center', 
+          justifyContent:'center'}}> 
+            <Text style={styles.cardText}>Target Calories: </Text>
+            <ActivityIndicator size='small' style = {{padding :5, paddingBottom: 10}}/>
+          </View>
+        ) : (
+          <Text style = {styles.cardText}>
           Target Calories: {MACROS.targetCalorie} kcal 
-      </Text>
+          </Text>
+      )}
+      
       <View style={{
         flexDirection:'row', 
         alignContent:'center', 
@@ -170,21 +171,45 @@ const HeaderCard = ({MACROS}) => (
         <Image resizeMode='contain'
           style={styles.iconImg}
           source={{uri:'https://cdn-icons-png.flaticon.com/512/1276/1276022.png'}}/>
-        <Text style={styles.cardSubText}>
+        {loading ? (
+          <View style = {{flexDirection:'row', marginRight: 10}}> 
+            <Text style={styles.cardSubText}>: </Text>
+            <ActivityIndicator size='small'/>
+          </View>
+        ) : (
+          <Text style={styles.cardSubText}>
           : {MACROS.carbs}g 
-        </Text>
+          </Text>
+        )}
+        
         <Image resizeMode='contain'
           style={styles.iconImg1}
           source={{uri:'https://png.pngtree.com/png-clipart/20230923/original/pngtree-high-protein-foods-vector-icon-illustration-exercise-body-powder-vector-png-image_12665260.png'}}/>
-        <Text style={styles.cardSubText}>
+        {loading ? (
+          <View style = {{flexDirection:'row', marginRight: 10 }}> 
+            <Text style={styles.cardSubText}>: </Text>
+            <ActivityIndicator size='small'/>
+          </View>
+        ) : (
+          <Text style={styles.cardSubText}>
           : {MACROS.protein}g 
-        </Text>
+          </Text>
+        )}
+        
         <Image resizeMode='contain'
           style={styles.iconImg}
           source={{uri:'https://static.thenounproject.com/png/3569311-200.png'}}/>
-        <Text style={styles.cardSubText}>
+        {loading ? (
+          <View style = {{flexDirection:'row'}}> 
+            <Text style={styles.cardSubText}>: </Text>
+            <ActivityIndicator size='small'/>
+          </View>
+        ) : (
+          <Text style={styles.cardSubText}>
           : {MACROS.fat}g
-        </Text>
+          </Text>
+        )}
+        
       </View>
   </View>
 )
@@ -319,6 +344,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center' 
   },
+  
   textOld : { fontSize: 26, fontWeight: 'bold' },
   container: {
       flex: 1,
@@ -326,7 +352,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#373F51'
     },
     flatList:{
-      height:150,
+      height:screenHeight *0.3,
       flexGrow: 0
     },
     item: {
@@ -336,13 +362,20 @@ const styles = StyleSheet.create({
       marginHorizontal: screenWidth *0.04,
       borderRadius: 25, 
       width: screenWidth *0.92, // Fixed width for each item
-      height: screenHeight * 0.15, // Fixed height for each item
+      height: screenHeight * 0.25, // Fixed height for each item
       justifyContent: 'center',
       alignContent:'center'
       
     },
     title: {
       fontSize: 16,
+    },
+    optionTitle: {
+      fontSize: 20,
+      fontWeight: '700',
+      flexWrap: 'wrap',
+      textAlign: 'center',
+      marginBottom: 10
     },
     itemTitle: {
       fontSize: 18,
@@ -364,7 +397,7 @@ const styles = StyleSheet.create({
       marginHorizontal: screenWidth* 0.04,
       borderRadius: 25,
       width: screenWidth* 0.92, // Fixed width for each item
-      height: screenHeight * 0.15,
+      height: screenHeight * 0.2,
       justifyContent: 'center',
       alignContent:'center'
     },
@@ -372,6 +405,7 @@ const styles = StyleSheet.create({
       fontSize: 22,
       fontWeight: '500',
       textAlign: 'center',
+      paddingBottom: 10
     },
     cardSubText:{
       fontSize: 16,
@@ -385,8 +419,9 @@ const styles = StyleSheet.create({
       color: 'white',
       marginHorizontal: 10,
       fontWeight: '600',
-      fontSize : 20,
-      paddingVertical: 8
+      fontSize : 22,
+      paddingVertical: 8,
+      textAlign: 'center'
     },
     iconImg :{
       width: 35,
@@ -398,7 +433,8 @@ const styles = StyleSheet.create({
       width: 45,
       height: 45,
       borderRadius: 5,
-      paddingHorizontal: 10
+      paddingHorizontal: 10,
+      
     },
     modalViewContainer: { 
       flex: 1, 
@@ -419,7 +455,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'black',
       height: 1,
       width: screenWidth * 0.8,
-      marginLeft:10,
+      //marginLeft:10,
       opacity:0.5
       
     },
