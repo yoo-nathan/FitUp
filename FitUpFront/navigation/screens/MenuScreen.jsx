@@ -47,6 +47,7 @@ export default function MenuScreen({ navigation }) {
       setData(BMRInfo);
       setLoading(false);
       setDCT(DCTInfo);
+      console.log(DCTInfo)
       setLoadingMENU(false);
     }
     fetchBMRInfo();
