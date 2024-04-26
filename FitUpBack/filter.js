@@ -37,7 +37,7 @@ const filtering = async (req, res) => {
     // console.log(userTotal1RM)
     const userWorkoutSchedule = user.workout_schedule.split(',');
 
-    let query = 'SELECT * FROM userInfo WHERE UID != ? AND isActive = 1';
+    let query = 'SELECT * FROM userInfo WHERE isActive = 1 AND UID != ?';
     let queryParams = [UID];
 
     if (filters.similar_body_profile == 1) {
@@ -50,10 +50,10 @@ const filtering = async (req, res) => {
       query += ` AND gender = ?`;
     }
 
-    // if (filters.similar_workout_purpose == 1) {
-    //   queryParams.push(user.workout_purpose);
-    //   query += ` AND purpose = ?`;
-    // }
+    if (filters.similar_workout_purpose == 1) {
+      queryParams.push(user.workout_purpose);
+      query += ` AND purpose = ?`;
+    }
 
     if (filters.similar_workout_time == 1) {
       const daysSql = userWorkoutSchedule.map(day => `FIND_IN_SET('${day}', workout_schedule)`).join(' OR ');

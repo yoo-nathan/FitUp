@@ -20,6 +20,7 @@ const EditProfile = ({navigation}) => {
     console.log(UID)
 
     const info = {UID, height, weight, purpose, squatPR, benchPressPR, deadliftPR, workoutSchedule}
+    console.log(info)
     const res = await updateProfile(info);
     
     if (res) {

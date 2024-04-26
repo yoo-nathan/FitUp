@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Switch } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { sendVerificationEmail } from '../service/authService';
 
 const SignUpPage = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -12,14 +13,16 @@ const SignUpPage = ({ navigation }) => {
         return email && password && password === confirmPassword && dataCollectionAgreement;
     };
 
-    const handleSignUp = () => {
+    const handleSignUp = async () => {
         if (canSignUp()) {
-            
+            const realCode = await sendVerificationEmail(email);
+            console.log(realCode.verificationCode);
           // Need to implement sign up logic 
             navigation.navigate('VerificationScreen', 
             { 
                 email: email,
-                password: password
+                password: password,
+                realCode: realCode.verificationCode
             });
         }
     };
