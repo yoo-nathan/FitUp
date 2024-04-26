@@ -8,7 +8,7 @@ import { getMyID } from '../service/chatService';
 const EditProfile = ({navigation}) => {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
-  const [workoutSchedule, setWorkoutSchedule] = useState([]);
+  const [workout_schedule, setWorkoutSchedule] = useState([]);
   const [purpose, setPurpose] = useState('Lose weight');
   const [squatPR, setSquatPR] = useState('');
   const [benchPressPR, setBenchPressPR] = useState('');
@@ -19,7 +19,8 @@ const EditProfile = ({navigation}) => {
     const UID = await getMyID(userToken);
     console.log(UID)
 
-    const info = {UID, height, weight, purpose, squatPR, benchPressPR, deadliftPR, workoutSchedule}
+    const info = {UID, height, weight, purpose, squatPR, benchPressPR, deadliftPR, workout_schedule}
+    console.log(info)
     const res = await updateProfile(info);
     
     if (res) {
@@ -111,16 +112,16 @@ const EditProfile = ({navigation}) => {
         {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
                 <TouchableOpacity
                     key={day}
-                    style={workoutSchedule.includes(day) ? styles.selectedDay : styles.day}
+                    style={workout_schedule.includes(day) ? styles.selectedDay : styles.day}
                     onPress={() => {
-                        if (workoutSchedule.includes(day)) {
-                            setWorkoutSchedule(workoutSchedule.filter(d => d !== day));
+                        if (workout_schedule.includes(day)) {
+                            setWorkoutSchedule(workout_schedule.filter(d => d !== day));
                         } else {
-                            setWorkoutSchedule([...workoutSchedule, day]);
+                            setWorkoutSchedule([...workout_schedule, day]);
                         }
                     }}
                 >
-                    <Text style={[styles.dayText, workoutSchedule.includes(day) && styles.selectedText]}>{day}</Text>
+                    <Text style={[styles.dayText, workout_schedule.includes(day) && styles.selectedText]}>{day}</Text>
                 </TouchableOpacity>
             ))}
         

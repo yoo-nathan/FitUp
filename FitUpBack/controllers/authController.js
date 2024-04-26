@@ -56,9 +56,12 @@ const register = async (req, res) => {
             isActive
         ]);
 
+        const payload = { id: UID };
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '6h' });
+
         res.status(201).json({
             message: 'User registered successfully.',
-            UID: UID
+            token
         });
     } catch (error) {
         console.error('Registration error:', error.message);
@@ -89,10 +92,10 @@ const sendVerificationEmail = async (req, res) => {
     try {
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent:', info.messageId);
-        return { verificationCode };
+        return res.status(201).json({ verificationCode: verificationCode });
     } catch (error) {
         console.error('Error sending email:', error);
-        return { error: 'Failed to send verification email.' };
+        return res.status(500).json({ error: 'Failed to send the email.' });
     }
 };
     
@@ -117,7 +120,7 @@ const login = async (req, res) => {
         }
 
         const payload = { id: user.UID };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '6h' });
 
         return res.status(200).json({
             message: 'Login successful',
@@ -139,7 +142,7 @@ const updateUserInfo = async (req, res) => {
         squatPR,
         benchpressPR,
         deadliftPR,
-        workout_schedule,
+        workout_schedule
     } = req.body;
 
     try {
@@ -154,11 +157,11 @@ const updateUserInfo = async (req, res) => {
             WHERE UID = ?`;
 
         const personal_records = {
-            squatPR,
-            benchpressPR,
-            deadliftPR
+            "squat": squatPR,
+            "deadlift": deadliftPR,
+            "benchpress": benchpressPR
         }
-        await pool.query(updateQuery, [height, weight, purpose, JSON.stringify(personal_records), workout_schedule, UID]);
+        await pool.query(updateQuery, [height, weight, purpose, JSON.stringify(personal_records), JSON.stringify(workout_schedule), UID]);
 
         res.json({ message: "User profile updated successfully." });
     } catch (error) {

@@ -4,7 +4,6 @@ const API_URL = "https://cs-370-420520.ue.r.appspot.com";
 
 export const login = async(email, password) => {
     try {
-        console.log('login')
         const response = await axios.post(`${API_URL}/users/authenticate/login`, {
             email: email,
             password: password
@@ -36,7 +35,6 @@ export const register = async(totalInfo) => {
 
 export const updateProfile = async (totalInfo) => {
     const { UID, height, weight, purpose, squatPR, benchpressPR, deadliftPR, workout_schedule } = totalInfo;
-    
     try {
         const response = await axios.post(`${API_URL}/users/authenticate/updateProfile`, {
             UID: UID,
@@ -46,7 +44,7 @@ export const updateProfile = async (totalInfo) => {
             squatPR: squatPR,
             benchpressPR: benchpressPR,
             deadliftPR: deadliftPR,
-            workout_schedule: workout_schedule,
+            workout_schedule: workout_schedule
         })
 
         if (response) {
@@ -60,7 +58,7 @@ export const updateProfile = async (totalInfo) => {
 export const sendVerificationEmail = async (email) => {
     try {
         const response = await axios.post(`${API_URL}/users/authenticate/sendVerificationEmail`, { 
-            email
+            email: email
         });
         
         if(response) {

@@ -48,12 +48,12 @@ export default function MenuScreen({ navigation }) {
       console.log(data)
       setLoading(false);
       setDCT(DCTInfo);
+      console.log(DCTInfo)
       setLoadingMENU(false);
       console.log(dct);
     }
     fetchBMRInfo();
   }, []);
-
   const MACROS = {
     targetCalorie: data[0],
     carbs: data[1], 

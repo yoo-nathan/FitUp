@@ -103,3 +103,21 @@ export const updateActive = async (uid) => {
     console.error(error);
   }
 }
+
+export const getActive = async (uid) => {
+  try {
+    const response = await axios.get(`${API_URL}/getInfo/getActive`, {
+      params: {
+        UID: uid
+      }
+    })
+
+    if (response) {
+      console.log(response.data)
+      return response.data
+    }
+  } catch (error) {
+    console.log("Error occurred while getting active status!")
+    console.error(error);
+  }
+}

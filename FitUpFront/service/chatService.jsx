@@ -5,7 +5,6 @@ const API_URL = "https://cs-370-420520.ue.r.appspot.com";
 
 export const getMyID = async(token) => {
   try {
-    console.log('get token')
     const response = await axios.get(`${API_URL}/chat/getMyUid`, {
       headers: {
         Authorization: `Bearer ${token}`
