@@ -35,7 +35,6 @@ export const register = async(totalInfo) => {
 
 export const updateProfile = async (totalInfo) => {
     const { UID, height, weight, purpose, squatPR, benchpressPR, deadliftPR, workout_schedule } = totalInfo;
-    
     try {
         const response = await axios.post(`${API_URL}/users/authenticate/updateProfile`, {
             UID: UID,
@@ -45,7 +44,7 @@ export const updateProfile = async (totalInfo) => {
             squatPR: squatPR,
             benchpressPR: benchpressPR,
             deadliftPR: deadliftPR,
-            workout_schedule: workout_schedule,
+            workout_schedule: workout_schedule
         })
 
         if (response) {

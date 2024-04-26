@@ -142,10 +142,8 @@ const updateUserInfo = async (req, res) => {
         squatPR,
         benchpressPR,
         deadliftPR,
-        workoutSchedule,
+        workout_schedule
     } = req.body;
-
-    console.log(workoutSchedule)
 
     try {
         const updateQuery = `
@@ -163,7 +161,7 @@ const updateUserInfo = async (req, res) => {
             "deadlift": deadliftPR,
             "benchpress": benchpressPR
         }
-        await pool.query(updateQuery, [height, weight, purpose, JSON.stringify(personal_records), JSON.stringify(workoutSchedule), UID]);
+        await pool.query(updateQuery, [height, weight, purpose, JSON.stringify(personal_records), JSON.stringify(workout_schedule), UID]);
 
         res.json({ message: "User profile updated successfully." });
     } catch (error) {
