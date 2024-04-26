@@ -20,7 +20,8 @@ infoRouter.get('/dct', DCT.getDietPlan);
 infoRouter.get('/homepage', filter.filtering);
 infoRouter.post('/changePic', infoController.changePic);
 infoRouter.get('/getPic', infoController.getPic); 
-infoRouter.post('/updateActive', infoController.Active);
+infoRouter.post('/updateActive', infoController.updateActive);
+infoRouter.get('/getActive', infoController.getActive);
 
 
 module.exports = infoRouter;

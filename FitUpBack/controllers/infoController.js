@@ -140,7 +140,7 @@ const getPic = async (req, res) => {
     }
 };
 
-const Active = async (req, res) => {
+const updateActive = async (req, res) => {
     const { UID } = req.body;
     console.log(UID)
 
@@ -163,6 +163,27 @@ const Active = async (req, res) => {
     }
 };
 
+const getActive = async (req, res) => {
+    const { UID } = req.query;
+    try {
+        const getQuery = `
+            SELECT isActive FROM userInfo
+            WHERE UID = ?
+        `
+
+        const [result] = await pool.query(getQuery, [UID]);
+        console.log(result)
+        console.log(result[0])
+        if (result.length > 0){
+            return res.status(201).json({
+                activeStatus: result[0].isActive
+            })
+        }
+    } catch (error) {
+        return res.status(500).send('Server error');
+    }
+}
+
 
 
 module.exports = {
@@ -171,5 +192,6 @@ module.exports = {
     getUserEmail,
     changePic,
     getPic,
-    Active
+    updateActive,
+    getActive
 };

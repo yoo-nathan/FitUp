@@ -50,7 +50,6 @@ export default function MenuScreen({ navigation }) {
     }
     fetchBMRInfo();
   }, []);
-
   const MACROS = {
     targetCalorie: data[0],
     carbs: data[1], 
