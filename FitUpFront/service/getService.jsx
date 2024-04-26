@@ -46,7 +46,6 @@ export const getBMR = async (uid) => {
         UID: uid,
       }
     });
-    console.log('dkdk')
     if (response) {
       return response.data;
     }
@@ -55,13 +54,16 @@ export const getBMR = async (uid) => {
     console.error(error);
   }
 }
+
 export const getDCT = async (uid) => {
   try {
+    console.log("wtf")
     const response = await axios.get(`${API_URL}/getInfo/dct`, {
       params: {
-        UID: uid,
+        UID: uid
       }
     });
+    console.log("Hi")
     if (response) {
       return response.data;
     }
