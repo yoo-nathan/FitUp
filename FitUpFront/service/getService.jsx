@@ -86,3 +86,18 @@ export const getUserEmail= async (uid) => {
     console.error(error);
   }
 }
+
+export const updateActive = async (uid) => {
+  try {
+    console.log(uid)
+    const response = await axios.post(`${API_URL}/getInfo/updateActive`, { UID: uid });
+    console.log('?')
+    if (response) {
+      console.log('toggled!');
+      return response.data;
+    }
+  } catch (error) {
+    console.log("Error occurred while updating active state!")
+    console.error(error);
+  }
+}

@@ -35,8 +35,8 @@ export const register = async(totalInfo) => {
 }
 
 export const updateProfile = async (totalInfo) => {
-    const {UID, height, weight, purpose, squatPR, benchpressPR, deadliftPR, workout_schedule} = totalInfo;
-
+    const { UID, height, weight, purpose, squatPR, benchpressPR, deadliftPR, workout_schedule } = totalInfo;
+    
     try {
         const response = await axios.post(`${API_URL}/users/authenticate/updateProfile`, {
             UID: UID,
@@ -50,9 +50,24 @@ export const updateProfile = async (totalInfo) => {
         })
 
         if (response) {
-            return true;
+            return response.data;
         }
     } catch (error) {
         console.error(error)
+    }
+}
+
+export const sendVerificationEmail = async (email) => {
+    try {
+        const response = await axios.post(`${API_URL}/users/authenticate/sendVerificationEmail`, { 
+            email
+        });
+        
+        if(response) {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error sending verification email:', error);
+        return { error: error.message };
     }
 }

@@ -19,6 +19,7 @@ import {
 import { getUserInfo } from '../../service/getService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMyID } from '../../service/chatService';
+import { updateActive } from '../../service/getService';
 
 export default function HomeScreen({ route, navigation }) {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -26,6 +27,7 @@ export default function HomeScreen({ route, navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user, setUser] = useState(null);
   const [data, setData] = useState([]);
+  const [uid, setUid] = useState('');
 
   const picURL = {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'};
 
@@ -43,16 +45,23 @@ export default function HomeScreen({ route, navigation }) {
     })
   }
 
+  const toggleActive = async (uid) => {
+    console.log('hi')
+    setIsEnabled(previousState => !previousState)
+    console.log(uid)
+    await updateActive(uid);
+  }
+
   useEffect(() => {
-    // console.log(route.params?.filters);
     const fetchUserInfo = async () =>{
       const token = await AsyncStorage.getItem('userToken');
       const uid = await getMyID(token);
+      setUid(uid)
       const userInfo = await getUserInfo(uid, route.params?.filters);
       setData(userInfo);
     }
     fetchUserInfo();
-}, [route.params]);
+  }, [route.params]);
   
   const UserCard = ({DATA}) => (
     <SafeAreaView> 
@@ -202,8 +211,9 @@ export default function HomeScreen({ route, navigation }) {
             trackColor={{false: '#767577', true: '#81b0ff'}}
             thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
+            onValueChange={() => toggleActive(uid)}
             value={isEnabled}
+            // onPress={toggleActive}
           />
         </View>
       </View>

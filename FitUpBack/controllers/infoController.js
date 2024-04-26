@@ -141,18 +141,22 @@ const getPic = async (req, res) => {
 };
 
 const Active = async (req, res) => {
-    const { UID, isActive } = req.body;
+    const { UID } = req.body;
+    console.log(UID)
 
     try {
-        const activeStatus = isActive ? 1 : 0;
-        const query = 'UPDATE userInfo SET isActive = ? WHERE UID = ?';
-        const [result] = await pool.execute(query, [activeStatus, UID]);
-  
+        const query = `
+            UPDATE userInfo
+            SET isActive = CASE WHEN isActive = 1 THEN 0 ELSE 1 END
+            WHERE UID = ?
+        `;
+        const [result] = await pool.query(query, [UID]);
+
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.json({ message: 'User status updated successfully', isActive });
+        res.status(200).json({ message: 'User status updated successfully' });
     } catch (error) {
         console.error('Error updating user status:', error);
         res.status(500).json({ error: 'Internal Server Error' });

@@ -107,6 +107,7 @@ export default function ChatScreen({ navigation }) {
       const token = AsyncStorage.getItem('userToken').then(async (token) => {
         const fromId = await getMyID(token);
         const uid = newMessage.from_id !== fromId ? newMessage.from_id : newMessage.to_id;
+        const name = await getFirstName(uid);
   
         setChatData(currentData => {
           const existingIndex = currentData.findIndex(chat => chat.uid === uid);
@@ -117,7 +118,7 @@ export default function ChatScreen({ navigation }) {
 
           const updatedChat = {
             uid: uid,
-            name: existingChat?.name || 'Loading...',
+            name: name || 'Loading...',
             message: newMessage.message,
             time: newMessage.timestamp,
             unread_count: unreadCount || 0
@@ -138,6 +139,7 @@ export default function ChatScreen({ navigation }) {
     }
   };
   
+
 
   const markMessagesAsRead = (chatId) => {
     setActiveChatId(chatId);
