@@ -3,17 +3,16 @@ const mysql = require('mysql2/promise');
 const app = express();
 const pool = require('./db')
 
-const genders = ['male', 'female', 'none'];
+// const genders = ['male', 'female', 'none'];
 // const workout_purpose = ['Gain Weight', 'Lose Weight', 'Maintain Weight', 'Better Performance'];
 
 const filtering = async (req, res) => {
   const { UID, filters = {} } = req.query;
 
   try {
-    
+    console.log("hi");
     const userQuery = 'SELECT height, weight, purpose AS workout_purpose, workout_schedule, gender, workout_style, personal_records, partner_preferences, `first_name`, `last_name`, age FROM userInfo WHERE UID = ?';
     const userResult = await pool.query(userQuery, [UID]);
-
     if (userResult[0].length === 0) {
       return res.status(404).json({ error: 'User profile not found' });
     }
@@ -45,15 +44,26 @@ const filtering = async (req, res) => {
       queryParams.push(userTotal1RM);
     }
 
-    if (filters.gender) {
-      queryParams.push(genders[filters.gender - 1]);
+    if (filters.gender==1) {
+      queryParams.push('male');
+      query += ` AND gender = ?`;
+    }
+
+    if (filters.gender==2) {
+      queryParams.push('female');
       query += ` AND gender = ?`;
     }
 
     if (filters.similar_workout_purpose == 1) {
+<<<<<<< HEAD
       queryParams.push(user.workout_purpose);
       query += ` AND purpose = ?`;
     }
+=======
+       queryParams.push(user.workout_purpose);
+       query += ` AND purpose = ?`;
+     }
+>>>>>>> 63eec0011aae1fc50a33b97e753f6750b45bf7c0
 
     if (filters.similar_workout_time == 1) {
       const daysSql = userWorkoutSchedule.map(day => `FIND_IN_SET('${day}', workout_schedule)`).join(' OR ');

@@ -62,7 +62,7 @@ export const getDCT = async (uid) => {
         UID: uid
       }
     });
-    console.log("Hi")
+    console.log("Response received:", response.data);
     if (response) {
       return response.data;
     }
