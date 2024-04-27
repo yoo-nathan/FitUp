@@ -143,7 +143,7 @@ export default function ChatRoom({ route, navigation }) {
           renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={{ paddingBottom: 50 }}
-          inverted
+          // inverted
           // onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
         />
         <View style={styles.bottomContainer}>

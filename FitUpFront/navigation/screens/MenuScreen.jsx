@@ -33,13 +33,8 @@ export default function MenuScreen({ navigation }) {
     setIsModalVisible(true);
     const MENU = dct.find(item => item.menu === name)
     setMenu(MENU)
-<<<<<<< HEAD
-    console.log(MENU)
-    console.log(id)
-=======
     //console.log(MENU)
     //console.log(id)
->>>>>>> de51d420d71ff7433ef8c00695385ecbcefcd26d
   }
   const hideModal = () => setIsModalVisible(false);
 
