@@ -19,7 +19,7 @@ export const getMyID = async(token) => {
     }
   } catch (error) {
     console.log("Error occurred while getting my UID!")
-    console.error(error);
+    // console.error(error);
   }
 }
 

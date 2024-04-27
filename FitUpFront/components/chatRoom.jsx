@@ -88,6 +88,9 @@ export default function ChatRoom({ route, navigation }) {
 
       socketRef.current.emit("chatting", msgData);
       setMessage('');
+      const token = await AsyncStorage.getItem('userToken');
+      const from_id = await getMyID(token);
+      console.log(from_id)
       inputRef.current.focus();
     }
   };

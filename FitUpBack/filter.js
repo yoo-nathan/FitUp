@@ -55,15 +55,9 @@ const filtering = async (req, res) => {
     }
 
     if (filters.similar_workout_purpose == 1) {
-<<<<<<< HEAD
       queryParams.push(user.workout_purpose);
       query += ` AND purpose = ?`;
     }
-=======
-       queryParams.push(user.workout_purpose);
-       query += ` AND purpose = ?`;
-     }
->>>>>>> 63eec0011aae1fc50a33b97e753f6750b45bf7c0
 
     if (filters.similar_workout_time == 1) {
       const daysSql = userWorkoutSchedule.map(day => `FIND_IN_SET('${day}', workout_schedule)`).join(' OR ');

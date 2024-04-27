@@ -17,10 +17,10 @@ const SignInPage = () => {
 
     const signInPress = async () => {
       // check if the email ends with '@emory.edu' <- NOT SURE IF IT WORKS PROPERLY
-      if (!validateEmail(email)) {
-        Alert.alert("Invalid Email", "Please use your Emory email address (ends with @emory.edu).");
-        return;
-      }
+      // if (!validateEmail(email)) {
+      //   Alert.alert("Invalid Email", "Please use your Emory email address (ends with @emory.edu).");
+      //   return;
+      // }
 
       try {
         const tokenData = await login(email, password);

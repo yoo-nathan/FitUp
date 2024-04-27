@@ -16,9 +16,10 @@ import {
   Pressable,
   
 } from 'react-native';
-import { getUserInfo } from '../../service/getService';
+import { getActive, getUserInfo } from '../../service/getService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMyID } from '../../service/chatService';
+import { updateActive } from '../../service/getService';
 
 export default function HomeScreen({ route, navigation }) {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -27,6 +28,8 @@ export default function HomeScreen({ route, navigation }) {
   const [user, setUser] = useState(null);
   const [userImage, setUserImage] = useState(null);
   const [data, setData] = useState([]);
+  const [uid, setUid] = useState('');
+  const [activeState, setActiveState] = useState(1);
 
 
   const picURL = {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'};
@@ -50,6 +53,27 @@ export default function HomeScreen({ route, navigation }) {
       params: { to_id: UID }
     })
   }
+
+  const toggleActive = async (uid) => {
+    try {
+      await updateActive(uid);  
+      setActiveState(currentState => currentState === 1 ? 0 : 1);
+    } catch (error) {
+      console.error("Failed to toggle active status:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchActiveStatus = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      const uid = await getMyID(token);
+      setUid(uid)
+      const activeStatus = await getActive(uid);
+      setActiveState(activeStatus.activeStatus);
+    };
+
+    fetchActiveStatus();
+  }, []);
 
   const fetchImage = async (UID) => {
     const token = await AsyncStorage.getItem('userToken');
@@ -80,13 +104,7 @@ export default function HomeScreen({ route, navigation }) {
       const uid = await getMyID(token);
       const userInfo = await getUserInfo(uid, route.params?.filters);
       setData(userInfo);
-<<<<<<< HEAD
-      console.log(userInfo);
-      
-    }
-=======
     };
->>>>>>> origin
     fetchUserInfo();
   }, [route.params]);
   
@@ -205,14 +223,14 @@ export default function HomeScreen({ route, navigation }) {
         <FilterButton />
         <View style={{flexDirection:'row'}}>
           <Text style={styles.activeInactive}>
-            {isEnabled ? 'Active' : 'Inactive'}
+            {activeState === 1 ? 'Active' : 'Inactive'}
           </Text>
           <Switch
             trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
+            thumbColor={activeState === 1 ? '#f4f3f4' : '#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+            onValueChange={() => toggleActive(uid)}
+            value={activeState === 1}
           />
         </View>
       </View>

@@ -1,4 +1,5 @@
 import apiClient from '../interceptor';
+import axios from 'axios';
 const API_URL = "https://cs-370-420520.ue.r.appspot.com";
 //const API_URL = 'http://localhost:3000';
 
@@ -33,7 +34,7 @@ export const getUserInfo = async (uid, filters) => {
     }
   } catch (error) {
     console.log("Error occurred while fetching homepage info in service!")
-    console.error(error);
+    // console.error(error);
   }
 }
 

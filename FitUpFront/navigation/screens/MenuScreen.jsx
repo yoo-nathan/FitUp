@@ -33,7 +33,7 @@ export default function MenuScreen({ navigation }) {
     console.log("hi");
     const MENU = dct.find(item => item.mid === id) 
     setMenu(MENU)
-    console.log(menu)
+    console.log(MENU)
     console.log(id)
   }
   const hideModal = () => setIsModalVisible(false);
@@ -42,6 +42,7 @@ export default function MenuScreen({ navigation }) {
     const fetchBMRInfo = async () =>{
       const token = await AsyncStorage.getItem('userToken');
       const uid = await getMyID(token);
+      console.log('uid: ',uid)
       const BMRInfo = await getBMR(uid);
       const DCTInfo = await getDCT(uid);
       setData(BMRInfo);
@@ -49,7 +50,8 @@ export default function MenuScreen({ navigation }) {
       console.log(data);
       setLoading(false);
       setLoadingMENU(false);
-      console.log(dct);
+      // console.log(BMRInfo);
+      // console.log("dct: ",DCTInfo);
     }
     fetchBMRInfo();
   }, []);
@@ -102,7 +104,7 @@ export default function MenuScreen({ navigation }) {
           ) : (
             <FlatList
               horizontal={true}
-              data={dct}
+              data={data}
               renderItem={({item}) => <Item item={item} />}
               style={styles.flatList}
             />
