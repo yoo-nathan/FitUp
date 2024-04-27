@@ -134,17 +134,19 @@ export default function ChatRoom({ route, navigation }) {
 
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 20}>
+    <KeyboardAvoidingView 
+      style={{ flex: 1 }} 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 80 } 
+    >
       <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 10 }}>
-        <Header/>
+        <Header />
         <FlatList
           ref={flatListRef}
           data={messages}
           renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: 50 }}
-          // inverted
-          // onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          contentContainerStyle={{ paddingBottom: 60, flexGrow: 1  }}
         />
         <View style={styles.bottomContainer}>
           <TextInput
@@ -152,11 +154,11 @@ export default function ChatRoom({ route, navigation }) {
             style={ styles.msgBox }
             onChangeText={setMessage}
             value={message}
-            placeholder="Type a message..."
+            placeholder="Type a message"
+            placeholderTextColor="#808080"
             onSubmitEditing={sendMessage}
             returnKeyType="send"
             blurOnSubmit={false}
-            placeholderTextColor="gray"
           />
           <TouchableOpacity style={ styles.sendButton } onPress={sendMessage} disabled={!message.trim()}>
             <Image source={require('../assets/send.png')} style={styles.buttonImage}/>

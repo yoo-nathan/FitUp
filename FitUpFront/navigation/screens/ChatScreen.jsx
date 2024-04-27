@@ -43,6 +43,8 @@ const FriendItem = ({ DATA, onPress }) => (
             }
           </View>
           
+          <Text numberOfLines={1} ellipsizeMode="tail" style={{fontSize: 20, color:'grey'}}>{DATA.message}</Text>
+          {DATA.unread_count > 0 && <Text>{DATA.unread_count}</Text>}
         </View>
 
       </View>

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from './../service/authService';
 import { useNavigation } from '@react-navigation/native';
+import { Keyboard, Dimensions } from 'react-native';
+
 
 const SignInPage = () => {
     const [email, setEmail] = useState('');
@@ -55,10 +57,30 @@ const SignInPage = () => {
     const handleForgotPw = () => {
       navigation.navigate('ForgotPasswordPage');
     }
+
+    const [keyboardUp, setKeyboardUp] = useState(false);
+
+    useEffect(() => {
+      const keyboardDidShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        () => setKeyboardUp(true)
+      );
+      const keyboardDidHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        () => setKeyboardUp(false)
+      );
   
+      return () => {
+        keyboardDidShowListener.remove();
+        keyboardDidHideListener.remove();
+      };
+    }, []);
+  
+    const bottomContainerStyle = keyboardUp ? { position: 'absolute', bottom: 20 } : { position: 'absolute', bottom: 20 };
+
 
     return (
-      <View style={{backgroundColor: '#373F51'}}>
+      <View style={{flex: 1, backgroundColor: '#373F51'}}>
         <View style = {styles.content}>
           <Text style={styles.title}> Welcome to FitUP!</Text>
           <Text style={styles.subtitle}> Log in with your Emory email </Text>
@@ -97,10 +119,9 @@ const SignInPage = () => {
             >Sign In</Text>
           </TouchableOpacity>
           
-          <View style={styles.createAccContainer}>
-          <Text style={{fontSize: 14}}>New to FitUp? </Text>
+          <View style={styles.bottomContainerStyle}>
           <TouchableOpacity onPress={handleCreateAcc} > 
-            <Text style={styles.creatAcc}>Create an account </Text>
+            <Text style={styles.creatAcc}>New to FitUp? Create an account </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -195,10 +216,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   creatAcc : {
-    color: 'white',
+    color: 'gray',
     fontSize: 14,
     textDecorationLine: 'underline',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop: 150,
   }
   
   });

@@ -37,7 +37,10 @@ const MainContainer = ({route}) => {
           }
 
           return <Ionicons name={iconName} size={size} color={color}/>;
+          
         },
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: { display: 'flex' }
       })}
       >
       <Tab.Screen name={homeName} component={HomeNavigator}/>
