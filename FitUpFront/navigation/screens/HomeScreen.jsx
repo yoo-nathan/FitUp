@@ -73,6 +73,7 @@ export default function HomeScreen({ route, navigation }) {
       setUid(uid)
       const userInfo = await getUserInfo(uid, route.params?.filters);
       setData(userInfo);
+      console.log(userInfo);
       
     }
     fetchUserInfo();
