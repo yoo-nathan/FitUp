@@ -48,7 +48,7 @@ const App = () => {
         
         <Stack.Navigator 
         initialRouteName={userToken ? "MainContainer" : "SignInPage"}
-        //initialRouteName='SignInPage'
+        //initialRouteName='SignUpPage'
         screenOptions={{
           headerShown: false,
         }}>

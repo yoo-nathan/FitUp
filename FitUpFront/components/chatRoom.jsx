@@ -115,7 +115,13 @@ export default function ChatRoom({ route, navigation }) {
   const Header = () => {
     return (
       <View style={styles.headerContainer}>
-        <Text style={[{fontSize: 18}, styles.senderName]}>{receiverName}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ChatList')}
+        >
+          <Text style={[{fontSize: 22, transform: [{ rotate: '180deg'}]}, styles.senderName]}>&#10132;</Text>
+        </TouchableOpacity>
+        
+        <Text style={[{fontSize: 18, paddingLeft: 10}, styles.senderName]}>{receiverName}</Text>
       </View>
     )
   }
@@ -137,7 +143,7 @@ export default function ChatRoom({ route, navigation }) {
           renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={{ paddingBottom: 50 }}
-          // inverted
+          inverted
           // onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
         />
         <View style={styles.bottomContainer}>
@@ -146,10 +152,11 @@ export default function ChatRoom({ route, navigation }) {
             style={ styles.msgBox }
             onChangeText={setMessage}
             value={message}
-            placeholder="Type a message"
+            placeholder="Type a message..."
             onSubmitEditing={sendMessage}
             returnKeyType="send"
             blurOnSubmit={false}
+            placeholderTextColor="gray"
           />
           <TouchableOpacity style={ styles.sendButton } onPress={sendMessage} disabled={!message.trim()}>
             <Image source={require('../assets/send.png')} style={styles.buttonImage}/>
@@ -184,9 +191,10 @@ const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: 'white',
     width: "100%",
-    height: "7%",
-    justifyContent: 'center',
-    paddingLeft: 20,
-    paddingBottom: 10
+    height: "5%",
+    justifyContent: 'left',
+    paddingHorizontal: "1%",
+    paddingBottom: 10,
+    flexDirection: 'row'
   }
 });

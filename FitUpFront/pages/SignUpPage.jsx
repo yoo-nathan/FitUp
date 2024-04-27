@@ -38,7 +38,7 @@ const SignUpPage = ({ navigation }) => {
                 onChangeText={setEmail}
                 autoCapitalize="none"
                 keyboardType="email-address"
-                placeholderTextColor="#003f5c"
+                placeholderTextColor="gray"
             />
             <Text style={styles.sidetitle1}> Create password </Text>
             <TextInput
@@ -47,7 +47,7 @@ const SignUpPage = ({ navigation }) => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
-                placeholderTextColor="#003f5c"
+                placeholderTextColor="gray"
             />
             <TextInput
                 style={styles.input}
@@ -55,7 +55,7 @@ const SignUpPage = ({ navigation }) => {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry
-                placeholderTextColor="#003f5c"
+                placeholderTextColor="gray"
             />
             <View style={styles.switchContainer}>
                 <Text style={styles.switchLabel}>Data collection Agreement</Text>

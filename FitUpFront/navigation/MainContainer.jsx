@@ -41,7 +41,7 @@ const MainContainer = ({route}) => {
       })}
       >
       <Tab.Screen name={homeName} component={HomeNavigator}/>
-      <Tab.Screen name={chatName} component={ChatNavigator}/>
+      <Tab.Screen name={chatName} component={ChatNavigator} />
       <Tab.Screen name={menuName} component={MenuScreen}/>
       <Tab.Screen name={profileName} component={ProfileScreen}/>
     </Tab.Navigator>

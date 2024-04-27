@@ -76,9 +76,9 @@ const SignUpPage1 = ({ navigation }) => {
         </TouchableOpacity>
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>First Name*</Text>
-          <TextInput style={styles.input} placeholder="John" value={firstName} onChangeText={setFirstName} />
+          <TextInput style={styles.input} placeholder="John" value={firstName} onChangeText={setFirstName} placeholderTextColor="gray"/>
           <Text style={styles.inputLabel}>Last Name*</Text>
-          <TextInput style={styles.input} placeholder="Parker" value={lastName} onChangeText={setLastName} />
+          <TextInput style={styles.input} placeholder="Parker" value={lastName} onChangeText={setLastName} placeholderTextColor="gray"/>
           <Text style={styles.label}>Gender*</Text>
           <View style={styles.pickerContainer}>
             <Picker selectedValue={gender} onValueChange={setGender}>
@@ -92,6 +92,7 @@ const SignUpPage1 = ({ navigation }) => {
             style={styles.input} 
             placeholder="21" value={age} 
             onChangeText={setAge}
+            placeholderTextColor="gray"
           />
           <TouchableOpacity style={styles.button} onPress={handleSignUp}>
             <Text style={styles.buttonText}>Next</Text>

@@ -38,6 +38,7 @@ export default function HomeScreen({ route, navigation }) {
     setIsModalVisible(true);
     const USER = data.find(item => item.profile.UID === id);
     setUser(USER.profile);
+    console.log(user)
     fetchImage(USER.profile.UID);
   };
 
