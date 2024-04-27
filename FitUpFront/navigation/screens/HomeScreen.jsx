@@ -16,28 +16,33 @@ import {
   Pressable,
   
 } from 'react-native';
-import { getActive, getUserInfo } from '../../service/getService';
+import { getUserInfo } from '../../service/getService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMyID } from '../../service/chatService';
-import { updateActive } from '../../service/getService';
 
 export default function HomeScreen({ route, navigation }) {
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user, setUser] = useState(null);
+  const [userImage, setUserImage] = useState(null);
   const [data, setData] = useState([]);
-  const [uid, setUid] = useState('');
-  const [activeState, setActiveState] = useState(1);
+
 
   const picURL = {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'};
 
-  const showModal = (id) => {
-    setIsModalVisible(true)
+  const showModal = async (id) => {
+    setIsModalVisible(true);
     const USER = data.find(item => item.profile.UID === id);
-    setUser(USER.profile)
-  } 
-  const hideModal = () => setIsModalVisible(false);
+    setUser(USER.profile);
+    fetchImage(USER.profile.UID);
+  };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
+    setUserImage(null); 
+  };
+
   const goToChat = (UID) => {
     setIsModalVisible(false)
     navigation.navigate('Chat', {
@@ -46,113 +51,92 @@ export default function HomeScreen({ route, navigation }) {
     })
   }
 
-  const toggleActive = async (uid) => {
+  const fetchImage = async (UID) => {
+    const token = await AsyncStorage.getItem('userToken');
     try {
-      await updateActive(uid);  
-      setActiveState(currentState => currentState === 1 ? 0 : 1);
+      const response = await fetch("https://cs-370-420520.ue.r.appspot.com/getInfo/getPic", {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          UID: UID,
+        },
+      });
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64data = reader.result;
+        setUserImage(base64data);
+      };
+      reader.readAsDataURL(blob);
     } catch (error) {
-      console.error("Failed to toggle active status:", error);
+      console.error('There was an error fetching the image:', error);
     }
   };
+  
 
   useEffect(() => {
-    const fetchActiveStatus = async () => {
+    const fetchUserInfo = async () => {
       const token = await AsyncStorage.getItem('userToken');
       const uid = await getMyID(token);
-      const activeStatus = await getActive(uid);
-      setActiveState(activeStatus.activeStatus);
-    };
-
-    fetchActiveStatus();
-  }, []);
-
-  useEffect(() => {
-    const fetchUserInfo = async () =>{
-      const token = await AsyncStorage.getItem('userToken');
-      const uid = await getMyID(token);
-      setUid(uid)
       const userInfo = await getUserInfo(uid, route.params?.filters);
       setData(userInfo);
+<<<<<<< HEAD
       console.log(userInfo);
       
     }
+=======
+    };
+>>>>>>> origin
     fetchUserInfo();
   }, [route.params]);
   
-  const UserCard = ({DATA}) => (
+  const UserCard = ({ DATA }) => {
+  const [userImage, setUserImage] = useState(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      try {
+        const response = await fetch("https://cs-370-420520.ue.r.appspot.com/getInfo/getPic", {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            UID: DATA.UID,
+          },
+        });
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          setUserImage(base64data);
+        };
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        console.error('There was an error fetching the image:', error);
+        setUserImage('https://via.placeholder.com/100'); 
+      }
+    };
+    fetchImage();
+  }, [DATA.UID]);
+  return (
     <SafeAreaView> 
       <TouchableOpacity 
         style={styles.userCard}
         onPress={() => showModal(DATA.UID)}>
-        <Image resizeMode='contain' style={styles.userImg} source={picURL} />
+        <Image
+          resizeMode='contain'
+          style={styles.userImg}
+          source={{ uri: userImage || 'https://via.placeholder.com/100' }} // Fallback or default image
+        />
         <View style={styles.userInfo}>
           <Text style={{fontSize:28, fontWeight:'700'}}>{DATA.first_name} {DATA.last_name}</Text>
           <Text style={{fontSize: 16, fontWeight:'700'}}>H: {DATA.height} in / W: {DATA.weight} lbs</Text>
-          <Text/>
-          <Text style={{fontSize: 14, fontWeight:'700'}}>Click to view details! </Text>
+          <Text style={{fontSize: 14, fontWeight:'700'}}>Click to view details!</Text>
         </View>
       </TouchableOpacity>
-      {user && (
-        <Modal 
-          visible={isModalVisible}
-          animationType='fade'
-          style={{opacity:0.5}}
-          transparent
-        > 
-          <View style={styles.modalViewContainer}> 
-            <View style={styles.modalCardView}> 
-              <View style={styles.flexRow}>
-                <Image resizeMode='contain' style={styles.userImg} source={user.image} />
-                  <View style={styles.userInfo}>
-                    <Text style={{fontSize:28, fontWeight:'700'}}>{user.first_name} {user.last_name}</Text>
-                    <Text />
-                    <Text style={{fontSize: 12, fontWeight:'700'}}>H: {user.height} in / W: {user.weight} lbs</Text>
-                    <Text style={{fontSize: 12, fontWeight:'700'}}>Gender: {user.gender}</Text>
-                    <Text style={{fontSize: 12, fontWeight:'700'}}>Purpose: {user.purpose}</Text>
-                    <View style={{width: "90%"}}>
-                      <Text style={{fontSize: 12, fontWeight:'700'}}>Usual workout time: {user.workout_schedule.slice(1, -1).replace(/"/g, '')}</Text>
-                    </View>
-                    
-                  </View>
-                  
-              </View>
-              <View style={styles.flexCol}>
-                <View style={styles.hairline}/>
-                <Text style={{fontSize: 15, fontWeight:'700', paddingVertical:6, paddingTop:10}}>Personal Records</Text>
-                <Text style={{fontSize: 12, fontWeight:'700', paddingVertical:3 }}>Squat: {user.personal_records.squat} lbs</Text>
-                <Text style={{fontSize: 12, fontWeight:'700', paddingVertical:3 }}>Bench: {user.personal_records.benchpress} lbs</Text>
-                <Text style={{fontSize: 12, fontWeight:'700', paddingVertical:3 }}>Deadlift: {user.personal_records.deadlift} lbs</Text>
-                <View style={styles.flexRow}>
-                  <TouchableOpacity 
-                  onPress={hideModal}
-                  style={styles.buttonStyleCancel}>
-                    <Text  
-                    style={{
-                      fontSize:15, 
-                      fontWeight:'500',
-                      textAlign:'center' 
-                    }}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                  style={styles.buttonStyleChat}
-                  onPress={() => goToChat(user.UID)}
-                  >
-                    <Text style={{
-                      fontSize:15, 
-                      fontWeight:'500',
-                      textAlign:'center',
-                      color: 'white' 
-                    }}>Chat</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View> 
-          </View> 
-        </Modal>
-      )}
-      
     </SafeAreaView>
-  )
+  );
+};
 
   const [isFilterVisible, setFilterVisible] = useState(false);
   const showFilter = () => setFilterVisible(true);
@@ -167,7 +151,7 @@ export default function HomeScreen({ route, navigation }) {
   const [isPurpose, setPurpose] = useBooleanState(false);
   const FilterButton = () => (
     <View>
-      <TouchableOpacity  
+      <TouchableOpacity 
         style={styles.buttonContainer}
         onPress={() => navigation.push('Filter')}
         >
@@ -221,14 +205,14 @@ export default function HomeScreen({ route, navigation }) {
         <FilterButton />
         <View style={{flexDirection:'row'}}>
           <Text style={styles.activeInactive}>
-            {activeState === 1 ? 'Active' : 'Inactive'}
+            {isEnabled ? 'Active' : 'Inactive'}
           </Text>
           <Switch
             trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={activeState === 1 ? '#f4f3f4' : '#f4f3f4'}
+            thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={() => toggleActive(uid)}
-            value={activeState === 1}
+            onValueChange={toggleSwitch}
+            value={isEnabled}
           />
         </View>
       </View>
@@ -393,5 +377,3 @@ const styles = StyleSheet.create({
     borderRadius: 25
   }
 })
-
-
