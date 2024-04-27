@@ -43,6 +43,7 @@ const getDietPlan = async (req, res) => {
 
     try {
         const BMRInfo = await getBMRInfo(UID);
+        console.log(BMRInfo);
         const menus = await fetchMenus(); // You'll need to define this function to fetch menu items from your database
 
         const prompt = `Create a well-balanced diet plan using the following menu items: ${menus}. ` +

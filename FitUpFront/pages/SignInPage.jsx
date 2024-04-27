@@ -23,10 +23,7 @@ const SignInPage = () => {
       }
 
       try {
-        console.log(email)
-        console.log(password)
         const tokenData = await login(email, password);
-        console.log(tokenData)
         
         if (tokenData) {
           await AsyncStorage.setItem('userToken', tokenData.token);

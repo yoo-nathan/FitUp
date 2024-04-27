@@ -33,7 +33,7 @@ export default function MenuScreen({ navigation }) {
     setIsModalVisible(true);
     const MENU = dct.find(item => item.menu === name)
     setMenu(MENU)
-    console.log(MENU)
+    //console.log(MENU)
     //console.log(id)
   }
   const hideModal = () => setIsModalVisible(false);
@@ -45,10 +45,9 @@ export default function MenuScreen({ navigation }) {
       const BMRInfo = await getBMR(uid);
       const DCTInfo = await getDCT(uid);
       setData(BMRInfo);
-      console.log(data)
-      setLoading(false);
       setDCT(DCTInfo);
-      console.log(DCTInfo)
+      console.log(data);
+      setLoading(false);
       setLoadingMENU(false);
       console.log(dct);
     }

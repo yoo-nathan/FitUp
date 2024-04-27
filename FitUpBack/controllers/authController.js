@@ -57,7 +57,7 @@ const register = async (req, res) => {
         ]);
 
         const payload = { id: UID };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '6h' });
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '15m' });
 
         res.status(201).json({
             message: 'User registered successfully.',
