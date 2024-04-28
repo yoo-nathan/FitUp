@@ -16,10 +16,9 @@ import {
   Pressable,
   
 } from 'react-native';
-import { getActive, getUserInfo } from '../../service/getService';
+import { getUserInfo } from '../../service/getService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMyID } from '../../service/chatService';
-import { updateActive } from '../../service/getService';
 
 export default function HomeScreen({ route, navigation }) {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -28,23 +27,19 @@ export default function HomeScreen({ route, navigation }) {
   const [user, setUser] = useState(null);
   const [userImage, setUserImage] = useState(null);
   const [data, setData] = useState([]);
-  const [uid, setUid] = useState('');
-  const [activeState, setActiveState] = useState(1);
+  
 
 
   const picURL = {uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg'};
 
-  const showModal = async (id) => {
-    setIsModalVisible(true);
+  const showModal = (id) => {
     const USER = data.find(item => item.profile.UID === id);
     setUser(USER.profile);
-    console.log(user)
-    fetchImage(USER.profile.UID);
+    setIsModalVisible(true);
   };
 
   const hideModal = () => {
     setIsModalVisible(false);
-    setUserImage(null); 
   };
 
   const goToChat = (UID) => {
@@ -54,27 +49,6 @@ export default function HomeScreen({ route, navigation }) {
       params: { to_id: UID }
     })
   }
-
-  const toggleActive = async (uid) => {
-    try {
-      await updateActive(uid);  
-      setActiveState(currentState => currentState === 1 ? 0 : 1);
-    } catch (error) {
-      console.error("Failed to toggle active status:", error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchActiveStatus = async () => {
-      const token = await AsyncStorage.getItem('userToken');
-      const uid = await getMyID(token);
-      setUid(uid)
-      const activeStatus = await getActive(uid);
-      setActiveState(activeStatus.activeStatus);
-    };
-
-    fetchActiveStatus();
-  }, []);
 
   const fetchImage = async (UID) => {
     const token = await AsyncStorage.getItem('userToken');
@@ -139,7 +113,7 @@ export default function HomeScreen({ route, navigation }) {
   }, [DATA.UID]);
   return (
     <SafeAreaView> 
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.userCard}
         onPress={() => showModal(DATA.UID)}>
         <Image
@@ -153,6 +127,46 @@ export default function HomeScreen({ route, navigation }) {
           <Text style={{fontSize: 14, fontWeight:'700'}}>Click to view details!</Text>
         </View>
       </TouchableOpacity>
+      {user && (
+  <Modal
+  visible={isModalVisible}
+  animationType='fade'
+  transparent
+>
+  <View style={styles.modalViewContainer}>
+    <View style={styles.modalCardView}>
+      <Text style={styles.modalNameText}>{user.first_name} {user.last_name}</Text>
+      <Text style={styles.modalDetailsText}>H: {user.height} in / W: {user.weight} lbs</Text>
+      <Text style={styles.modalDetailsText}>Gender: {user.gender}</Text>
+      <Text style={styles.modalDetailsText}>Purpose: {user.purpose}</Text>
+      <Text style={styles.modalDetailsText}>Usual workout time: {user.workout_schedule}</Text>
+
+      <View style={styles.hairline} />
+      
+      <Text style={styles.modalSectionTitle}>Personal Records</Text>
+      <Text style={styles.modalDetailsText}>Squat: {user.personal_records.squat} lbs</Text>
+      <Text style={styles.modalDetailsText}>Bench: {user.personal_records.benchpress} lbs</Text>
+      <Text style={styles.modalDetailsText}>Deadlift: {user.personal_records.deadlift} lbs</Text>
+
+      <View style={styles.modalButtonRow}>
+        <TouchableOpacity 
+          onPress={hideModal}
+          style={styles.buttonStyleCancel}
+        >
+          <Text style={styles.buttonTextStyle}>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.buttonStyleChat}
+          onPress={() => goToChat(user.UID)}
+        >
+          <Text style={styles.buttonTextStyle}>Chat</Text>
+        </TouchableOpacity>
+      </View>
+    </View> 
+  </View> 
+</Modal>
+
+)}
     </SafeAreaView>
   );
 };
@@ -224,14 +238,14 @@ export default function HomeScreen({ route, navigation }) {
         <FilterButton />
         <View style={{flexDirection:'row'}}>
           <Text style={styles.activeInactive}>
-            {activeState === 1 ? 'Active' : 'Inactive'}
+            {isEnabled ? 'Active' : 'Inactive'}
           </Text>
           <Switch
             trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={activeState === 1 ? '#f4f3f4' : '#f4f3f4'}
+            thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={() => toggleActive(uid)}
-            value={activeState === 1}
+            onValueChange={toggleSwitch}
+            value={isEnabled}
           />
         </View>
       </View>
@@ -317,21 +331,39 @@ const styles = StyleSheet.create({
     paddingHorizontal:10, 
     paddingVertical:8, 
   },
-  modalViewContainer: { 
-    flex: 1, 
-    backgroundColor:'rgba(0,0,0,0.6)', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    
-  }, 
-  modalCardView : { 
-    backgroundColor : 'rgba(255,255,255,1)' , 
-    height : '55%' , 
-    width : "85%", 
-    borderRadius : 20, 
-    alignItems : "center", 
-    justifyContent : "center" 
-  }, 
+  modalViewContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalCardView: {
+    backgroundColor: 'white',
+    width: '90%',
+    padding: 20,
+    borderRadius: 20,
+    alignItems: 'center',
+  },
+  modalNameText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalDetailsText: {
+    fontSize: 18,
+    marginBottom: 5,
+  },
+  modalSectionTitle: {
+    fontWeight: 'bold',
+    marginTop: 10,
+    fontSize: 20,
+  },
+
+  buttonTextStyle: {
+    fontSize: 15,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
   flexRow: {
     flexDirection:'row' ,
     marginTop: 20
@@ -347,7 +379,8 @@ const styles = StyleSheet.create({
   hairline: {
     backgroundColor: 'black',
     height: 1,
-    width: 300
+    width: '100%',
+    marginVertical: 10,
   },
   buttonStyleCancel :{
     backgroundColor: 'white',
@@ -359,6 +392,11 @@ const styles = StyleSheet.create({
     width: 120,
     marginHorizontal: 10,
     flex:1
+  },
+  modalButtonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
   },
   buttonStyleChat :{
     backgroundColor: '#8075FF',
