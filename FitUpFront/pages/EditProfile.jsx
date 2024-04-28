@@ -7,8 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
-  Image,
-  Alert
+  Image
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,6 +16,7 @@ import { updateProfile } from '../service/authService';
 import { getMyID } from '../service/chatService';
 
 const EditProfile = ({ navigation }) => {
+  // State hooks for various fields
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [workout_schedule, setWorkoutSchedule] = useState([]);
@@ -24,58 +24,63 @@ const EditProfile = ({ navigation }) => {
   const [squatPR, setSquatPR] = useState('');
   const [benchPressPR, setBenchPressPR] = useState('');
   const [deadliftPR, setDeadliftPR] = useState('');
-  const [profileImageURI, setProfileImageURI] = useState(null);
+  const [profileImageURI, setProfileImageURI] = useState('https://static-00.iconduck.com/assets.00/profile-circle-icon-2048x2048-cqe5466q.png');
   const [imageKey, setImageKey] = useState(0);
 
   const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission Denied', 'Sorry, we need camera roll permissions to make this work!');
-      return;
-    }
+  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (status !== 'granted') {
+    alert('Sorry, we need camera roll permissions to make this work!');
+    return;
+  }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  if (!result.canceled) {
+    const token = await AsyncStorage.getItem('userToken');
+    const uid = await getMyID(token);
+
+    console.log('Image URI:', result.uri);  // Debugging log
+    console.log('Image Type:', result.type);  // Debugging log
+    console.log('UID:', uid);  // Debugging log
+
+    const formData = new FormData();
+    formData.append('profilePic', {
+      uri: result.uri,
+      type: 'image/jpeg',  // Assuming JPEG, adjust if your app can use different types
+      name: 'profilePic.jpg',
     });
+    formData.append('UID', uid);
 
-    if (!result.canceled) {
-      setProfileImageURI(result.uri);
-      setImageKey(prevKey => prevKey + 1); // Update the key to trigger a re-render of the image
-
-      const token = await AsyncStorage.getItem('userToken');
-      const uid = await getMyID(token);
-
-      const formData = new FormData();
-      formData.append('profilePic', {
-        uri: result.uri,
-        type: 'image/jpeg',
-        name: 'profilePic.jpg',
+    try {
+      const response = await fetch('https://cs-370-420520.ue.r.appspot.com/getInfo/changePic', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-      formData.append('UID', uid);
 
-      try {
-        const response = await fetch('https://cs-370-420520.ue.r.appspot.com/getInfo/changePic', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+      const responseText = await response.text();
+      console.log('Server Response:', responseText);  // Debugging log
 
-        const responseText = await response.text();
-        if (response.ok) {
-          Alert.alert('Upload Successful', responseText);
-        } else {
-          Alert.alert('Upload Failed', responseText);
-        }
-      } catch (error) {
-        Alert.alert('Network Error', error.message);
+      if (response.ok) {
+        alert(responseText); 
+        setProfileImageURI(result.uri);
+        setImageKey(prevKey => prevKey + 1);
+      } else {
+        alert(`Failed to upload image: ${responseText}`);
       }
+    } catch (error) {
+      alert(`Network error: ${error.message}`);
     }
-  };
+  }
+};
 
   const handleSave = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
