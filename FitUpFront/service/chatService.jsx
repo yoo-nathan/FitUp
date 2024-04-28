@@ -1,11 +1,11 @@
-import axios from 'axios';
+import apiClient from '../interceptor';
 
 const API_URL = "https://cs-370-420520.ue.r.appspot.com";
 //const API_URL = "http://localhost:3000";
 
 export const getMyID = async(token) => {
   try {
-    const response = await axios.get(`${API_URL}/chat/getMyUid`, {
+    const response = await apiClient.get(`/chat/getMyUid`, {
       headers: {
         Authorization: `Bearer ${token}`
       },
@@ -19,13 +19,13 @@ export const getMyID = async(token) => {
     }
   } catch (error) {
     console.log("Error occurred while getting my UID!")
-    console.error(error);
+    // console.error(error);
   }
 }
 
 export const saveChat = async(from_id, to_id, message) => {
     try {
-        const response = await axios.post(`${API_URL}/chat/saveLog`, {
+        const response = await apiClient.post(`/chat/saveLog`, {
             from_id: from_id,
             to_id: to_id,
             message: message
@@ -41,7 +41,7 @@ export const saveChat = async(from_id, to_id, message) => {
 
 export async function getChatHistory(from_id, to_id) {
   try {
-    const response = await axios.get(`${API_URL}/chat/getHistory`, {
+    const response = await apiClient.get(`/chat/getHistory`, {
       params: {
         from_id: from_id,
         to_id: to_id
@@ -62,7 +62,7 @@ export async function getChatHistory(from_id, to_id) {
 
 export async function getChatList(user_id) {
   try {
-    const response = await axios.get(`${API_URL}/chat/getList`, {
+    const response = await apiClient.get(`/chat/getList`, {
       params: {
         userId: user_id,
       }
@@ -77,7 +77,7 @@ export async function getChatList(user_id) {
 
 export async function markAsRead(roomId, toId) {
   try {
-    const response = await axios.post(`${API_URL}/chat/markAsRead`, {
+    const response = await apiClient.post(`/chat/markAsRead`, {
       roomId: roomId,
       toId: toId
     });
@@ -90,7 +90,7 @@ export async function markAsRead(roomId, toId) {
 
 export async function countUnRead(to_id, from_id) {
   try {
-    const response = await axios.get(`${API_URL}/chat/howManyUnRead`, {
+    const response = await apiClient.get(`/chat/howManyUnRead`, {
       params: {
         to_id: to_id,
         from_id: from_id
@@ -106,7 +106,7 @@ export async function countUnRead(to_id, from_id) {
 
 export async function isReadMsg(from_id, to_id) {
   try {
-    const response = await axios.get(`${API_URL}/chat/getReadStatus`, {
+    const response = await apiClient.get(`/chat/getReadStatus`, {
       params: {
         from_id: from_id,
         to_id: to_id

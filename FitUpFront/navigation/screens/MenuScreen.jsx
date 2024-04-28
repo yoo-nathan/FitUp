@@ -11,7 +11,8 @@ import {
   Button,
   Image,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView
   } from 'react-native';
 import { getBMR } from '../../service/getService';
 import { getDCT } from '../../service/getService';
@@ -28,13 +29,12 @@ export default function MenuScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [loadingMENU, setLoadingMENU] = useState(true);
 
-  const showModal = (id) => {
+  const showModal = (name) => {
     setIsModalVisible(true);
-    console.log("hi");
-    const MENU = dct.find(item => item.mid === id) 
+    const MENU = dct.find(item => item.menu === name)
     setMenu(MENU)
-    console.log(menu)
-    console.log(id)
+    //console.log(MENU)
+    //console.log(id)
   }
   const hideModal = () => setIsModalVisible(false);
 
@@ -42,6 +42,7 @@ export default function MenuScreen({ navigation }) {
     const fetchBMRInfo = async () =>{
       const token = await AsyncStorage.getItem('userToken');
       const uid = await getMyID(token);
+      console.log('uid: ',uid)
       const BMRInfo = await getBMR(uid);
       const DCTInfo = await getDCT(uid);
       setData(BMRInfo);
@@ -49,7 +50,8 @@ export default function MenuScreen({ navigation }) {
       console.log(data);
       setLoading(false);
       setLoadingMENU(false);
-      console.log(dct);
+      // console.log(BMRInfo);
+      // console.log("dct: ",DCTInfo);
     }
     fetchBMRInfo();
   }, []);
@@ -64,7 +66,7 @@ export default function MenuScreen({ navigation }) {
     <SafeAreaView>
       <TouchableOpacity 
         style={styles.item}
-        onPress={() => showModal(item.mid)}>
+        onPress={() => showModal(item.menu)}>
           <Text style={styles.optionTitle}>
               {item.menu}
           </Text>
@@ -75,7 +77,7 @@ export default function MenuScreen({ navigation }) {
         transparent>
           <View style={styles.modalViewContainer}>
             <View style={styles.modalCardView}>
-              <ModalPopUp item = {dct}/>
+              <ModalPopUp item = {menu}/>
               <Button title='Close' onPress={hideModal}/>
               
             </View>
@@ -88,7 +90,7 @@ export default function MenuScreen({ navigation }) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
           <Text style={styles.pageHead}> Diet Recommendation </Text>
           <HeaderCard MACROS={MACROS} loading={loading}/>
           <Text style={styles.subhead}>DCT Menu Recommendation</Text>
@@ -102,16 +104,16 @@ export default function MenuScreen({ navigation }) {
           ) : (
             <FlatList
               horizontal={true}
-              data={dct}
+              data={data}
               renderItem={({item}) => <Item item={item} />}
               style={styles.flatList}
             />
           )}
-
+          <Text style={styles.pageHead}> Cox Menu Recommendations Coming Soon! </Text>
           
           
           
-      </SafeAreaView>
+      </ScrollView>
   );
 }
 
@@ -140,25 +142,25 @@ const ModalPopUp = ({item}) => (
       fontWeight:'400',
       paddingVertical: 5,
       marginHorizontal: 25
-    }}>Total Calories: {item.calorie}kcal</Text>
+    }}>Total Calories: {item.calorie}</Text>
     <Text style={{
       fontSize: 16,
       fontWeight:'400',
       paddingVertical: 5,
       marginHorizontal: 25
-    }}>Carbs: {item.carbs}g</Text>
+    }}>Carbs: {item.carbs}</Text>
     <Text style={{
       fontSize: 16,
       fontWeight:'400',
       paddingVertical: 5,
       marginHorizontal: 25
-    }}>Protein: {item.protein}g</Text>
+    }}>Protein: {item.protein}</Text>
     <Text style={{
       fontSize: 16,
       fontWeight:'400',
       paddingVertical: 5,
       marginHorizontal: 25
-    }}>Fat: {item.fat}g</Text>
+    }}>Fat: {item.fat}</Text>
   </View>
 )
 

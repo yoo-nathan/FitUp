@@ -88,6 +88,9 @@ export default function ChatRoom({ route, navigation }) {
 
       socketRef.current.emit("chatting", msgData);
       setMessage('');
+      const token = await AsyncStorage.getItem('userToken');
+      const from_id = await getMyID(token);
+      console.log(from_id)
       inputRef.current.focus();
     }
   };
@@ -112,7 +115,13 @@ export default function ChatRoom({ route, navigation }) {
   const Header = () => {
     return (
       <View style={styles.headerContainer}>
-        <Text style={[{fontSize: 18}, styles.senderName]}>{receiverName}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ChatList')}
+        >
+          <Text style={[{fontSize: 22, transform: [{ rotate: '180deg'}]}, styles.senderName]}>&#10132;</Text>
+        </TouchableOpacity>
+        
+        <Text style={[{fontSize: 18, paddingLeft: 10}, styles.senderName]}>{receiverName}</Text>
       </View>
     )
   }
@@ -125,17 +134,19 @@ export default function ChatRoom({ route, navigation }) {
 
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 20}>
+    <KeyboardAvoidingView 
+      style={{ flex: 1 }} 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 80 } 
+    >
       <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 10 }}>
-        <Header/>
+        <Header />
         <FlatList
           ref={flatListRef}
           data={messages}
           renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: 50 }}
-          // inverted
-          // onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          contentContainerStyle={{ paddingBottom: 60, flexGrow: 1  }}
         />
         <View style={styles.bottomContainer}>
           <TextInput
@@ -144,6 +155,7 @@ export default function ChatRoom({ route, navigation }) {
             onChangeText={setMessage}
             value={message}
             placeholder="Type a message"
+            placeholderTextColor="#808080"
             onSubmitEditing={sendMessage}
             returnKeyType="send"
             blurOnSubmit={false}
@@ -181,9 +193,10 @@ const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: 'white',
     width: "100%",
-    height: "7%",
-    justifyContent: 'center',
-    paddingLeft: 20,
-    paddingBottom: 10
+    height: "5%",
+    justifyContent: 'left',
+    paddingHorizontal: "1%",
+    paddingBottom: 10,
+    flexDirection: 'row'
   }
 });

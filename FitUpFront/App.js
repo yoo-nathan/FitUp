@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { navigationRef } from './service/navigationService';
 
 // page or screen
 import SignInPage from './pages/SignInPage';
@@ -43,11 +44,11 @@ const App = () => {
   }
 
   return (
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         
         <Stack.Navigator 
         initialRouteName={userToken ? "MainContainer" : "SignInPage"}
-        //initialRouteName='SignInPage'
+        //initialRouteName='SignUpPage'
         screenOptions={{
           headerShown: false,
         }}>

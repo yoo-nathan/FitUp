@@ -37,11 +37,14 @@ const MainContainer = ({route}) => {
           }
 
           return <Ionicons name={iconName} size={size} color={color}/>;
+          
         },
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: { display: 'flex' }
       })}
       >
       <Tab.Screen name={homeName} component={HomeNavigator}/>
-      <Tab.Screen name={chatName} component={ChatNavigator}/>
+      <Tab.Screen name={chatName} component={ChatNavigator} />
       <Tab.Screen name={menuName} component={MenuScreen}/>
       <Tab.Screen name={profileName} component={ProfileScreen}/>
     </Tab.Navigator>

@@ -48,6 +48,7 @@ const SignUpPage2 = ({ navigation }) => {
                     keyboardType="numeric"
                     value={height}
                     onChangeText={setHeight}
+                    placeholderTextColor="gray"
                 />
 
                 <TextInput
@@ -56,6 +57,7 @@ const SignUpPage2 = ({ navigation }) => {
                     keyboardType="numeric"
                     value={weight}
                     onChangeText={setWeight}
+                    placeholderTextColor="gray"
                 />
                 <Text style={styles.subtitle}>Purpose of Training*</Text>
 

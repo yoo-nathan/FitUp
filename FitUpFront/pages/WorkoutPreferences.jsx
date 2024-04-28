@@ -113,6 +113,7 @@ const WorkoutPreferences = ({ navigation }) => {
             value={squatPR}
             onChangeText={setSquatPR}
             keyboardType="numeric"
+            placeholderTextColor="gray"
           />
           <TextInput
             style={styles.input}
@@ -120,6 +121,7 @@ const WorkoutPreferences = ({ navigation }) => {
             value={benchPressPR}
             onChangeText={setBenchPressPR}
             keyboardType="numeric"
+            placeholderTextColor="gray"
           />
           <TextInput
             style={styles.input}
@@ -127,6 +129,7 @@ const WorkoutPreferences = ({ navigation }) => {
             value={deadliftPR}
             onChangeText={setDeadliftPR}
             keyboardType="numeric"
+            placeholderTextColor="gray"
           />
         </View>
 
