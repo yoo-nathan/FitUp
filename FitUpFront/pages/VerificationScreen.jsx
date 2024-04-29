@@ -36,7 +36,6 @@ const VerificationScreen = ({ route, navigation }) => {
   const renderCodeInputs = () => {
     return code.map((value, index) => (
       <TextInput
-        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
         key={index}
         style={styles.codeInput}
         maxLength={1}
