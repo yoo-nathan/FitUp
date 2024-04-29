@@ -14,15 +14,15 @@ const SignInPage = () => {
     const navigation = useNavigation();
 
     const validateEmail = (email) => {
-      return email.endsWith('@gmail.com');
+      return email.endsWith('@emory.edu');
     };
 
     const signInPress = async () => {
       // check if the email ends with '@emory.edu' <- NOT SURE IF IT WORKS PROPERLY
-      // if (!validateEmail(email)) {
-      //   Alert.alert("Invalid Email", "Please use your Emory email address (ends with @emory.edu).");
-      //   return;
-      // }
+      if (!validateEmail(email)) {
+        Alert.alert("Invalid Email", "Please use your Emory email address (ends with @emory.edu).");
+        return;
+      }
 
       try {
         const tokenData = await login(email, password);

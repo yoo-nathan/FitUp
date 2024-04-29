@@ -108,7 +108,7 @@ const login = async (req, res) => {
         // console.log(rows)
 
         if (rows.length === 0) {
-            return res.status(401).send('Invalid email or password');
+            return res.status(405).send('Invalid email or password');
         }
 
         const user = rows[0];
@@ -116,7 +116,7 @@ const login = async (req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.hashed_password);
 
         if (!isPasswordValid) {
-            return res.status(401).send('Invalid email or password');
+            return res.status(405).send('Invalid email or password');
         }
 
         const payload = { id: user.UID };

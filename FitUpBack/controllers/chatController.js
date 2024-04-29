@@ -17,7 +17,7 @@ const saveChatLog = async (req, res) => {
 
     const save = await pool.query(saveMessageQuery, [from_id, to_id, message]);
     if (!save) {
-      return res.status(401).send("Message not saved!");
+      return res.status(400).send("Message not saved!");
     }
 
     return res.status(200).json({

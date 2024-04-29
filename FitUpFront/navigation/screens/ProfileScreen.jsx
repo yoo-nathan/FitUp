@@ -80,8 +80,7 @@ export default function ProfileScreen({ navigation }) {
   style={styles.iconImg}
   source={userImage ? { uri: userImage } : { uri: 'https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/7phXLCGAsmdelHmGrb33ID/1407d5437076e04de863901ad121eb52/talk-test-conversational-pace.jpg' }}
 />
-
-
+        <Text style={styles.headerText}>{name}</Text>
         <Text style={styles.emailText}>{email}</Text>
       </View>
       <View style={styles.lowerView}>
