@@ -7,7 +7,8 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
-  Image
+  Image,
+  SafeAreaView
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -123,6 +124,7 @@ const EditProfile = ({ navigation }) => {
   };
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <ScrollView style={styles.container}>
       {/* Profile Picture Container */}
       <TouchableOpacity onPress={pickImage} style={styles.profilePicContainer}>
@@ -240,6 +242,7 @@ const EditProfile = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -250,6 +253,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#373F51',
+    paddingTop: 20, 
   },
   header: {
     fontSize: 24,
@@ -353,8 +357,7 @@ const styles = StyleSheet.create({
   },
   profilePicContainer: {
     alignSelf: 'center',
-    marginTop: -50,
-    marginBottom: 20,
+    marginTop: 20,
   },
   profilePic: {
     width: 150,
