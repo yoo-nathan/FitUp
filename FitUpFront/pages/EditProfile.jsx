@@ -124,7 +124,7 @@ const EditProfile = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+
     <ScrollView style={styles.container}>
       {/* Profile Picture Container */}
       <TouchableOpacity onPress={pickImage} style={styles.profilePicContainer}>
@@ -242,7 +242,7 @@ const EditProfile = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </ScrollView>
-    </SafeAreaView>
+    
   );
 };
 
@@ -253,7 +253,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#373F51',
-    paddingTop: 20, 
+    paddingTop: "20%", 
+    paddingBottom: "50%"
   },
   header: {
     fontSize: 24,
@@ -313,7 +314,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
-    marginBottom: 55
+    marginBottom: "50%",
+     
   },
   cancelButton: {
     backgroundColor: 'lightgrey',
