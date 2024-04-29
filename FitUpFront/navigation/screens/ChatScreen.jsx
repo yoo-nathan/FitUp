@@ -32,9 +32,7 @@ const FriendItem = ({ DATA, onPress }) => (
             <Text style={{paddingVertical: 10, fontWeight: '500'}}>{formatTime(convertUtcToEst(DATA.time))}</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <View style={styles.messageContainer}>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={{fontSize: 20, color:'grey'}}>{DATA.message}</Text>
-            </View>
+            
             {
               DATA.unread_count > 0 &&
               <View style={styles.countContainer}>

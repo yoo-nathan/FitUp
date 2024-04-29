@@ -27,6 +27,8 @@ export default function HomeScreen({ route, navigation }) {
   const [user, setUser] = useState(null);
   const [userImage, setUserImage] = useState(null);
   const [data, setData] = useState([]);
+  const [feet, setFeet] = useState('');
+  const [inches, setInches] = useState('');
   
 
 
@@ -36,7 +38,15 @@ export default function HomeScreen({ route, navigation }) {
     const USER = data.find(item => item.profile.UID === id);
     setUser(USER.profile);
     setIsModalVisible(true);
+    const floatValue = parseFloat(USER.profile.height)
+    const feetValue = Math.floor(floatValue);
+    const inchesValue = Math.round((floatValue - feetValue) * 10);
+    //console.log(feetValue)
+    //console.log(inchesValue)
+    setFeet(feetValue);
+    setInches(inchesValue);
   };
+
 
   const hideModal = () => {
     setIsModalVisible(false);
@@ -122,9 +132,8 @@ export default function HomeScreen({ route, navigation }) {
           source={{ uri: userImage || 'https://via.placeholder.com/100' }} // Fallback or default image
         />
         <View style={styles.userInfo}>
-          <Text style={{fontSize:28, fontWeight:'700'}}>{DATA.first_name} {DATA.last_name}</Text>
-          <Text style={{fontSize: 16, fontWeight:'700'}}>H: {DATA.height} in / W: {DATA.weight} lbs</Text>
-          <Text style={{fontSize: 14, fontWeight:'700'}}>Click to view details!</Text>
+          <Text style={{fontSize:28, fontWeight:'700'}}>{DATA.first_name} {DATA.last_name}</Text>          
+          <Text style={{fontSize: 14, fontWeight:'700', paddingVertical: 10}}>Click to view details!</Text>
         </View>
       </TouchableOpacity>
       {user && (
@@ -136,10 +145,10 @@ export default function HomeScreen({ route, navigation }) {
   <View style={styles.modalViewContainer}>
     <View style={styles.modalCardView}>
       <Text style={styles.modalNameText}>{user.first_name} {user.last_name}</Text>
-      <Text style={styles.modalDetailsText}>H: {user.height} in / W: {user.weight} lbs</Text>
+      <Text style={styles.modalDetailsText}>H: {feet}' {inches}" / W: {user.weight} lbs</Text>
       <Text style={styles.modalDetailsText}>Gender: {user.gender}</Text>
       <Text style={styles.modalDetailsText}>Purpose: {user.purpose}</Text>
-      <Text style={styles.modalDetailsText}>Usual workout time: {user.workout_schedule}</Text>
+      <Text style={styles.modalDetailsText}>Usual workout time: {user.workout_schedule.slice(1, -1).replace(/"/g, '')}</Text>
 
       <View style={styles.hairline} />
       
@@ -159,7 +168,7 @@ export default function HomeScreen({ route, navigation }) {
           style={styles.buttonStyleChat}
           onPress={() => goToChat(user.UID)}
         >
-          <Text style={styles.buttonTextStyle}>Chat</Text>
+          <Text style={styles.buttonTextStyleChat}>Chat</Text>
         </TouchableOpacity>
       </View>
     </View> 
@@ -312,7 +321,7 @@ const styles = StyleSheet.create({
   userInfo : {
     flexDirection: 'column',
     marginHorizontal: 10,
-    
+    flex:1
     
   },
   toggleView: {
@@ -345,7 +354,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalNameText: {
-    fontSize: 22,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -363,6 +372,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
     textAlign: 'center',
+  },
+  buttonTextStyleChat: {
+    fontSize: 15,
+    fontWeight: '500',
+    textAlign: 'center',
+    color: 'white'    
   },
   flexRow: {
     flexDirection:'row' ,
