@@ -28,59 +28,76 @@ const EditProfile = ({ navigation }) => {
   const [imageKey, setImageKey] = useState(0);
 
   const pickImage = async () => {
-  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  if (status !== 'granted') {
-    alert('Sorry, we need camera roll permissions to make this work!');
-    return;
-  }
-
-  const result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 1,
-  });
-
-  if (!result.canceled) {
-    const token = await AsyncStorage.getItem('userToken');
-    const uid = await getMyID(token);
-
-    console.log('Image URI:', result.uri);  // Debugging log
-    console.log('Image Type:', result.type);  // Debugging log
-    console.log('UID:', uid);  // Debugging log
-
-    const formData = new FormData();
-    formData.append('profilePic', {
-      uri: result.uri,
-      type: 'image/jpeg',  // Assuming JPEG, adjust if your app can use different types
-      name: 'profilePic.jpg',
-    });
-    formData.append('UID', uid);
-
-    try {
-      const response = await fetch('https://cs-370-420520.ue.r.appspot.com/getInfo/changePic', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      const responseText = await response.text();
-      console.log('Server Response:', responseText);  // Debugging log
-
-      if (response.ok) {
-        alert(responseText); 
-        setProfileImageURI(result.uri);
-        setImageKey(prevKey => prevKey + 1);
-      } else {
-        alert(`Failed to upload image: ${responseText}`);
-      }
-    } catch (error) {
-      alert(`Network error: ${error.message}`);
+    // Requesting media library permissions
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+      return;
     }
-  }
-};
+  
+    // Launching the image library to pick an image
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    // Detailed log of the full result from ImagePicker
+    console.log('Image Picker Result:', result);
+  
+    // Checking if an image was selected
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const pickedImage = result.assets[0];
+  
+      // Logging detailed image information
+      console.log('Picked Image:', pickedImage);
+  
+      const token = await AsyncStorage.getItem('userToken');
+      const uid = await getMyID(token);
+      console.log('UID:', uid);
+  
+      // Preparing the FormData with the picked image
+      const formData = new FormData();
+      formData.append('profilePic', {
+        uri: pickedImage.uri,
+        type: pickedImage.mimeType,
+        name: pickedImage.fileName || "profilePic.jpg",
+      });
+      formData.append('UID', uid);
+  
+      console.log('FormData:', formData);
+  
+      // Attempt to upload the image via the API
+      try {
+        const response = await fetch('https://cs-370-420520.ue.r.appspot.com/getInfo/changePic', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`, // Adjust this as needed
+          },
+        });
+  
+        // Logging the full response from the server
+        const responseText = await response.text();
+        console.log('Server Response:', responseText);
+  
+        // Handling the response
+        if (response.ok) {
+          alert(responseText);
+          setProfileImageURI(pickedImage.uri);
+          setImageKey(prevKey => prevKey + 1);
+        } else {
+          alert(`Failed to upload image: ${responseText}`);
+        }
+      } catch (error) {
+        console.error('Upload Error:', error);
+        alert(`Network error: ${error.message}`);
+      }
+    } else {
+      alert('No image selected.');
+    }
+  };
 
   const handleSave = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
