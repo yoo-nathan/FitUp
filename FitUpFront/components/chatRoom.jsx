@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, Text, FlatList, StyleSheet, Image, KeyboardAvoidingView, Platform, Button } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, FlatList, StyleSheet, Image, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import io from "socket.io-client";
 import { Message } from './Message';
 import { getFirstName } from '../service/getService';
@@ -19,6 +19,7 @@ export default function ChatRoom({ route, navigation }) {
   const [fromId, setFromId] = useState('');
   const [toId, setToId] = useState('');
   const [roomId, setRoomId] = useState('');
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
   function createRoomId(uid1, uid2) {
     const sortedUids = [uid1, uid2].sort();
@@ -128,10 +129,29 @@ export default function ChatRoom({ route, navigation }) {
 
 
   useEffect(() => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  }, [messages]);
+    // Scroll to the bottom when the component mounts
+    scrollToBottom();
+  }, []);
 
+  const scrollToBottom = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToEnd({ animated: true });
+    }
+  };
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setIsHeaderVisible(false); // Hide header when keyboard is shown
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setIsHeaderVisible(true); // Show header when keyboard is hidden
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   return (
     <KeyboardAvoidingView 
@@ -139,8 +159,8 @@ export default function ChatRoom({ route, navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 80 } 
     >
-      <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 10 }}>
-        <Header />
+      <View style={{ flex: 1, backgroundColor: 'white',  }}>
+        {isHeaderVisible && <Header />}
         <FlatList
           ref={flatListRef}
           data={messages}

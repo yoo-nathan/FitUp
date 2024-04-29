@@ -9,6 +9,8 @@ const BMRcal = async (req, res) => {
     
     function calculateBMR(gender, weight, height, age, workoutnum) {
         let bmr;
+        weight = weight * 0.4536;
+        height = height * 30.48;
         if (gender.toLowerCase() === 'male') {
           bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
         } else if (gender.toLowerCase() === 'female') {

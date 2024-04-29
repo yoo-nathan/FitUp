@@ -1,29 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  View, Text, TextInput, TouchableOpacity, StyleSheet, Alert,
+  TouchableWithoutFeedback, Keyboard
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { sendVerificationEmail } from '../service/authService';
-
-
 
 const VerificationScreen = ({ route, navigation }) => {
-  const [code, setCode] = useState(['', '', '', '', '', '']);
+  const [code, setCode] = useState(new Array(5).fill(''));
+  const inputs = useRef([]);
+  
   const { email, password, realCode } = route.params;
 
   const handleCodeInput = (text, index) => {
     const newCode = [...code];
     newCode[index] = text;
     setCode(newCode);
+    if (text && index < code.length - 1) {
+      inputs.current[index + 1].focus();
+    }
   };
 
   const verifyCode = () => {
     if (realCode === code.join("")) {
-      navigation.navigate('SignUpPage1', { 
+      navigation.navigate('SignUpPage1', {
         email: email,
         password: password
       });
+    } else {
+      Alert.alert('Invalid Code', 'The entered code is incorrect.');
     }
-  }
+  };
 
   const handleResendCode = () => {
     Alert.alert("Email Sent", "The verification code has been resent to your email.");
@@ -36,35 +42,42 @@ const VerificationScreen = ({ route, navigation }) => {
   const renderCodeInputs = () => {
     return code.map((value, index) => (
       <TextInput
+<<<<<<< HEAD
+=======
+        ref={(ref) => inputs.current[index] = ref}
+>>>>>>> b95d61d81010b6c963551c449d91b117ca06d462
         key={index}
         style={styles.codeInput}
         maxLength={1}
         keyboardType="numeric"
         onChangeText={(text) => handleCodeInput(text, index)}
         value={code[index]}
+        returnKeyType="done"
       />
     ));
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Please enter the code</Text>
-      <Text style={styles.subtitle}>
-        We've sent a code to your Emory email.{'\n'}It might take a few minutes.{'\n'}Please check the junk folder if not found.
-      </Text>
-      <View style={styles.codeInputContainer}>
-        {renderCodeInputs()}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Please enter the code</Text>
+        <Text style={styles.subtitle}>
+          We've sent a code to your email.{'\n'}It might take a few minutes.{'\n'}Please check the junk folder if not found.
+        </Text>
+        <View style={styles.codeInputContainer}>
+          {renderCodeInputs()}
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleResendCode}>
+          <Text style={styles.buttonText}>Resend the code</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.submitButton]} onPress={verifyCode}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancel}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleResendCode}>
-        <Text style={styles.buttonText}>Resend the code</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.submitButton]} onPress={verifyCode}>
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancel}>
-        <Text style={styles.buttonText}>Cancel</Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

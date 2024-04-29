@@ -46,9 +46,9 @@ const getDietPlan = async (req, res) => {
         console.log(BMRInfo);
         const menus = await fetchMenus(); // You'll need to define this function to fetch menu items from your database
 
-        const prompt = `Create a well-balanced diet plan using the following menu items: ${menus}. ` +
+        const prompt = `Create a well-balanced diet plan using the following menu: ${menus}. ` +
                        `Target daily intake: ${BMRInfo[0]} calories, ${BMRInfo[1]} grams carbohydrates, ` +
-                       `${BMRInfo[3]} grams fat, and ${BMRInfo[2]} grams protein. For the nutrition information of menus, just make a prediction. Make sure the sum of the calories of foods add up to the target calorie. Return the response in the following json format:
+                       `${BMRInfo[3]} grams fat, and ${BMRInfo[2]} grams protein. For the nutrition info of menus, just make a prediction. Make sure the sum of the calories of foods add up to the target calorie. Return the response in the following json format:
                        [
                        {
                         mid: '1'
@@ -65,17 +65,9 @@ const getDietPlan = async (req, res) => {
                         carbs: "carbohydrates in gram",
                         protein: "protein in gram",
                         fat: "fat in gram"
-                       },
-                       {
-                        mid: '3'
-                        menu:"1 serving of certain menu",
-                        calorie: "calories in kcal",
-                        carbs: "carbohydrates in gram",
-                        protein: "protein in gram",no
-                        fat: "fat in gram"
                        }
                     ]
-                      mid stands for menu id. can you assign mid to each menu in order of 1, 2, 3, .... ? don't say anything else than this json format. Even for the json format, don't add the title, just the data.  `;
+                      mid stands for menu id. can you assign mid to each menu in order of 1, 2, 3, .... ? don't say anything else than this json format. Even for the json format, don't add the title.`;
                        
       
   
