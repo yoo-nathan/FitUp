@@ -104,7 +104,7 @@ export default function MenuScreen({ navigation }) {
           ) : (
             <FlatList
               horizontal={true}
-              data={data}
+              data={dct}
               renderItem={({item}) => <Item item={item} />}
               style={styles.flatList}
             />
