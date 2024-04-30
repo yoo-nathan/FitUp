@@ -84,7 +84,7 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.emailText}>{email}</Text>
       </View>
       <View style={styles.lowerView}>
-        <TouchableOpacity style={styles.touchableStyle}
+        <TouchableOpacity style={[styles.touchableStyle, {paddingTop:50}]}
         onPress={() => navigation.navigate('EditProfile')}
         >
           <View style={{flexDirection: 'row'}}>
@@ -99,7 +99,7 @@ export default function ProfileScreen({ navigation }) {
         <View style={styles.hairline}/>
 
         <TouchableOpacity 
-        style={styles.touchableStyle}
+        style={[styles.touchableStyle,]}
         onPress={() => navigation.navigate('ContactUs')}
         >
           <View style={{flexDirection: 'row'}}>
@@ -113,7 +113,7 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
         <View style={styles.hairline}/>
         <TouchableOpacity 
-          style={styles.touchableStyle}
+          style={[styles.touchableStyle, {paddingBottom:50}]}
           onPress={async () => {
             try {
                 // console.log('Logging out');
@@ -140,20 +140,7 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
         <View style={styles.hairline}/>
 
-        <TouchableOpacity 
-          style={styles.touchableStyle}
-          onPress={() => {console.log('implement delete')}}
-        >
-          <View style={{flexDirection: 'row'}}>
-            <Image resizeMode='contain'
-              style={styles.widgetImg}
-
-              //Trash
-              source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkEqb7yH6GMN43ZOyS5_LiZvWutK3h5ihP1Q93v7T6qA&s'}}/>
-            <Text style={styles.widgetText}> Delete Account</Text>
-          </View>
-          <Text style={styles.arrowText}>&#187;</Text>
-        </TouchableOpacity>
+        
         
 
         
@@ -194,9 +181,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   lowerView : {
-    height: screenHeight*0.6,
+    height: screenHeight*0.55,
     borderRadius: 20,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    
   },
   widgetText :{
     color: 'black',

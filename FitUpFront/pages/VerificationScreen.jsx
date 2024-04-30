@@ -42,10 +42,7 @@ const VerificationScreen = ({ route, navigation }) => {
   const renderCodeInputs = () => {
     return code.map((value, index) => (
       <TextInput
-<<<<<<< HEAD
-=======
         ref={(ref) => inputs.current[index] = ref}
->>>>>>> b95d61d81010b6c963551c449d91b117ca06d462
         key={index}
         style={styles.codeInput}
         maxLength={1}

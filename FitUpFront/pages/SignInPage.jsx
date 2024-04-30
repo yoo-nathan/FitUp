@@ -222,7 +222,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 150,
   }
-  
   });
   
 export default SignInPage; 

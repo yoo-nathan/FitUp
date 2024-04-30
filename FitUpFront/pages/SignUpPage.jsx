@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Switch } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Switch, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sendVerificationEmail } from '../service/authService';
 
@@ -9,28 +9,36 @@ const SignUpPage = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [dataCollectionAgreement, setDataCollectionAgreement] = useState(false);
 
+    const isEmoryEmail = email => email.endsWith('@emory.edu');
+
     const canSignUp = () => {
-        return email && password && password === confirmPassword && dataCollectionAgreement;
+        return isEmoryEmail(email) && password && password === confirmPassword && dataCollectionAgreement;
     };
 
     const handleSignUp = async () => {
+        if (!isEmoryEmail(email)) {
+            Alert.alert('Invalid Email', 'Please enter an Emory email address.');
+            return;
+        }
         if (canSignUp()) {
-            const realCode = await sendVerificationEmail(email);
-            console.log(realCode.verificationCode);
-          // Need to implement sign up logic 
-            navigation.navigate('VerificationScreen', 
-            { 
-                email: email,
-                password: password,
-                realCode: realCode.verificationCode
-            });
+            try {
+                const realCode = await sendVerificationEmail(email);
+                console.log(realCode.verificationCode);
+                navigation.navigate('VerificationScreen', {
+                    email: email,
+                    password: password,
+                    realCode: realCode.verificationCode
+                });
+            } catch (error) {
+                console.error(error);
+            }
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}> Sign up with your Emory email! </Text>
-            <Text style={styles.sidetitle}> Email </Text>
+            <Text style={styles.title}>Sign up with your Emory email!</Text>
+            <Text style={styles.sidetitle}>Email</Text>
             <TextInput
                 style={styles.input}
                 placeholder="example@emory.edu"
@@ -40,7 +48,7 @@ const SignUpPage = ({ navigation }) => {
                 keyboardType="email-address"
                 placeholderTextColor="gray"
             />
-            <Text style={styles.sidetitle1}> Create password </Text>
+            <Text style={styles.sidetitle1}>Create password</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Create a password"
@@ -65,9 +73,9 @@ const SignUpPage = ({ navigation }) => {
                 />
             </View>
             <TouchableOpacity
-            style={[styles.button, canSignUp() ? {} : styles.buttonDisabled]}
-            onPress={handleSignUp}
-            disabled={!canSignUp()}
+                style={[styles.button, canSignUp() ? {} : styles.buttonDisabled]}
+                onPress={handleSignUp}
+                disabled={!canSignUp()}
             >
                 <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
