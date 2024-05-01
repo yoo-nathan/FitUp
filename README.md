@@ -35,7 +35,7 @@ The menu page takes time to load the data for your targeted calories and the DCT
 
 # Contact 
 For more information or details, contact emoryfitup@gmail.com!
-
+----------
 # Developer Documentation
 If you want to use our codebase for development, please refer to the following: 
 1. Run `git clone https://github.com/yoo-nathan/FitUp.git`
