@@ -45,6 +45,7 @@ If you want to use our codebase for development, please refer to the following:
 1. Run git clone https://github.com/yoo-nathan/FitUp.git
 2. Navigate to the cloned folder
 3. Then, run the following commands:
+
    i. `cd ./FitUpBack/`
    
    ii. `npm install`
