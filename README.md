@@ -89,3 +89,4 @@ Chat-Initiating API: Facilitates communication between users by allowing them to
    These users may quickly modify the settings of their profiles and promptly save the changes with just a touch of a button. This ensures that their preferences and personal data is always updated. In addition to that, we have implemented a log-out feature that makes the user's security and privacy better by removing the user's authentication token from AsyncStorage. The user is effectively logged out of the system, rejecting unauthorized access and preserving session integrity. This blend of characteristics guarantees that the application remained easy-to-use, secure, and highly functional, serving the diverse fitness community.
 
 ## Database Structure 
+![Database Structure](misc/db_structure_1.png)
