@@ -1,6 +1,9 @@
 # FitUp 
 The ultimate workout app for Emory students! FitUp is an Emory specific health app which not only helps the Emory students or faculties find their ideal gym partner and match them but also inform each user’s targeted daily intake for each nutrition and suggest the DCT menu recommendation based on their profile. This document covers how to install the FitUp app, how to use all the features in the app, and how to troubleshoot the common errors in the app. 
 
+# Informational Video 
+[Click here to watch informational video!](https://drive.google.com/file/d/1eDBB3JA3QEpA073dj95hwSBH8XZ62sn6/view?usp=sharing)
+
 # Installation Instruction 
 
 # User Manuals 
