@@ -5,6 +5,7 @@ The ultimate workout app for Emory students! FitUp is an Emory specific health a
 [Click here to watch an informational video about FitUp!](https://drive.google.com/file/d/1eDBB3JA3QEpA073dj95hwSBH8XZ62sn6/view?usp=sharing)
 
 # Installation Instruction 
+You can follow the instructions on this website for your device platform [here!](https://spar926.wixsite.com/fitup)
 
 # User Manuals 
 ### Getting Started 
