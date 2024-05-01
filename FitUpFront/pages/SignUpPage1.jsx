@@ -68,12 +68,6 @@ const SignUpPage1 = ({ navigation }) => {
         keyboardShouldPersistTaps="handled"  // ensure keyboard can be disabled by tapping outside
       >
         <Text style={styles.header}>Let us know about you!</Text>
-        <TouchableOpacity onPress={pickImage}>
-          <Image
-            style={styles.profilePic}
-            source={{ uri: profileImageURI }}
-          />
-        </TouchableOpacity>
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>First Name*</Text>
           <TextInput style={styles.input} placeholder="John" value={firstName} onChangeText={setFirstName} placeholderTextColor="gray"/>

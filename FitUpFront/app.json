@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "d3cccd19-5f39-4b9c-879e-b93249349f15"
+      }
+    },
+    "android": {
+      "package": "com.fitupemory.fitupfront"
+    },
+    "ios": {
+      "bundleIdentifier": "com.fitupemory.fitupfront"
+    }
+  }
+}
