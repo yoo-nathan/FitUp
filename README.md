@@ -2,7 +2,7 @@
 The ultimate workout app for Emory students! FitUp is an Emory specific health app which not only helps the Emory students or faculties find their ideal gym partner and match them but also inform each user’s targeted daily intake for each nutrition and suggest the DCT menu recommendation based on their profile. This document covers how to install the FitUp app, how to use all the features in the app, and how to troubleshoot the common errors in the app. 
 
 # Informational Video 
-[Click here to watch informational video!](https://drive.google.com/file/d/1eDBB3JA3QEpA073dj95hwSBH8XZ62sn6/view?usp=sharing)
+[Click here to watch an informational video about FitUp!](https://drive.google.com/file/d/1eDBB3JA3QEpA073dj95hwSBH8XZ62sn6/view?usp=sharing)
 
 # Installation Instruction 
 
@@ -38,3 +38,17 @@ The menu page takes time to load the data for your targeted calories and the DCT
 
 # Contact 
 For more information or details, contact emoryfitup@gmail.com!
+
+# Developer Documentation
+If you want to use our codebase for development, please refer to the following: 
+1. Run git clone https://github.com/yoo-nathan/FitUp.git
+2. Navigate to the cloned folder
+3. Then, run the following commands:
+   i. `cd ./FitUpBack/` 
+   ii. `npm install`
+   iii. `cd ../FitUpFront/`
+   iv. `npm install`
+   v. To launch the app run `npx expo start` and scan the QR code with a mobile device using the Expo Go app.
+   
+
+
