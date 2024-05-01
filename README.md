@@ -87,4 +87,6 @@ Chat-Initiating API: Facilitates communication between users by allowing them to
 
 ## Database Structure 
 ![Database Structure](misc/db_structure_1.png)
+
+## Architectural Diagram
 ![Architectural Diagram](misc/db_structure_2.png)
