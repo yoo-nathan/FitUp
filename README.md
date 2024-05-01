@@ -29,10 +29,6 @@ Profile: Allows you to edit your settings, contact FitUp support, logout, or del
 Specifically for the menu page, you can get your targeted calories, carbohydrates, protein, and fat which is calculated based on your age, height, weight, gender, and your workout purpose. You can follow that targeted nutrition to achieve your workout goal. Below that, you also have a detailed DCT menu recommendation, which is made based on your targeted nutrition. When you follow the diet plan provided, you will achieve your targeted nutrition. The recommendations are based on the DCT menus updated everyday, and you can click each modal for the specific nutrition information about each specific menu. The Cox menu recommendations are not provided yet since Emory does not provide specific nutrition information about Cox menus in the website, but it will soon be updated. 
 
 # Common Troubleshooting Guides
-
-### Token Expired
-When you log in to the app and leave it for a long time and come back, the buttons might not function well because the token may expire. You can simply log out and login again and the problem will be resolved. 
-
 ### Menu Page loading
 The menu page takes time to load the data for your targeted calories and the DCT menu recommendation, since the app is feeding your targeted nutrition information to openai api to get the recommendation based on it. It will take more than 20 seconds, so when you just wait, the page will be loaded. 
 
@@ -42,7 +38,7 @@ For more information or details, contact emoryfitup@gmail.com!
 
 # Developer Documentation
 If you want to use our codebase for development, please refer to the following: 
-1. Run git clone https://github.com/yoo-nathan/FitUp.git
+1. Run `git clone https://github.com/yoo-nathan/FitUp.git`
 2. Navigate to the cloned folder
 3. Then, run the following commands:
 
@@ -91,4 +87,4 @@ Chat-Initiating API: Facilitates communication between users by allowing them to
 
 ## Database Structure 
 ![Database Structure](misc/db_structure_1.png)
-![Database Structure](misc/db_structure_2.png)
+![Architectural Diagram](misc/db_structure_2.png)
